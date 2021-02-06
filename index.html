@@ -1,8 +1,9 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="litegraph/litegraph.css">
+    <link rel="stylesheet" type="text/css" href="litegraph/litegraph-editor.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
     <script>
-        var oldconsole = console;
         function stacktrace() { 
             function st2(f) {
                 return !f ? [] : 
@@ -17,7 +18,7 @@
             json: function(st) {moi.log(JSON.stringify(st)+"\n");},
             keys: function(st) {moi.log(Object.keys(st)+"\n");},
             error: function(st) {
-                moi.log("ERROR!!! "+st+"\n");
+                console.log("ERROR!!! "+st+"\n");
                 var trace = stacktrace();
                 console.log("TRACE:");
                 for (var i = 0; i < trace.length; i++) {
@@ -28,29 +29,71 @@
             timeEnd: function(timer){if (this.timers[timer]){moi.log(timer+": "+Math.round(LiteGraph.getTime()-this.timers[timer])+" ms\n"); delete this.timers[timer]}},
             timers: {}
         };
+        if (!String.prototype.startsWith) {
+            Object.defineProperty(String.prototype, 'startsWith', {
+                value: function(search, rawPos) {
+                    var pos = rawPos > 0 ? rawPos|0 : 0;
+                    return this.substring(pos, pos + search.length) === search;
+                }
+            });
+        }
+        // https://tc39.github.io/ecma262/#sec-array.prototype.findindex
+        if (!Array.prototype.findIndex) {
+        Object.defineProperty(Array.prototype, 'findIndex', {
+            value: function(predicate) {
+            // 1. Let O be ? ToObject(this value).
+            if (this == null) {
+                throw new TypeError('"this" is null or not defined');
+            }
 
+            var o = Object(this);
+
+            // 2. Let len be ? ToLength(? Get(O, "length")).
+            var len = o.length >>> 0;
+
+            // 3. If IsCallable(predicate) is false, throw a TypeError exception.
+            if (typeof predicate !== 'function') {
+                throw new TypeError('predicate must be a function');
+            }
+
+            // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
+            var thisArg = arguments[1];
+
+            // 5. Let k be 0.
+            var k = 0;
+
+            // 6. Repeat, while k < len
+            while (k < len) {
+                // a. Let Pk be ! ToString(k).
+                // b. Let kValue be ? Get(O, Pk).
+                // c. Let testResult be ToBoolean(? Call(predicate, T, « kValue, k, O »)).
+                // d. If testResult is true, return k.
+                var kValue = o[k];
+                if (predicate.call(thisArg, kValue, k, o)) {
+                return k;
+                }
+                // e. Increase k by 1.
+                k++;
+            }
+
+            // 7. Return -1.
+            return -1;
+            },
+            configurable: true,
+            writable: true
+        });
+        }
     </script>
-	<script type="text/javascript" src="litegraph/litegraph.js"></script>
 </head>
-<body style='width:100%; height:100%'>
-<canvas id='mycanvas' width='1024' height='720' style='border: 1px solid'></canvas>
-<script>
-    var graph = new LGraph();
-
-    var canvas = new LGraphCanvas("#mycanvas", graph);
-
-    var node_const = LiteGraph.createNode("basic/const");
-    node_const.pos = [200,200];
-    graph.add(node_const);
-    node_const.setValue(4.5);
-
-    var node_watch = LiteGraph.createNode("basic/watch");
-    node_watch.pos = [700,200];
-    graph.add(node_watch);
-
-    node_const.connect(0, node_watch, 0 );
-
-    graph.start()
-</script>
+<body>
+    <div id="main"></div>
+    <script type="text/javascript" src="litegraph/litegraph.js"></script>
+	<script type="text/javascript" src="litegraph/litegraph-editor.js"></script>
+    <script type="text/javascript" src="litegraph/nodes/base.js"></script>
+    <script type="text/javascript" src="litegraph/nodes/math.js"></script>
+    <script type="text/javascript" src="litegraph/nodes/events.js"></script>
+    <script type="text/javascript" src="litegraph/nodes/strings.js"></script>
+    <script type="text/javascript" src="litegraph/nodes/interface.js"></script>
+    <script type="text/javascript" src="code.js"></script>
 </body>
 </html>
