@@ -11254,18 +11254,18 @@ LGraphNode.prototype.executeAction = function(action)
             }
         }
 
-		var eventClass = null;
-		if(options.event) //use strings because comparing classes between windows doesnt work
-			eventClass = options.event.constructor.name;
-        if ( eventClass !== "MouseEvent" &&
-            eventClass !== "CustomEvent" &&
-			eventClass !== "PointerEvent"
-        ) {
-            console.error(
-                "Event passed to ContextMenu is not of type MouseEvent or CustomEvent. Ignoring it."
-            );
-            options.event = null;
-        }
+		// var eventClass = null;
+		// if(options.event) //use strings because comparing classes between windows doesnt work
+		// 	eventClass = options.event.constructor.name;
+        // if ( eventClass !== "MouseEvent" &&
+        //     eventClass !== "CustomEvent" &&
+		// 	eventClass !== "PointerEvent"
+        // ) {
+        //     console.error(
+        //         "Event passed to ContextMenu is not of type MouseEvent or CustomEvent. Ignoring it."
+        //     );
+        //     options.event = null;
+        // }
 
         var root = document.createElement("div");
         root.className = "litegraph litecontextmenu litemenubar-panel";
