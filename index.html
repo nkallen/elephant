@@ -1,0 +1,56 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="litegraph/litegraph.css">
+    <script>
+        var oldconsole = console;
+        function stacktrace() { 
+            function st2(f) {
+                return !f ? [] : 
+                    st2(f.caller).concat([f.toString().split(')')[0] + ')']);
+            }
+            return st2(arguments.callee.caller);
+        }
+        window.console =
+        {
+            warn: function(st) {moi.log("WARN: " + st+"\n");},
+            log: function(st) {moi.log(st+"\n");},
+            json: function(st) {moi.log(JSON.stringify(st)+"\n");},
+            keys: function(st) {moi.log(Object.keys(st)+"\n");},
+            error: function(st) {
+                moi.log("ERROR!!! "+st+"\n");
+                var trace = stacktrace();
+                console.log("TRACE:");
+                for (var i = 0; i < trace.length; i++) {
+                    console.log("\t" + trace[i]);
+                }
+            },
+            time: function(timer) {this.timers[timer] = LiteGraph.getTime()},
+            timeEnd: function(timer){if (this.timers[timer]){moi.log(timer+": "+Math.round(LiteGraph.getTime()-this.timers[timer])+" ms\n"); delete this.timers[timer]}},
+            timers: {}
+        };
+
+    </script>
+	<script type="text/javascript" src="litegraph/litegraph.js"></script>
+</head>
+<body style='width:100%; height:100%'>
+<canvas id='mycanvas' width='1024' height='720' style='border: 1px solid'></canvas>
+<script>
+    var graph = new LGraph();
+
+    var canvas = new LGraphCanvas("#mycanvas", graph);
+
+    var node_const = LiteGraph.createNode("basic/const");
+    node_const.pos = [200,200];
+    graph.add(node_const);
+    node_const.setValue(4.5);
+
+    var node_watch = LiteGraph.createNode("basic/watch");
+    node_watch.pos = [700,200];
+    graph.add(node_watch);
+
+    node_const.connect(0, node_watch, 0 );
+
+    graph.start()
+</script>
+</body>
+</html>
