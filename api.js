@@ -1952,8 +1952,9 @@
             console.log("onExecute " + name);
             var call = [[name]];
             for (var i = 0; i < args.length; i++) {
-                var value = this.getInputData(i, this.properties[args[i].name] || null);
+                var value = this.getInputData(i, this.properties[args[i].name]);
                 var type = args[i].type;
+                console.log("i: " + value + " " + type);
                 if (value != null) {
                     switch (type) {
                         case "ObjectList":
@@ -1998,6 +1999,7 @@
     
             var acc = moi.geometryDatabase.createObjectList();
             for (var i = 0; i < calls.length; i++) {
+                console.log(call);
                 var temp = factory.apply(null, calls[i]);
                 for (var j = 0; j < temp.length; j++) {
                     acc.addObject(temp.item(j));
@@ -2007,7 +2009,7 @@
             this.setOutputData(0, acc);
             // this.updateThisNodeGraph();
             this.setDirtyCanvas(true);
-    }
+        }
     
         function unroll(call) {
             if (call.length == 0) return [];
@@ -2428,9 +2430,9 @@
     };
     var loopbegin = makeNodeType("loopbegin", loopbegindesc.in, loopbegindesc.out);
     loopbegin.prototype.onStart = function() {
-        this.onPropertyChange();
+        this.onPropertyChanged();
     }
-    loopbegin.prototype.onPropertyChange = function() {
+    loopbegin.prototype.onPropertyChanged = function() {
         this.internal.i = 0;
     }
     loopbegin.prototype.onExecute = function() {

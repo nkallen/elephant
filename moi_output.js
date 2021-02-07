@@ -1,13 +1,19 @@
 (function(){
     function MoIOutput()
     {
-        this.minsize = [70, 0];
+        // this.minsize = [70, 0];
+        this.size = [164, 84];
         this.boxcolor = "#F05";
         this.addInput("","objectlist");
         this.flags = { isOutput: true };
         this.properties = {style:["--", "--"], edges:["On", "Off", "On"], displayMode: ["Normal", "Normal", "FaintWireframe"]};
         this.sIndex = -1;
         this.tempobjects = moi.geometryDatabase.createObjectList();
+
+        this.addProperty("text", "click me");
+        this.addProperty("font_size", 30);
+        this.size = [164, 84];
+        this.clicked = false;
     }
     
     MoIOutput.title = "Output";
@@ -93,32 +99,47 @@
     
     MoIOutput.prototype.onDrawForeground = function(ctx)
     {
-        var title_height = LiteGraph.NODE_TITLE_HEIGHT;
-        var old_alpha = ctx.globalAlpha;
-        
-        ctx.fillStyle = this.bgcolor || LiteGraph.NODE_DEFAULT_BGCOLOR;
-        ctx.fillRect(2,-title_height + 2,title_height - 4,title_height - 4);
-        if (!this.flags.collapsed) ctx.fillRect( 5, 2, this.size[0]-10, this.size[1]-4);
-        
-        ctx.fillStyle = this.color || LiteGraph.NODE_DEFAULT_COLOR;
-        ctx.globalAlpha = 0.5 * old_alpha;
-        ctx.fillRect(2,-title_height + 2,title_height - 4,title_height - 4);
-        ctx.globalAlpha = old_alpha;
-    
-        ctx.fillStyle=this.color || LiteGraph.NODE_DEFAULT_COLOR;
-        ctx.fillStyle = this.boxcolor || LiteGraph.NODE_DEFAULT_BOXCOLOR;
-        ctx.roundRect(3,-title_height + 3,title_height - 6,title_height - 6, 3);
-        ctx.fill();
-    
-        if (!this.flags.collapsed)
-        {
-            var text = (this.tempobjects.length > 0)?this.tempobjects.length.toFixed(0):"--";
-            ctx.font = "12px Arial";
-            ctx.fillStyle="#AAA";
-            ctx.textAlign = "center";
-            ctx.fillText(text, this.size[0]/2, this.size[1]/2+4);
-            ctx.textAlign = "left";
+        if (this.flags.collapsed) {
+            return;
         }
+        var margin = 10;
+        ctx.fillStyle = "black";
+        ctx.fillRect(
+            margin + 1,
+            margin + 1,
+            this.size[0] - margin * 2,
+            this.size[1] - margin * 2
+        );
+        ctx.fillStyle = "#AAF";
+        ctx.fillRect(
+            margin - 1,
+            margin - 1,
+            this.size[0] - margin * 2,
+            this.size[1] - margin * 2
+        );
+        ctx.fillStyle = this.clicked
+            ? "white"
+            : this.mouseOver
+            ? "#668"
+            : "#334";
+        ctx.fillRect(
+            margin,
+            margin,
+            this.size[0] - margin * 2,
+            this.size[1] - margin * 2
+        );
+
+        var text = (this.tempobjects.length > 0)?this.tempobjects.length.toFixed(0):"--";
+        var font_size = this.properties.font_size || 30;
+        ctx.textAlign = "center";
+        ctx.fillStyle = this.clicked ? "black" : "white";
+        ctx.font = font_size + "px " + "Arial";
+        ctx.fillText(
+            text,
+            this.size[0] * 0.5,
+            this.size[1] * 0.5 + font_size * 0.3
+        );
+        ctx.textAlign = "left";
     }
     LiteGraph.registerNodeType("Basic/Output", MoIOutput);    
 }());

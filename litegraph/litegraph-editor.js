@@ -31,7 +31,7 @@ function Editor(container_id, options) {
     //add stuff
     //this.addToolsButton("loadsession_button","Load","imgs/icon-load.png", this.onLoadButton.bind(this), ".tools-left" );
     //this.addToolsButton("savesession_button","Save","imgs/icon-save.png", this.onSaveButton.bind(this), ".tools-left" );
-    this.addLoadCounter();
+    // this.addLoadCounter();
     this.addToolsButton(
         "playnode_button",
         "Play",
@@ -141,7 +141,7 @@ Editor.prototype.onPlayButton = function() {
 
     if (graph.status == LGraph.STATUS_STOPPED) {
         button.innerHTML = "<img src='imgs/icon-stop.png'/> Stop";
-        graph.start();
+        graph.start(5);
     } else {
         button.innerHTML = "<img src='imgs/icon-play.png'/> Play";
         graph.stop();
