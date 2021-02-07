@@ -56,5 +56,12 @@ if (!Array.prototype.findIndex) {
         writable: true
     });
 }
-
+storage = {
+    setItem: function(key, value) {
+        this[key] = value;
+    },
+    getItem: function(key) {
+        return this[key];
+    }
+}
 })();

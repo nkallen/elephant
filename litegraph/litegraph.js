@@ -6266,14 +6266,14 @@ LGraphNode.prototype.executeAction = function(action)
                 }
             }
         }
-        localStorage.setItem(
+        storage.setItem(
             "litegrapheditor_clipboard",
             JSON.stringify(clipboard_info)
         );
     };
 
     LGraphCanvas.prototype.pasteFromClipboard = function() {
-        var data = localStorage.getItem("litegrapheditor_clipboard");
+        var data = storage.getItem("litegrapheditor_clipboard");
         if (!data) {
             return;
         }
