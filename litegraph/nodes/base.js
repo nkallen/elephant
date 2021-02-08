@@ -716,6 +716,44 @@
 
     LiteGraph.registerNodeType("basic/string", ConstantString);
 
+    function ConstantPoint() {
+        this.addOutput("", "pointarray");
+        this.addProperty("pointarray", new pointArray());
+        this.widgetX = this.addWidget("number","x",0,this.setValue.bind(this));
+        this.widgetY = this.addWidget("number","y",0,this.setValue.bind(this));
+        this.widgetZ = this.addWidget("number","z",0,this.setValue.bind(this));
+        this.widgets_up = true;
+        this.size = [180, 90];
+    }
+
+    ConstantPoint.title = "Const Point";
+    ConstantPoint.desc = "Constant point";
+
+    ConstantPoint.prototype.getTitle = ConstantNumber.prototype.getTitle;
+
+    ConstantPoint.prototype.onExecute = function() {
+        console.log("ContantPoint.onExecute: " + this.properties.pointarray.getPoint().toString());
+        this.setOutputData(0, this.properties.pointarray);
+    };
+
+    ConstantPoint.prototype.loadValue = function(newValue) {
+        this.setProperty("pointarray", newValue);
+        var p = newValue.getPoint();
+        this.widgetX.value = p.x;
+        this.widgetY.value = p.y;
+        this.widgetZ.value = p.z;
+    };
+
+
+	ConstantPoint.prototype.setValue = function() {
+        var old = this.properties.pointarray.getFrame();
+        old.set(this.widgetX.value, this.widgetY.value, this.widgetZ.value, old.xaxis.x, old.xaxis.y, old.xaxis.z, old.yaxis.x, old.yaxis.y, old.yaxis.z);
+        var pa = new pointArray();
+        pa.pushFrame(old);
+        this.setProperty("pointarray", pa);
+    };
+
+    LiteGraph.registerNodeType("basic/point", ConstantPoint);
     function ConstantObject() {
         this.addOutput("obj", "object");
         this.size = [120, 30];

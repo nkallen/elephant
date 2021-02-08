@@ -1975,6 +1975,7 @@
                             for (var j = 0; j < value.length; j++) {
                                 tmp.push(value.getPoint(j));
                             }
+                            console.log(value.getPoint(j).toString());
                             value = tmp;
                             break;
                         case "float":
@@ -1994,12 +1995,15 @@
                 }
                 if (value == null) value = [null];
                 call.push(value);
+                console.log(-1);
             }
             var calls = unroll(call);
     
             var acc = moi.geometryDatabase.createObjectList();
             for (var i = 0; i < calls.length; i++) {
+                console.log("calling fac");
                 var temp = factory.apply(null, calls[i]);
+                console.log("/calling fac");
                 for (var j = 0; j < temp.length; j++) {
                     acc.addObject(temp.item(j));
                 }
@@ -2116,7 +2120,7 @@
                     );
                     menu_info.push({
                         content: "Add ObjectList", callback: function() {
-                            var output = LiteGraph.createNode("Commands/ObjectList");
+                            var output = LiteGraph.createNode("Classes/ObjectList");
                             output.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
                             that.graph.add(output);
                             that.connect(slot.slot, output, 0);
@@ -2124,7 +2128,7 @@
                     });
                     menu_info.push({
                         content: "Add GeomObject", callback: function() {
-                            var output = LiteGraph.createNode("Commands/GeomObject");
+                            var output = LiteGraph.createNode("Classes/GeomObject");
                             output.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
                             that.graph.add(output);
                             that.connect(slot.slot, output, 0);
@@ -2132,7 +2136,7 @@
                     });
                     menu_info.push({
                         content: "Select Point", callback: function() {
-                            var pointobject = LiteGraph.createNode("Commands/PointObject");
+                            var pointobject = LiteGraph.createNode("Classes/PointObject");
                             pointobject.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
                             that.graph.add(pointobject);
                             that.connect(slot.slot, pointobject, 0);
@@ -2140,7 +2144,7 @@
                     });
                     menu_info.push({
                         content: "Select Curve", callback: function() {
-                            var curve = LiteGraph.createNode("Commands/Curve");
+                            var curve = LiteGraph.createNode("Classes/Curve");
                             curve.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
                             that.graph.add(curve);
                             that.connect(slot.slot, curve, 0);
@@ -2148,7 +2152,7 @@
                     });
                     menu_info.push({
                         content: "Select Edge", callback: function() {
-                            var edge = LiteGraph.createNode("Commands/Edge");
+                            var edge = LiteGraph.createNode("Classes/Edge");
                             edge.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
                             that.graph.add(edge);
                             that.connect(slot.slot, edge, 0);
@@ -2156,7 +2160,7 @@
                     });
                     menu_info.push({
                         content: "Select Face", callback: function() {
-                            var face = LiteGraph.createNode("Commands/Face");
+                            var face = LiteGraph.createNode("Classes/Face");
                             face.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
                             that.graph.add(face);
                             that.connect(slot.slot, face, 0);
@@ -2164,14 +2168,14 @@
                     });
                     menu_info.push({
                         content: "Select BRep", callback: function() {
-                            var face = LiteGraph.createNode("Commands/BRep");
+                            var face = LiteGraph.createNode("Classes/BRep");
                             face.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
                             that.graph.add(face);
                             that.connect(slot.slot, face, 0);
                         }
                     });
                 } else if (_slot.type == "pointarray") {
-                    menu_info.push({
+                  menu_info.push({
                         content: "Make point", callback: function() {
                             var point = LiteGraph.createNode("Commands/point");
                             point.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
@@ -2185,31 +2189,42 @@
                     menu_info.push({
                         content: "Current selection", callback: function() {
                             var point = LiteGraph.createNode("Commands/XXX");
-                            point.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
+                            point.pos = [that.pos[0] - point.size[0] - 30, that.pos[1]];
                             that.graph.add(point);
-                            that.connect(slot.slot, point, 0);
+                            point.connect(0, that, slot.slot);
                         }
                     });
                 } else if (_slot.type == "pointarray") {
                     menu_info.push({
-                        content: "From point", callback: function() {
-                            var point = LiteGraph.createNode("Commands/PointObject");
-                            point.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
+                        content: "Expand point constant", callback: function() {
+                            var point = LiteGraph.createNode("basic/point");
+                            point.pos = [that.pos[0] - point.size[0] - 30, that.pos[1]];
                             that.graph.add(point);
-                            that.connect(slot.slot, point, 0);
+                            if (that.properties[_slot.name]) {
+                                point.loadValue(that.properties[_slot.name]);
+                            }
+                            point.connect(0, that, slot.slot);
+                        }
+                    });  
+                    menu_info.push({
+                        content: "From point", callback: function() {
+                            var point = LiteGraph.createNode("Classes/PointObject");
+                            point.pos = [that.pos[0] - point.size[0] - 30, that.pos[1]];
+                            that.graph.add(point);
+                            point.connect(0, that, slot.slot);
                         }
                     });
                     menu_info.push({
                         content: "From bounding box", callback: function() {
-                            var point = LiteGraph.createNode("Commands/PointObject");
-                            point.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
+                            var point = LiteGraph.createNode("Classes/BoundingBox");
+                            point.pos = [that.pos[0] - point.size[0] - 30, that.pos[1]];
                             that.graph.add(point);
-                            that.connect(slot.slot, point, 0);
+                            point.connect(0, that, slot.slot);
                         }
                     });
                     menu_info.push({
                         content: "Pick point(s)", callback: function() {
-                            var point = LiteGraph.createNode("Commands/XXX");
+                            var point = LiteGraph.createNode("Commands/PickPoint");
                             point.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
                             that.graph.add(point);
                             that.connect(slot.slot, point, 0);
@@ -2290,7 +2305,7 @@
     ////////////////////////////////////////////////////////////////
     /// Basic Object-Oriented node wrappers. An ONM if you will ///
     
-    var geomobjets = {
+    var geomobjects = {
         "GeomObject": {
             "out": [
               {
@@ -2380,7 +2395,7 @@
               {
                 "name": "getBoundingBox",
                 "type": "BoundingBox",
-                "arguments": " boolean useHighAccuracyBounds = 0 ",
+                "arguments": "",
                 "slot": "method"
               },
               {
@@ -2542,13 +2557,23 @@
         "name": "Objects",
         "type": "ObjectList"
     }];
-    for (var name in geomobjets) {
-        var node = makeNodeType(name, ins, geomobjets[name].out);
+    for (var name in geomobjects) {
+        var outs = [];
+        for (var i = 0; i < geomobjects[name].out.length; i++) {
+            var out = geomobjects[name].out[i];
+            if (out.slot == "method" && (!out.name.startsWith("get") || out.arguments != "")) continue;
+            var clone = {};
+            for (var k in out) { clone[k] = out[k] }
+            clone.originalName = out.name;
+            clone.name = out.name.replace(/^get/, '');
+            outs.push(clone);
+        }
+        var node = makeNodeType(name, ins, outs);
         node.prototype.onExecute = function() {
             console.log("onExecute: " + this.name);
             this.boxcolor = "#F80";
             var outs = this.output;
-            var enm = geomobjets[this.name].enum; // FIXME nk this is ugly
+            var enm = geomobjects[this.name].enum; // FIXME nk this is ugly
             var objects = this.getInputData(0, this.properties["Objects"]);
             var outputDatas = [];
             for (var i = 0; i < outs.length; i++) {
@@ -2573,7 +2598,8 @@
                     for (var j = 0; j < outs.length; j++) {
                         var outData = outputDatas[j];
                         // using call/apply doesn't seem to work with MoI's javascript host, so use eval instead
-                        var result = eval("object." + outs[j].name + (outs[j].slot == "method" ? "()" : ""));
+                        console.log("object." + outs[j].originalName + (outs[j].slot == "method" ? "()" : ""));
+                        var result = eval("object." + outs[j].originalName + (outs[j].slot == "method" ? "()" : ""));
                         if (result == null) continue;
                         switch (outs[j].type) {
                             case "Point":
@@ -2593,12 +2619,14 @@
                 }
             }
         }
-        LiteGraph.registerNodeType("Commands/" + name, node);
+        LiteGraph.registerNodeType("Classes/" + name, node);
     }
     
     var classes = {
         "PointPicker": {
+            singleton: "this.properties.pointPicker",
             "out": [
+                /*
             {
                 "name": "allowMidObjectSnap",
                 "type": "boolean",
@@ -2719,7 +2747,8 @@
                 "arguments": "read only",
                 "slot": "property"
             },
-            {
+            */
+           {
                 "name": "pt",
                 "type": "PickedPoint",
                 "arguments": "read only",
@@ -2731,6 +2760,7 @@
                 "arguments": "read only",
                 "slot": "property"
             },
+            /*
             {
                 "name": "relocatedBasePt",
                 "type": "Point",
@@ -2959,6 +2989,7 @@
                 "arguments": " float z ",
                 "slot": "method"
             }
+            */
             ]
         },
         "BoundingBox": {
@@ -4784,14 +4815,20 @@
         }
         var node = makeNodeType(name, classes[name].singleton ? [] : ins, outs);
         node.prototype.onExecute = function() {
+            console.log("onExecute: " + this.name);
             var outs = this.output;
             var singleton = classes[this.name].singleton;
             var objects;
-            if (!singleton) objects = this.getInputData(0, this.properties["Objects"]); // used by eval below
+            if (!singleton) {
+                objects = this.getInputData(0); // used by eval below
+                if (objects == undefined) return;
+                console.log(objects.xLength);
+            }
             var outputDatas = [];
             for (var i = 0; i < outs.length; i++) {
                 switch (outs[i].type) {
                     case "Point":
+                    case "CoordinateFrame":
                         outputDatas.push(new pointArray());
                         break;
                     case "ObjectList":
@@ -4814,6 +4851,8 @@
                     case "Point":
                         outData.pushPoint(result);
                         break;
+                    case "CoordinateFrame":
+                        outData.pushFrame(result);
                     case "ObjectList":
                         for (var k = 0; k < result.length; k++) {
                             outData.addObject(result.item(k));
@@ -4827,6 +4866,23 @@
             }
         }
         LiteGraph.registerNodeType("Classes/" + name, node);
+    }
+    LiteGraph.getNodeType("Classes/PointPicker").prototype.onAdded = function() {
+        this.properties.pointPicker = moi.ui.createPointPicker();
+        var that = this;
+        this.addWidget("button", "Pick", "", function(w, canvas, node, pos, event) {
+            if (event.type !== "mousedown") return;
+
+            while (true) {
+                var pointpicker = that.properties.pointPicker;
+                if (!pointpicker.waitForEvent())
+                    return false;
+                if (pointpicker.event == 'finished') {
+                    that.hasChanged();
+                    break;
+                }
+            }
+        });
     }
     /////////////////////// Finally /////////////////////
     /// Exceptional cases that may be replaced ///

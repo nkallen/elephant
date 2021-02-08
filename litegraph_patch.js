@@ -6,7 +6,12 @@
 (function(){
 
 LGraphNode.prototype.getInputData = function(slot, defaultdata) {
-    if (!this.inputs)  return;
+    var type = this.inputs[slot].type;
+    if (!defaultdata) {
+        if (type == "objectlist") defaultdata = moi.geometryDatabase.createObjectList();
+        if (type == "pointarray") defaultdata = new pointArray();
+    }
+    if (!this.inputs) return defaultdata;
 
     if (slot >= this.inputs.length || this.inputs[slot].link == null) {
         return defaultdata;
@@ -19,6 +24,8 @@ LGraphNode.prototype.getInputData = function(slot, defaultdata) {
         return defaultdata;
     }
 
+    if (link.data === undefined) return defaultdata;
+    
     switch (this.inputs[slot].type) {
         case "pointarray":
             return link.data.clone();
@@ -68,6 +75,7 @@ LGraph.prototype.onNodeRemoved = function(node) {
     delete immortal[node.id];
 }
 LGraph.prototype.runStep = function(num, do_not_catch_errors, limit ) {
+    console.log("=======>>>===============");
     if (Object.keys(hasChanged).length == 0) return;
 
     var needsExecution = this.computeNeedsExecution();
@@ -75,6 +83,7 @@ LGraph.prototype.runStep = function(num, do_not_catch_errors, limit ) {
     for (var i = 0; i < executable.length; i++) {
         if (executable[i].id in needsExecution) {
             _nodes_executable.push(executable[i]);
+            console.log(executable[i].title);
         }
     }
     this._nodes_executable = _nodes_executable;

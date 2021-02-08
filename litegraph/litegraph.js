@@ -8848,7 +8848,8 @@ LGraphNode.prototype.executeAction = function(action)
 					}
 					if (w.callback) {
 						setTimeout(function() {
-							w.callback(w, that, node, pos, event);
+                            console.log("invoking callback");
+                            w.callback(w, that, node, pos, event);
 						}, 20);
 					}
 					w.clicked = true;

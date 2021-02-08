@@ -78,8 +78,11 @@
                 inObj.setProperty('displayMode', 1);
                 break;
         }
-        var object = changeStyle ? inObj.item(i).clone() : inObj.item(i);
-        object.locked = true;
+        for ( var i = 0; i<inObj.length; i++) {
+            var object = changeStyle ? inObj.item(i).clone() : inObj.item(i);
+            object.locked = true;
+        }
+
         for ( var i = 0; i<inObj.length; i++) this.tempobjects.addObject(object);
         for ( var i = this.tempobjects.length; i > 0; ) this.tempobjects.item(--i).setHitTest(0);
         if (changeStyle) this.tempobjects.setProperty( 'styleIndex', this.sIndex);
