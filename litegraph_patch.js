@@ -25,7 +25,7 @@ LGraphNode.prototype.getInputData = function(slot, defaultdata) {
     }
 
     if (link.data === undefined) return defaultdata;
-    
+
     switch (this.inputs[slot].type) {
         case "pointarray":
             return link.data.clone();
@@ -35,6 +35,10 @@ LGraphNode.prototype.getInputData = function(slot, defaultdata) {
             return link.data;
     }
 };
+
+LGraphNode.prototype.hasChanged = function() {
+    return true;
+}
 
 // The execution model differs from vanilla LiteGraph. Most nodes are lazy and should only
 // be executed when something upstream has changed. Only quartz/timer nodes are considered
@@ -58,7 +62,7 @@ LGraph.prototype.updateExecutionOrder = function() {
 
 var runStep = LGraph.prototype.runStep;
 var hasChanged = {};
-LGraphNode.prototype.hasChanged = function() {
+LGraphNode.prototype.markChanged = function() {
     hasChanged[this.id] = true;
 }
 LGraphNode.prototype.onPropertyChanged = function(prop) {
@@ -75,27 +79,89 @@ LGraph.prototype.onNodeRemoved = function(node) {
     delete immortal[node.id];
 }
 LGraph.prototype.runStep = function(num, do_not_catch_errors, limit ) {
-    console.log("=======>>>===============");
     if (Object.keys(hasChanged).length == 0) return;
+
+    var start = LiteGraph.getTime();
+    this.globaltime = 0.001 * (start - this.starttime);
 
     var needsExecution = this.computeNeedsExecution();
     var _nodes_executable = [];
     for (var i = 0; i < executable.length; i++) {
         if (executable[i].id in needsExecution) {
             _nodes_executable.push(executable[i]);
-            console.log(executable[i].title);
         }
     }
-    this._nodes_executable = _nodes_executable;
-    try {
-        runStep.call(this, num, do_not_catch_errors, limit);
-    } catch (err) {
-        this.stop();
-        throw err;
+    num = num || 1;
+
+    var nodes = _nodes_executable;
+
+    limit = limit || nodes.length;
+
+    if (do_not_catch_errors) {
+        //iterations
+        for (var i = 0; i < num; i++) {
+            for (var j = 0; j < limit; ++j) {
+                var node = nodes[j];
+                if ((node.mode == LiteGraph.ALWAYS || node.mode == LiteGraph.IMMORTAL) && node.onExecute) {
+                    node.onExecute(); //hard to send elapsed time
+                }
+            }
+
+            this.fixedtime += this.fixedtime_lapse;
+            if (this.onExecuteStep) {
+                this.onExecuteStep();
+            }
+        }
+
+        if (this.onAfterExecute) {
+            this.onAfterExecute();
+        }
+    } else {
+        try {
+            //iterations
+            for (var i = 0; i < num; i++) {
+                for (var j = 0; j < limit; ++j) {
+                    var node = nodes[j];
+                    if ((node.mode == LiteGraph.ALWAYS || node.mode == LiteGraph.IMMORTAL) && node.onExecute) {
+                        node.onExecute();
+                    }
+                }
+
+                this.fixedtime += this.fixedtime_lapse;
+                if (this.onExecuteStep) {
+                    this.onExecuteStep();
+                }
+            }
+
+            if (this.onAfterExecute) {
+                this.onAfterExecute();
+            }
+            this.errors_in_execution = false;
+        } catch (err) {
+            this.stop();
+            this.errors_in_execution = true;
+            if (LiteGraph.throw_errors) {
+                throw err;
+            }
+            if (LiteGraph.debug) {
+                console.log("Error during execution: " + err);
+            }
+        }
     }
-    delete this._nodes_executable;
+
     hasChanged = {};
     for (var id in immortal) hasChanged[id] = true;
+
+    var now = LiteGraph.getTime();
+    var elapsed = now - start;
+    if (elapsed == 0) {
+        elapsed = 1;
+    }
+    this.execution_time = 0.001 * elapsed;
+    this.globaltime += 0.001 * elapsed;
+    this.iteration += 1;
+    this.elapsed_time = (now - this.last_update_time) * 0.001;
+    this.last_update_time = now;
 };
 
 LGraph.prototype.computeNeedsExecution = function() {

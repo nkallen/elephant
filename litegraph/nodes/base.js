@@ -698,7 +698,7 @@
     ConstantString.prototype.getTitle = ConstantNumber.prototype.getTitle;
 
     ConstantString.prototype.onExecute = function() {
-        this.setOutputData(0, this.properties["value"]);
+        this.setOutputData(0, [this.properties["value"]]);
     };
 
 	ConstantString.prototype.setValue = ConstantNumber.prototype.setValue;

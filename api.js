@@ -1915,12 +1915,14 @@
         return type;
     }
     
-    function makeNodeType(name, args, output) {
+    function makeNodeType(name, input, output, options) {
+        options = options || {};
         var node = function() {
             this.internal = {};
             this.properties = {};
-            for (var i = 0; i < args.length; i++) {
-                var arg = args[i];
+            this.mode = options.mode || LiteGraph.ALWAYS;
+            for (var i = 0; i < input.length; i++) {
+                var arg = input[i];
                 var type = mapType(arg.type);
                 this.addInput(arg.name, type);
                 this.properties[arg.name] = null; // this is necessary for saving/loading
@@ -1941,7 +1943,7 @@
             for (var i = 0; i < output.length; i++) {
                 this.addOutput(output[i].name, mapType(output[i].type));
             }
-            this.args = args;
+            this.args = input;
             this.output = output;
             this.name = name;
             this.boxcolor = "#F05";
@@ -1951,9 +1953,9 @@
         node.prototype.onExecute = function() { // FIXME nk move into loop
             console.log("onExecute " + name);
             var call = [[name]];
-            for (var i = 0; i < args.length; i++) {
-                var value = this.getInputData(i, this.properties[args[i].name]);
-                var type = args[i].type;
+            for (var i = 0; i < input.length; i++) {
+                var value = this.getInputData(i, this.properties[input[i].name]);
+                var type = input[i].type;
                 console.log("i: " + value + " " + type);
                 if (value != null) {
                     switch (type) {
@@ -2029,8 +2031,8 @@
         }
     
         node.prototype.createFromFactory = function(factory) {
-            for (var i = 0; i < args.length; i++) {
-                var arg = args[i];
+            for (var i = 0; i < input.length; i++) {
+                var arg = input[i];
                 var type = arg.type;
                 var rawValue;
                 try {
@@ -2066,9 +2068,9 @@
         };
         node.prototype.configure = function(info) {
             LGraphNode.prototype.configure.call(this, info);
-            for (var i = 0; i < args.length; i++) {
+            for (var i = 0; i < input.length; i++) {
                 var value;
-                var arg = args[i];
+                var arg = input[i];
                 var type = arg.type;
                 var rawValue = this.properties[arg.name];
                 if (rawValue == null) continue;
@@ -3948,6 +3950,7 @@
         },
         "GeometryDatabase": {
             singleton: "moi.geometryDatabase",
+            mode: LiteGraph.IMMORTAL,
             "out": [
             {
                 "name": "Units",
@@ -4813,7 +4816,7 @@
             clone.name = out.name.replace(/^get/, '');
             outs.push(clone);
         }
-        var node = makeNodeType(name, classes[name].singleton ? [] : ins, outs);
+        var node = makeNodeType(name, classes[name].singleton ? [] : ins, outs, classes[name]);
         node.prototype.onExecute = function() {
             console.log("onExecute: " + this.name);
             var outs = this.output;
@@ -4822,7 +4825,6 @@
             if (!singleton) {
                 objects = this.getInputData(0); // used by eval below
                 if (objects == undefined) return;
-                console.log(objects.xLength);
             }
             var outputDatas = [];
             for (var i = 0; i < outs.length; i++) {
@@ -4878,11 +4880,25 @@
                 if (!pointpicker.waitForEvent())
                     return false;
                 if (pointpicker.event == 'finished') {
-                    that.hasChanged();
+                    that.markChanged();
                     break;
                 }
             }
         });
+    }
+    LiteGraph.getNodeType("Classes/GeometryDatabase").prototype.hasChanged = function() {
+        var revChange = moi.geometryDatabase.revision != this.prevRev;
+        this.prevRev = moi.geometryDatabase.revision;
+        var selection = moi.geometryDatabase.getSelectedObjects();
+        var ids = [];
+        var selectionChange = false;
+        for (var i = 0; i < selection.length; i++) {
+            ids.push(selection[i].id);
+            if (!selectionChange && this.prevSelection.length > i - 1 && this.prevSelection[i] != selection[i].id);
+                selectionChange = true;
+        }
+        this.prevSelection = ids;
+        return revChange || selectionChange;
     }
     /////////////////////// Finally /////////////////////
     /// Exceptional cases that may be replaced ///
