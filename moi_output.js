@@ -6,7 +6,7 @@
         this.boxcolor = "#F05";
         this.addInput("","objectlist");
         this.flags = { isOutput: true };
-        this.properties = {style:["--", "--"], edges:["On", "Off", "On"], displayMode: ["Normal", "Normal", "FaintWireframe"]};
+        this.properties = {style:["--", "--"], edges:["On", "Off", "On"], displayMode: ["Normal", "Normal", "FaintWireframe"], xOffset: 0.0};
         this.sIndex = -1;
         this.tempobjects = moi.geometryDatabase.createObjectList();
 
@@ -14,6 +14,21 @@
         this.addProperty("font_size", 30);
         this.size = [164, 84];
         this.clicked = false;
+        var that = this;
+        this.unlockButton = this.addWidget("button", "Unlock", "value", function() {
+            if (that.tempobjects) {
+                for (var i = 0; i < that.tempobjects.length; i++) {
+                    var o = that.tempobjects[i];
+                    o.locked = false;
+                    o.setHitTest(true);
+                }
+            }
+        });
+        this.unlockButton.disabled = true;
+        this.offsetSlider = this.addWidget("slider", "x-offset", 0.0, function(n) {
+            that.onPropertyChanged("xOffset");
+            that.properties.xOffset = n;
+        }, {min:-100, max:100});
     }
     
     MoIOutput.title = "Output";
@@ -63,34 +78,35 @@
                 inObj.setProperty('displayMode', 1);
                 break;
         }
-        for ( var i = 0; i<inObj.length; i++) this.tempobjects.addObject(changeStyle?inObj.item(i).clone():inObj.item(i));
+        var object = changeStyle ? inObj.item(i).clone() : inObj.item(i);
+        object.locked = true;
+        for ( var i = 0; i<inObj.length; i++) this.tempobjects.addObject(object);
         for ( var i = this.tempobjects.length; i > 0; ) this.tempobjects.item(--i).setHitTest(0);
         if (changeStyle) this.tempobjects.setProperty( 'styleIndex', this.sIndex);
+        if (this.properties.xOffset != 0.0) {
+            var zero = moi.VectorMath.createPoint(0,0,0);
+            var offset = moi.VectorMath.createPoint(this.properties.xOffset,0,0);
+            this.tempobjects = factory('move', this.tempobjects, zero, offset);
+        }
         if (this.properties.edges[0] === "Off") for ( var breps = this.tempobjects.getBReps(), i = breps.length; i > 0; ) { breps.item(--i).getEdges().setProperty( 'hidden', true ); }
+
         moi.geometryDatabase.addObjects(this.tempobjects);
-    }
-    
-    MoIOutput.prototype.onPropertyChange = function(property)
-    {
-        this.updateStyles();
-        this.updateObjects();
-        if ( property === "edges" ) if (this.properties.edges[0] === "On") for ( var breps = this.tempobjects.getBReps(), i = breps.length; i > 0; ) { breps.item(--i).getEdges().setProperty( 'hidden', false ); }
-    }
-    
-    MoIOutput.prototype.onApply = function()
-    {
-        var newobjects = moi.geometryDatabase.createObjectList();
-        for ( var i=0; i<this.tempobjects.length; i++) { newobjects.addObject(this.tempobjects.item(i).clone()); newobjects.item(i).styleIndex = this.tempobjects.item(i).styleIndex; }
-        moi.geometryDatabase.addObjects(newobjects);
-        moi.geometryDatabase.removeObjects(this.tempobjects);
-        this.tempobjects = moi.geometryDatabase.createObjectList();
     }
     
     MoIOutput.prototype.onExecute = function()
     {
-        console.log("moioutput");
+        this.unlockButton.disabled = true;
         this.updateObjects();
-        if(this.inputs[0].link !== null) { if (this.tempobjects.length === 0) {this.boxcolor = "#F80"} else {this.boxcolor = "#0F5"}} else {this.boxcolor = "#F05"}
+        if (this.inputs[0].link !== null) {
+            if (this.tempobjects.length === 0) {
+                this.boxcolor = "#F80"
+            } else {
+                this.unlockButton.disabled = false;
+                this.boxcolor = "#0F5"
+            }
+        } else {
+            this.boxcolor = "#F05"
+        }
     }
     
     MoIOutput.prototype.onGetCreatedObjects = function()
@@ -102,49 +118,10 @@
     
     MoIOutput.prototype.getExtraMenuOptions = function(graphcanvas) { var that = this, thatgraph = this.graph; return [{content:lang.getTranslation("Clear"), callback: function() { that.onAdded(); that.onClear(); that.graph.setisChangedFlag(that.id); }}]; }
     
-    MoIOutput.prototype.onDrawForeground = function(ctx)
-    {
-        if (this.flags.collapsed) {
-            return;
-        }
-        var margin = 10;
-        ctx.fillStyle = "black";
-        ctx.fillRect(
-            margin + 1,
-            margin + 1,
-            this.size[0] - margin * 2,
-            this.size[1] - margin * 2
-        );
-        ctx.fillStyle = "#AAF";
-        ctx.fillRect(
-            margin - 1,
-            margin - 1,
-            this.size[0] - margin * 2,
-            this.size[1] - margin * 2
-        );
-        ctx.fillStyle = this.clicked
-            ? "white"
-            : this.mouseOver
-            ? "#668"
-            : "#334";
-        ctx.fillRect(
-            margin,
-            margin,
-            this.size[0] - margin * 2,
-            this.size[1] - margin * 2
-        );
+    MoIOutput.prototype.onDrawBackground = function(ctx) {
+        if (!this.tempobjects) return;
+        this.inputs[0].label = (this.tempobjects.length > 0) ? this.tempobjects.length.toFixed(0) : "--";
+    };
 
-        var text = (this.tempobjects.length > 0)?this.tempobjects.length.toFixed(0):"--";
-        var font_size = this.properties.font_size || 30;
-        ctx.textAlign = "center";
-        ctx.fillStyle = this.clicked ? "black" : "white";
-        ctx.font = font_size + "px " + "Arial";
-        ctx.fillText(
-            text,
-            this.size[0] * 0.5,
-            this.size[1] * 0.5 + font_size * 0.3
-        );
-        ctx.textAlign = "left";
-    }
     LiteGraph.registerNodeType("Basic/Output", MoIOutput);    
 }());

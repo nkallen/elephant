@@ -51,6 +51,12 @@ LGraph.prototype.updateExecutionOrder = function() {
 
 var runStep = LGraph.prototype.runStep;
 var hasChanged = {};
+LGraphNode.prototype.hasChanged = function() {
+    hasChanged[this.id] = true;
+}
+LGraphNode.prototype.onPropertyChanged = function(prop) {
+    hasChanged[this.id] = true;
+}
 LGraph.prototype.onNodeConnectionChange = function(_, node) {
     hasChanged[node.id] = true;
 }
@@ -72,7 +78,12 @@ LGraph.prototype.runStep = function(num, do_not_catch_errors, limit ) {
         }
     }
     this._nodes_executable = _nodes_executable;
-    runStep.call(this, num, do_not_catch_errors, limit);
+    try {
+        runStep.call(this, num, do_not_catch_errors, limit);
+    } catch (err) {
+        this.stop();
+        this.throw(err);
+    }
     delete this._nodes_executable;
     hasChanged = {};
     for (var id in immortal) hasChanged[id] = true;
