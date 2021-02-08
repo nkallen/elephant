@@ -82,7 +82,7 @@ LGraph.prototype.runStep = function(num, do_not_catch_errors, limit ) {
         runStep.call(this, num, do_not_catch_errors, limit);
     } catch (err) {
         this.stop();
-        this.throw(err);
+        throw err;
     }
     delete this._nodes_executable;
     hasChanged = {};

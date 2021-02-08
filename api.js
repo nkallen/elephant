@@ -2292,67 +2292,250 @@
     
     var geomobjets = {
         "GeomObject": {
-            out: [
-                {
-                    "pos": 0,
-                    "name": "databaseRevision",
-                    "type": "int",
-                    "slot": "property",
-                },  
-                {
-                    "pos": 1,
-                    "name": "name",
-                    "type": "string",
-                    "slot": "property",
-                },  
-                {
-                    "pos": 2,
-                    "name": "getSubObjects",
-                    "type": "ObjectList",
-                    "slot": "method",
-                },
+            "out": [
+              {
+                "name": "databaseRevision",
+                "type": "int",
+                "arguments": "read only",
+                "slot": "property"
+              },
+              {
+                "name": "databaseState",
+                "type": "ObjectDatabaseStateEnum",
+                "arguments": "read only",
+                "slot": "property"
+              },
+              {
+                "name": "displayMode",
+                "type": "DisplayModeEnum",
+                "arguments": "",
+                "slot": "property"
+              },
+              {
+                "name": "hidden",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+              },
+              {
+                "name": "id",
+                "type": "string",
+                "arguments": "read only",
+                "slot": "property"
+              },
+              {
+                "name": "locked",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+              },
+              {
+                "name": "name",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+              },
+              {
+                "name": "selected",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+              },
+              {
+                "name": "showPoints",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+              },
+              {
+                "name": "styleIndex",
+                "type": "int",
+                "arguments": "",
+                "slot": "property"
+              },
+              {
+                "name": "type",
+                "type": "GeomObjectEnum",
+                "arguments": "read only",
+                "slot": "property"
+              },
+              {
+                "name": "updateWithHistory",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+              },
+              {
+                "name": "clone",
+                "type": "GeomObject",
+                "arguments": "",
+                "slot": "method"
+              },
+              {
+                "name": "deleteHistoryData",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+              },
+              {
+                "name": "getBoundingBox",
+                "type": "BoundingBox",
+                "arguments": " boolean useHighAccuracyBounds = 0 ",
+                "slot": "method"
+              },
+              {
+                "name": "getHistoryChildren",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+              },
+              {
+                "name": "getHistoryData",
+                "type": "string",
+                "arguments": "",
+                "slot": "method"
+              },
+              {
+                "name": "getHistoryParents",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+              },
+              {
+                "name": "getSubObjects",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+              },
+              {
+                "name": "setHitTest",
+                "type": "",
+                "arguments": " boolean newHitTest ",
+                "slot": "method"
+              }
             ]
-        },
+          },
+        "BRep": {
+            enum: 3,
+            "out": [
+              {
+                "name": "getEdges",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+              },
+              {
+                "name": "getFaces",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+              },
+              {
+                "name": "getJoinedEdges",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+              },
+              {
+                "name": "getNakedEdges",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+              },
+              {
+                "name": "getSeamEdges",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+              }
+            ]
+          },
         "Curve": {
             enum: 2,
-            out: [
+            "out": [
                 {
-                    "pos": 0,
-                    "name": "getEndPt",
-                    "type": "Point",
-                    "slot": "method",
+                  "name": "isClosed",
+                  "type": "boolean",
+                  "arguments": "read only",
+                  "slot": "property"
                 },
                 {
-                    "pos": 1,
-                    "name": "getFacesOfEdge",
-                    "type": "ObjectList",
-                    "slot": "method",
+                  "name": "getEndPt",
+                  "type": "Point",
+                  "arguments": "",
+                  "slot": "method"
                 },
                 {
-                    "pos": 2,
-                    "name": "getStartPt",
-                    "type": "Point",
-                    "slot": "method",
+                  "name": "getFacesOfEdge",
+                  "type": "ObjectList",
+                  "arguments": "",
+                  "slot": "method"
                 },
                 {
-                    "pos": 3,
-                    "name": "getLength",
-                    "type": "float",
-                    "slot": "method",
+                  "name": "getLength",
+                  "type": "float",
+                  "arguments": "",
+                  "slot": "method"
+                },
+                {
+                  "name": "getStartPt",
+                  "type": "Point",
+                  "arguments": "",
+                  "slot": "method"
                 }
-            ]
+              ]
         },
         "PointObject": {
             enum: 6,
-            out: [
+            "out": [
                 {
-                    "pos": 0,
-                    "name": "pt",
-                    "type": "Point",
-                    "slot": "property",
+                  "name": "pt",
+                  "type": "Point",
+                  "arguments": "read only",
+                  "slot": "property"
                 }
             ]
-        },
+          },
+          "ConstructionLine": {
+            enum: 5,
+            "out": [
+              {
+                "name": "isTemporary",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+              }
+            ]
+          },
+        "Face": {
+            enum: 4,
+            "out": [
+                {
+                  "name": "getEdges",
+                  "type": "ObjectList",
+                  "arguments": "",
+                  "slot": "method"
+                },
+                {
+                  "name": "getJoinedEdges",
+                  "type": "ObjectList",
+                  "arguments": "",
+                  "slot": "method"
+                },
+                {
+                  "name": "getNakedEdges",
+                  "type": "ObjectList",
+                  "arguments": "",
+                  "slot": "method"
+                },
+                {
+                  "name": "getSeamEdges",
+                  "type": "ObjectList",
+                  "arguments": "",
+                  "slot": "method"
+                }
+            ]
+        }
     }
     var ins = [{
         "pos": 0,
@@ -2414,46 +2597,2197 @@
     }
     
     var classes = {
-        "ObjectList": {
-            out: [
-                {
-                    "pos": 0,
-                    "name": "length",
-                    "type": "int",
-                    "slot": "property",
-                },  
-                {
-                    "pos": 1,
-                    "name": "getCurves",
-                    "type": "ObjectList",
-                    "slot": "method",
-                },
-                {
-                    "pos": 2,
-                    "name": "getEdges",
-                    "type": "ObjectList",
-                    "slot": "method",
-                },
-                {
-                    "pos": 3,
-                    "name": "getFaces",
-                    "type": "ObjectList",
-                    "slot": "method",
-                },
-                {
-                    "pos": 4,
-                    "name": "getPoints",
-                    "type": "ObjectList",
-                    "slot": "method",
-                },
+        "PointPicker": {
+            "out": [
+            {
+                "name": "allowMidObjectSnap",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "altDown",
+                "type": "boolean",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "basept",
+                "type": "PickedPoint",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "controlDown",
+                "type": "boolean",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "cplane",
+                "type": "CoordinateFrame",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "disableBasePt",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "disableObjectSnap",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "disableSnapToBasePt",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "disableStraightSnap",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "disableTanPerpObjectSnap",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "disableVerticalStraightSnap",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "enableOnObjectSnap",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "finishOnMouseDown",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "finishOnMouseUp",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "hasRelocatedBasePt",
+                "type": "boolean",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "inMouseDown",
+                "type": "boolean",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "inMouseUp",
+                "type": "boolean",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "onlyUseSnapFunc",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "orientedptframe",
+                "type": "CoordinateFrame",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "param",
+                "type": "float",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "pt",
+                "type": "PickedPoint",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "ptframe",
+                "type": "CoordinateFrame",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "relocatedBasePt",
+                "type": "Point",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "resetOnMouseLeave",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "shiftDown",
+                "type": "boolean",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "stickToSurfacesMode",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "addSnapFunc",
+                "type": "",
+                "arguments": " object pdispFunc,string funcName = \"\" ",
+                "slot": "method"
+            },
+            {
+                "name": "addSnapPoint",
+                "type": "",
+                "arguments": " Point point,string textLabel ",
+                "slot": "method"
+            },
+            {
+                "name": "addSnapPostFunc",
+                "type": "",
+                "arguments": " object pdispFunc,string funcName = \"\" ",
+                "slot": "method"
+            },
+            {
+                "name": "addStraightSnapAngle",
+                "type": "",
+                "arguments": " float angleInDegrees,string label ",
+                "slot": "method"
+            },
+            {
+                "name": "bindBasePt",
+                "type": "",
+                "arguments": " object target ",
+                "slot": "method"
+            },
+            {
+                "name": "bindFunc",
+                "type": "",
+                "arguments": " object target,string funcName = \"\" ",
+                "slot": "method"
+            },
+            {
+                "name": "bindFuncPostUpdate",
+                "type": "",
+                "arguments": " object target,string funcName = \"\" ",
+                "slot": "method"
+            },
+            {
+                "name": "bindResultCPlane",
+                "type": "",
+                "arguments": " object target ",
+                "slot": "method"
+            },
+            {
+                "name": "bindResultFrame",
+                "type": "",
+                "arguments": " object target ",
+                "slot": "method"
+            },
+            {
+                "name": "bindResultOrientation",
+                "type": "",
+                "arguments": " object target ",
+                "slot": "method"
+            },
+            {
+                "name": "bindResultPt",
+                "type": "",
+                "arguments": " object target ",
+                "slot": "method"
+            },
+            {
+                "name": "clearBasePt",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "clearBindings",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "clearCurrentSnaps",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "clearSnapFuncPoint",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "clearSnapFuncs",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "clearSnapPoints",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "clearStraightSnapAngles",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "disableStraightSnapAngle",
+                "type": "",
+                "arguments": " float angleInDegrees ",
+                "slot": "method"
+            },
+            {
+                "name": "reset",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "restrictToLinePtDir",
+                "type": "",
+                "arguments": " Point basePt,Point dir,boolean projectAll ",
+                "slot": "method"
+            },
+            {
+                "name": "restrictToLinePtPt",
+                "type": "",
+                "arguments": " Point startPt,Point endpt,boolean projectAll ",
+                "slot": "method"
+            },
+            {
+                "name": "restrictToObject",
+                "type": "",
+                "arguments": " GeomObject obj ",
+                "slot": "method"
+            },
+            {
+                "name": "restrictToPlane",
+                "type": "",
+                "arguments": " CoordinateFrame plane,boolean projectAll ",
+                "slot": "method"
+            },
+            {
+                "name": "restrictToPlaneThroughPt",
+                "type": "",
+                "arguments": " Point point,boolean projectAll ",
+                "slot": "method"
+            },
+            {
+                "name": "setAngleConstraint",
+                "type": "",
+                "arguments": " float angleDegrees ",
+                "slot": "method"
+            },
+            {
+                "name": "setBasePt",
+                "type": "",
+                "arguments": " Point point ",
+                "slot": "method"
+            },
+            {
+                "name": "setDistanceConstraint",
+                "type": "",
+                "arguments": " float distance ",
+                "slot": "method"
+            },
+            {
+                "name": "setPt",
+                "type": "",
+                "arguments": " Point point ",
+                "slot": "method"
+            },
+            {
+                "name": "setRadialIntersection",
+                "type": "",
+                "arguments": " CoordinateFrame frame,Point point ",
+                "slot": "method"
+            },
+            {
+                "name": "setSnapFuncPoint",
+                "type": "",
+                "arguments": " Point point,string textLabel ",
+                "slot": "method"
+            },
+            {
+                "name": "setX",
+                "type": "",
+                "arguments": " float x ",
+                "slot": "method"
+            },
+            {
+                "name": "setY",
+                "type": "",
+                "arguments": " float y ",
+                "slot": "method"
+            },
+            {
+                "name": "setZ",
+                "type": "",
+                "arguments": " float z ",
+                "slot": "method"
+            }
             ]
-        }
+        },
+        "BoundingBox": {
+            "out": [
+            {
+                "name": "center",
+                "type": "Point",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "diagonalLength",
+                "type": "float",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "max",
+                "type": "Point",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "min",
+                "type": "Point",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "xLength",
+                "type": "float",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "yLength",
+                "type": "float",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "zLength",
+                "type": "float",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "addBoundingBox",
+                "type": "",
+                "arguments": " BoundingBox box ",
+                "slot": "method"
+            },
+            {
+                "name": "addObject",
+                "type": "",
+                "arguments": " GeomObject obj,boolean useHighAccuracyBounds = 0 ",
+                "slot": "method"
+            },
+            {
+                "name": "addPoint",
+                "type": "",
+                "arguments": " Point point ",
+                "slot": "method"
+            },
+            {
+                "name": "clear",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "get",
+                "type": "",
+                "arguments": " float minX,float minY,float minZ,float maxX,float maxY,float maxZ ",
+                "slot": "method"
+            },
+            {
+                "name": "set",
+                "type": "",
+                "arguments": " float minX,float minY,float minZ,float maxX,float maxY,float maxZ ",
+                "slot": "method"
+            }
+            ]
+        },
+        "FilesystemOM": {
+            "out": [
+            {
+                "name": "getCompactPath",
+                "type": "string",
+                "arguments": " string fileName,int numChars ",
+                "slot": "method"
+            },
+            {
+                "name": "getFileNameFromPath",
+                "type": "string",
+                "arguments": " string fullPath ",
+                "slot": "method"
+            },
+            {
+                "name": "getOpenFileName",
+                "type": "string",
+                "arguments": " string title,string filters ",
+                "slot": "method"
+            },
+            {
+                "name": "getSaveFileName",
+                "type": "string",
+                "arguments": " string title,string filters ",
+                "slot": "method"
+            },
+            {
+                "name": "incrementFileName",
+                "type": "string",
+                "arguments": " string fileName ",
+                "slot": "method"
+            }
+            ]
+        },
+        "Moi": {
+            singleton: "moi",
+            "out": [
+            {
+                "name": "command",
+                "type": "CommandOM",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "drawingAids",
+                "type": "DrawingAids",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "expireDate",
+                "type": "string",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "filesystem",
+                "type": "FilesystemOM",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "geometryDatabase",
+                "type": "GeometryDatabase",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "grid",
+                "type": "Grid",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "selection",
+                "type": "Selection",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "settings",
+                "type": "Settings",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "ui",
+                "type": "UI",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "vectorMath",
+                "type": "VectorMath",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "version",
+                "type": "string",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "view",
+                "type": "View",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "copyTextToClipboard",
+                "type": "",
+                "arguments": " string text ",
+                "slot": "method"
+            },
+            {
+                "name": "createList",
+                "type": "List",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "exit",
+                "type": "",
+                "arguments": " boolean noQuerySaveChanges = 0 ",
+                "slot": "method"
+            },
+            {
+                "name": "getLog",
+                "type": "string",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "launchHelp",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "log",
+                "type": "",
+                "arguments": " string toLog ",
+                "slot": "method"
+            },
+            {
+                "name": "test",
+                "type": "",
+                "arguments": " string test ",
+                "slot": "method"
+            }
+            ]
+        },
+        "VectorMath": {
+            "out": [
+            {
+                "name": "add",
+                "type": "object",
+                "arguments": " object pointA,object pointB ",
+                "slot": "method"
+            },
+            {
+                "name": "average",
+                "type": "object",
+                "arguments": " object pointA,object pointB ",
+                "slot": "method"
+            },
+            {
+                "name": "createBoundingBox",
+                "type": "BoundingBox",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "createFrame",
+                "type": "CoordinateFrame",
+                "arguments": " Point origin = NULL,Point xAxis = NULL,Point yAxis = NULL ",
+                "slot": "method"
+            },
+            {
+                "name": "createFrontFrame",
+                "type": "CoordinateFrame",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "createPoint",
+                "type": "Point",
+                "arguments": " float x = 0.0,float y = 0.0,float z = 0.0 ",
+                "slot": "method"
+            },
+            {
+                "name": "createRightFrame",
+                "type": "CoordinateFrame",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "createTopFrame",
+                "type": "CoordinateFrame",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "distance",
+                "type": "float",
+                "arguments": " object pointA,object pointB ",
+                "slot": "method"
+            },
+            {
+                "name": "pointsAreEqual",
+                "type": "boolean",
+                "arguments": " object pointA,object pointB ",
+                "slot": "method"
+            },
+            {
+                "name": "pointsWithinTolerance",
+                "type": "boolean",
+                "arguments": " object pointA,object pointB ",
+                "slot": "method"
+            }
+            ]
+        },
+        "CommandOM": {
+            singleton: "moi.command",
+            "out": [
+            {
+                "name": "lastCommandRevisionEnd",
+                "type": "int",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "lastCommandRevisionStart",
+                "type": "int",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "nonRepeatingCommands",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "cancel",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "createFactory",
+                "type": "GeometryFactory",
+                "arguments": " string factoryName ",
+                "slot": "method"
+            },
+            {
+                "name": "execCommand",
+                "type": "",
+                "arguments": " string commandName ",
+                "slot": "method"
+            },
+            {
+                "name": "execCommandSet",
+                "type": "",
+                "arguments": " string commandSetName ",
+                "slot": "method"
+            },
+            {
+                "name": "getOption",
+                "type": "any",
+                "arguments": " string option,boolean fromIni = 0 ",
+                "slot": "method"
+            },
+            {
+                "name": "redo",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "registerCommandSpecificShortcutKey",
+                "type": "",
+                "arguments": " string shortcut ",
+                "slot": "method"
+            },
+            {
+                "name": "repeatLastCommand",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "setCommandSpecificUndo",
+                "type": "",
+                "arguments": " boolean newCommandSpecificUndo ",
+                "slot": "method"
+            },
+            {
+                "name": "setOption",
+                "type": "",
+                "arguments": " string option,any varValue,boolean toIni = 0 ",
+                "slot": "method"
+            },
+            {
+                "name": "undo",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            }
+            ]
+        },
+        "View": {
+            "out": [
+            {
+                "name": "allowRotationTilt3dx",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "axisLabels",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "backgroundImageDrawOrder",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "backgroundImageShowIn",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "backgroundImageTransparency",
+                "type": "int",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "customFillLightLevel",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "customKeyLightLevel",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "edgeColorMode",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "edgeFixedColor",
+                "type": "int",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "fixedLightPositions",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "hiddenLineOpacity",
+                "type": "int",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "hiddenLineStyle",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "lightDirection",
+                "type": "Point",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "lightingStyle",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "lineWidth",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "linkOrthoViews",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "lockedObjectsColor",
+                "type": "int",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "lockedObjectsUseAlternateColor",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "meshAngle",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "meshDetailedInflections",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "metallicLighting",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "panButtonSensitivity",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "panSpeed3dx",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "reversePan3dx",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "reversePanButton",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "reverseRotateButton",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "reverseRotateMouse",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "reverseRotation3dx",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "reverseScrollWheel",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "reverseZoom3dx",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "reverseZoomButton",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "rotateButtonSensitivity",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "rotateMiddleButton",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "rotationSpeed3dx",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "rotationStyle",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "shadeMode",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "showAxisIcon",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "showEditFrame",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "showHiddenLines",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "showViewControls",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "specularBrightness",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "specularFocusSize",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "specularHighlights",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "surfaceColorMode",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "surfaceFixedColor",
+                "type": "int",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "swapPanZoom3dx",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "swapTwistTilt3dx",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "viewportBackgroundColor",
+                "type": "int",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "zoomButtonSensitivity",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "zoomSpeed3dx",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "getBackgroundImages",
+                "type": "List",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "getCPlane",
+                "type": "CoordinateFrame",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "resetAll",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "resetCPlane",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "screenshot",
+                "type": "Image",
+                "arguments": " string area,boolean includeCursor ",
+                "slot": "method"
+            },
+            {
+                "name": "setCPlane",
+                "type": "",
+                "arguments": " CoordinateFrame frame,boolean applyToAllViews = -1,boolean orientOrthoViews = -1 ",
+                "slot": "method"
+            },
+            {
+                "name": "setCPlaneInteractive",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            }
+            ]
+        },
+        "ObjectList": {
+            "out": [
+            {
+                "name": "length",
+                "type": "int",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "numBReps",
+                "type": "int",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "numConstructionLines",
+                "type": "int",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "numCurves",
+                "type": "int",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "numEdges",
+                "type": "int",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "numFaces",
+                "type": "int",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "numOpenBReps",
+                "type": "int",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "numPoints",
+                "type": "int",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "numSingleFaceBReps",
+                "type": "int",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "numSolids",
+                "type": "int",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "numStandaloneCurves",
+                "type": "int",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "numTopLevelObjects",
+                "type": "int",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "addObject",
+                "type": "",
+                "arguments": " GeomObject obj ",
+                "slot": "method"
+            },
+            {
+                "name": "callMethod",
+                "type": "",
+                "arguments": " string methodName ",
+                "slot": "method"
+            },
+            {
+                "name": "getBReps",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "getBoundingBox",
+                "type": "BoundingBox",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "getConstructionLines",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "getCurves",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "getEdges",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "getFaces",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "getHighAccuracyBoundingBox",
+                "type": "BoundingBox",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "getOpenBReps",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "getPoints",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "getSingleFaceBReps",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "getSolids",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "getStandaloneCurves",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "getTopLevelObjects",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "invertProperty",
+                "type": "",
+                "arguments": " string propName ",
+                "slot": "method"
+            },
+            {
+                "name": "item",
+                "type": "GeomObject",
+                "arguments": " int index ",
+                "slot": "method"
+            },
+            {
+                "name": "lockSelection",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "removeObject",
+                "type": "",
+                "arguments": " GeomObject obj ",
+                "slot": "method"
+            },
+            {
+                "name": "removeObjectAt",
+                "type": "",
+                "arguments": " int index ",
+                "slot": "method"
+            },
+            {
+                "name": "setProperty",
+                "type": "",
+                "arguments": " string propName,any pvarValue ",
+                "slot": "method"
+            },
+            {
+                "name": "sortBySelectionOrder",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "unlockSelection",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            }
+            ]
+        },
+        "GeometryDatabase": {
+            singleton: "moi.geometryDatabase",
+            "out": [
+            {
+                "name": "Units",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "currentFileName",
+                "type": "string",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "currentFileNameDir",
+                "type": "string",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "defaultUnits",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "generatedObjectsInheritStyle",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "revision",
+                "type": "int",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "scaleOnImportDifferentUnits",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "scaleOnUnitChange",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "startupTemplate",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "tolerance",
+                "type": "float",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "unitsShortLabel",
+                "type": "string",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "addObject",
+                "type": "",
+                "arguments": " GeomObject object ",
+                "slot": "method"
+            },
+            {
+                "name": "addObjects",
+                "type": "",
+                "arguments": " ObjectList objects ",
+                "slot": "method"
+            },
+            {
+                "name": "addStyle",
+                "type": "ObjectStyle",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "calculateCurveOrientations",
+                "type": "List",
+                "arguments": " ObjectList curveList ",
+                "slot": "method"
+            },
+            {
+                "name": "copyToClipboard",
+                "type": "",
+                "arguments": " ObjectList objects ",
+                "slot": "method"
+            },
+            {
+                "name": "copyToClipboardCommand",
+                "type": "",
+                "arguments": " ObjectList objects ",
+                "slot": "method"
+            },
+            {
+                "name": "createObjectList",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "deleteAll",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "deselectAll",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "fileExport",
+                "type": "",
+                "arguments": " string fileName,string options = \"\" ",
+                "slot": "method"
+            },
+            {
+                "name": "fileImport",
+                "type": "",
+                "arguments": " string fileName ",
+                "slot": "method"
+            },
+            {
+                "name": "fileNew",
+                "type": "",
+                "arguments": " boolean noQuerySaveChanges = 0 ",
+                "slot": "method"
+            },
+            {
+                "name": "findObject",
+                "type": "GeomObject",
+                "arguments": " string id ",
+                "slot": "method"
+            },
+            {
+                "name": "findStyle",
+                "type": "ObjectStyle",
+                "arguments": " string styleName,boolean createIfNotFound = 0 ",
+                "slot": "method"
+            },
+            {
+                "name": "getObjectStyles",
+                "type": "List",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "getObjects",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "getOpenFileName",
+                "type": "string",
+                "arguments": " string dialogTitle = \"\",boolean isTemplate = 0 ",
+                "slot": "method"
+            },
+            {
+                "name": "getSaveFileName",
+                "type": "string",
+                "arguments": " string default = \"\" ",
+                "slot": "method"
+            },
+            {
+                "name": "getSelectedObjects",
+                "type": "ObjectList",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "hide",
+                "type": "",
+                "arguments": " boolean unused = 0 ",
+                "slot": "method"
+            },
+            {
+                "name": "incrementalSave",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "invertSelection",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "isolate",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "isolateLock",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "lock",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "open",
+                "type": "",
+                "arguments": " string fileName,boolean noQuerySaveChanges = 0 ",
+                "slot": "method"
+            },
+            {
+                "name": "openTemplate",
+                "type": "",
+                "arguments": " string fileName,boolean noQuerySaveChanges = 0 ",
+                "slot": "method"
+            },
+            {
+                "name": "pasteFromClipboard",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "removeObject",
+                "type": "",
+                "arguments": " GeomObject object ",
+                "slot": "method"
+            },
+            {
+                "name": "removeObjects",
+                "type": "",
+                "arguments": " ObjectList objects ",
+                "slot": "method"
+            },
+            {
+                "name": "save",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "saveAs",
+                "type": "",
+                "arguments": " string fileName,string options = \"\" ",
+                "slot": "method"
+            },
+            {
+                "name": "selectAll",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "selectLastCreated",
+                "type": "",
+                "arguments": " boolean deselectOthers = 0 ",
+                "slot": "method"
+            },
+            {
+                "name": "selectNamed",
+                "type": "",
+                "arguments": " string name ",
+                "slot": "method"
+            },
+            {
+                "name": "selectVisible",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "showPoints",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "showSubset",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "sortCurves",
+                "type": "",
+                "arguments": " ObjectList curveList ",
+                "slot": "method"
+            },
+            {
+                "name": "styleEditorClosed",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "styleEditorOpened",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "unlockSubset",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            }
+            ]
+        },
+        "ObjectPicker": {
+            "out": [
+            {
+                "name": "finishOnPick",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "max",
+                "type": "int",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "min",
+                "type": "int",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "objects",
+                "type": "ObjectList",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "allowBReps",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "allowCurves",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "allowEdgeCurves",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "allowEditPoints",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "allowFaces",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "allowPointObjects",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "allowStandaloneCurves",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "allowTopLevelObjects",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "disableWindowing",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "done",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "resetAllow",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            }
+            ]
+        },
+        "Settings": {
+            "out": [
+            {
+                "name": "igesJoinOnImport",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "lwoScaleToMeters",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "lwoVertexNormalsStyle",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "meshExportCombineSameNamedObjects",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "objExportOrientation",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "objExportScaleFactor",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "objExportWriteMaterialAssignments",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "objExportWriteMtlFile",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "stlExportFileType",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "editIniFile",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "getIniPath",
+                "type": "string",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "restoreDefaults",
+                "type": "",
+                "arguments": " string whichGroup = \"\" ",
+                "slot": "method"
+            }
+            ]
+        },
+        "CoordinateFrame": {
+            "out": [
+            {
+                "name": "origin",
+                "type": "Point",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "xaxis",
+                "type": "Point",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "yaxis",
+                "type": "Point",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "zaxis",
+                "type": "Point",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "distancex",
+                "type": "float",
+                "arguments": " Point point ",
+                "slot": "method"
+            },
+            {
+                "name": "distancey",
+                "type": "float",
+                "arguments": " Point point ",
+                "slot": "method"
+            },
+            {
+                "name": "distancez",
+                "type": "float",
+                "arguments": " Point point ",
+                "slot": "method"
+            },
+            {
+                "name": "evaluate",
+                "type": "Point",
+                "arguments": " float x,float y,float z ",
+                "slot": "method"
+            },
+            {
+                "name": "get",
+                "type": "",
+                "arguments": " float originX,float originY,float originZ,float xAxisX,float xAxisY,float xAxisZ,float yAxisX,float yAxisY,float yAxisZ ",
+                "slot": "method"
+            },
+            {
+                "name": "set",
+                "type": "",
+                "arguments": " float newOriginX,float newOriginY,float newOriginZ,float newXAxisX,float newXAxisY,float newXAxisZ,float newYAxisX,float newYAxisY,float newYAxisZ ",
+                "slot": "method"
+            }
+            ]
+        },
+        "Viewport": {
+            "out": [
+            {
+                "name": "cameraFrame",
+                "type": "CoordinateFrame",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "cameraPt",
+                "type": "Point",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "cplane",
+                "type": "CoordinateFrame",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "is3DView",
+                "type": "boolean",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "leftRightAngle",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "name",
+                "type": "string",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "projection",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "targetFrame",
+                "type": "CoordinateFrame",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "targetPt",
+                "type": "Point",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "tiltAngle",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "upDownAngle",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "viewPanel",
+                "type": "ViewPanel",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "interactiveViewChange",
+                "type": "",
+                "arguments": " string type ",
+                "slot": "method"
+            },
+            {
+                "name": "pan",
+                "type": "",
+                "arguments": " float rightLeft,float upDown,float backwardsForwards = 0.0 ",
+                "slot": "method"
+            },
+            {
+                "name": "renderToClipboard",
+                "type": "",
+                "arguments": " int width,int height ",
+                "slot": "method"
+            },
+            {
+                "name": "reset",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "rotate",
+                "type": "",
+                "arguments": " string direction,float angleDegrees = 0.0 ",
+                "slot": "method"
+            },
+            {
+                "name": "setAngles",
+                "type": "",
+                "arguments": " float upDownAngleDegrees = 0.0,float leftRightAngleDegrees = 0.0,float tiltAngleDegrees = 0.0 ",
+                "slot": "method"
+            },
+            {
+                "name": "setCameraAndTarget",
+                "type": "",
+                "arguments": " Point newCamera,Point newTarget ",
+                "slot": "method"
+            },
+            {
+                "name": "zoom",
+                "type": "",
+                "arguments": " float zoomFactor ",
+                "slot": "method"
+            }
+            ]
+        },
+        "ObjectStyle": {
+            "out": [
+            {
+                "name": "color",
+                "type": "int",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "hexcolor",
+                "type": "string",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "index",
+                "type": "int",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "name",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "moveDown",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "moveUp",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            },
+            {
+                "name": "remove",
+                "type": "",
+                "arguments": "",
+                "slot": "method"
+            }
+            ]
+        },
+
+        "Grid": {
+            "out": [
+            {
+                "name": "accentedLineColor",
+                "type": "int",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "accentedLineFrequency",
+                "type": "int",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "accentedLineStyle",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "accentedLineWidth",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "display",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "lineColor",
+                "type": "int",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "lineStyle",
+                "type": "string",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "lineWidth",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "sections",
+                "type": "int",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "showXYAxes",
+                "type": "boolean",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "size",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "snapSize",
+                "type": "float",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "xAxisColor",
+                "type": "int",
+                "arguments": "",
+                "slot": "property"
+            },
+            {
+                "name": "yAxisColor",
+                "type": "int",
+                "arguments": "",
+                "slot": "property"
+            }
+            ]
+        },
+        "PickedPoint": {
+            "out": [
+            {
+                "name": "numOsnaps",
+                "type": "int",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "screenX",
+                "type": "float",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "screenY",
+                "type": "float",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "viewport",
+                "type": "Viewport",
+                "arguments": "read only",
+                "slot": "property"
+            },
+            {
+                "name": "osnap",
+                "type": "Osnap",
+                "arguments": " int index ",
+                "slot": "method"
+            }
+            ]
+        },
     }
     for (var name in classes) {
-        var node = makeNodeType(name, ins, classes[name].out);
+        var ins = [{
+            "pos": 0,
+            "name": name,
+            "type": name
+        }];
+        var outs = [];
+        for (var i = 0; i < classes[name].out.length; i++) {
+            var out = classes[name].out[i];
+            if (out.slot == "method" && (!out.name.startsWith("get") || out.arguments != "")) continue;
+            var clone = {};
+            for (var k in out) { clone[k] = out[k] }
+            clone.originalName = out.name;
+            clone.name = out.name.replace(/^get/, '');
+            outs.push(clone);
+        }
+        var node = makeNodeType(name, classes[name].singleton ? [] : ins, outs);
         node.prototype.onExecute = function() {
             var outs = this.output;
-            var objects = this.getInputData(0, this.properties["Objects"]); // used by eval below
+            var singleton = classes[this.name].singleton;
+            var objects;
+            if (!singleton) objects = this.getInputData(0, this.properties["Objects"]); // used by eval below
             var outputDatas = [];
             for (var i = 0; i < outs.length; i++) {
                 switch (outs[i].type) {
@@ -2470,13 +4804,13 @@
                 this.setOutputData(i, outputDatas[outputDatas.length-1]);
             }
             this.boxcolor = "#F80";
-    
-            for (var j = 0; j < outs.length; j++) {
-                var outData = outputDatas[j];
+
+            for (var i = 0; i < outs.length; i++) {
+                var outData = outputDatas[i];
                 // using call/apply doesn't seem to work with MoI's javascript host, so use eval instead
-                var result = eval("objects." + outs[j].name + (outs[j].slot == "method" ? "()" : ""));
+                var result = eval((singleton ? singleton : "objects") + '.' + outs[i].originalName + (outs[i].slot == "method" ? "()" : ""));
                 if (result == null) continue;
-                switch (outs[j].type) {
+                switch (outs[i].type) {
                     case "Point":
                         outData.pushPoint(result);
                         break;
@@ -2492,7 +4826,7 @@
                 this.boxcolor = "#0F5";
             }
         }
-        LiteGraph.registerNodeType("Commands/" + name, node);
+        LiteGraph.registerNodeType("Classes/" + name, node);
     }
     /////////////////////// Finally /////////////////////
     /// Exceptional cases that may be replaced ///
@@ -2646,3 +4980,23 @@
     //         var tds = $(tr).find("td");
     //         return {pos: $(tds[0]).text(), b: $(tds[1]).text(), c: $(tds[2]).text()} })};
     // })
+    
+    
+    // $.map($(tbody).find("tr td a"), function (item) {
+    // 	var trs = $($("a[name='" + $(item).attr("href").substring(1,25) + "']")[0])
+    //         .nextAll(".sectionb:first").find("table:contains('Properties')")
+    //         .find("tr.odd, tr.even");
+    //     var props = $.map(trs, function(tr) {
+    //             var tds = $(tr).find("td");
+    //             return {name: $(tds[0]).text(), type: $(tds[1]).text(), arguments: $(tds[2]).find('.info').text(), slot: "property" }})
+    //     var trs = $($("a[name='" + $(item).attr("href").substring(1,25) + "']")[0])
+    //         .nextAll(".sectionb:first").find("table:contains('Methods')")
+    //         .find("tr.odd, tr.even");
+    //     var methods = $.map(trs, function(tr) {
+    //             var tds = $(tr).find("td");
+    //             return {name: $(tds[0]).text(), type: $(tds[1]).text(), arguments: $(tds[2]).find('.info').text(), slot: "method" }})
+    
+    //     return {name: $(item).attr("href").substring(2,25), out: $.extend({}, props, methods)}
+    // })
+
+    
