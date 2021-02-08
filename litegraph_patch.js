@@ -38,6 +38,7 @@ var immortal = {};
 var executable = [];
 LiteGraph.IMMORTAL = 4;
 LGraph.prototype.updateExecutionOrder = function() {
+    executable = [];
     this._nodes_in_order = this.computeExecutionOrder(false);
     for (var i = 0; i < this._nodes_in_order.length; ++i) {
         var node = this._nodes_in_order[i];
@@ -50,11 +51,15 @@ LGraph.prototype.updateExecutionOrder = function() {
 
 var runStep = LGraph.prototype.runStep;
 var hasChanged = {};
-LGraph.prototype.onConnectionChange = function(node) {
+LGraph.prototype.onNodeConnectionChange = function(_, node) {
     hasChanged[node.id] = true;
 }
 LGraph.prototype.onNodeAdded = function(node) {
     hasChanged[node.id] = true;
+}
+LGraph.prototype.onNodeRemoved = function(node) {
+    delete hasChanged[node.id];
+    delete immortal[node.id];
 }
 LGraph.prototype.runStep = function(num, do_not_catch_errors, limit ) {
     if (Object.keys(hasChanged).length == 0) return;

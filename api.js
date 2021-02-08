@@ -1999,7 +1999,6 @@
     
             var acc = moi.geometryDatabase.createObjectList();
             for (var i = 0; i < calls.length; i++) {
-                console.log(call);
                 var temp = factory.apply(null, calls[i]);
                 for (var j = 0; j < temp.length; j++) {
                     acc.addObject(temp.item(j));
@@ -2007,7 +2006,6 @@
             }
             this.boxcolor = acc.length == 0 ? "#F80" : "#0F5";
             this.setOutputData(0, acc);
-            // this.updateThisNodeGraph();
             this.setDirtyCanvas(true);
         }
     
@@ -2084,29 +2082,143 @@
         };
         node.prototype.getExtraMenuOptions = function() {
             var that = this;
-            var result = [
-                {content: lang.getTranslation("Clone"), callback: function() {
-                    that.graph.runStep();
-                    moi.geometryDatabase.addObjects(that.temp);
-                }}
-            ];
+            var menu_info = [];
             if (that.createdObjectIds) {
                 for (var i = 0; i < that.createdObjectIds.length; i++) {
                     var obj = moi.geometryDatabase.findObject(that.createdObjectIds[i]);
                     if (obj != null) {
-                        result.push(
-                            {content: lang.getTranslation("SELECT"), callback: function() {
+                        menu_info.push({
+                            content: lang.getTranslation("Select"), callback: function() {
                                 for (var i = 0; i < that.createdObjectIds.length; i++) {
                                     var obj = moi.geometryDatabase.findObject(that.createdObjectIds[i]);
                                     obj.selected = true;
                                 }
-                            }}
-                        );
-                        break;
+                            }
+                        });
                     }
                 }
             }
-            return result;
+            return menu_info;
+        };
+        node.prototype.getSlotMenuOptions = function(slot) {
+            var that = this;
+            menu_info = [];
+            var _slot = slot.input || slot.output;
+            if (slot.output) {
+                if (_slot.type == "objectlist") {
+                    menu_info.push({
+                        content: "Add output", callback: function() {
+                            var output = LiteGraph.createNode("Basic/Output");
+                            output.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
+                            that.graph.add(output);
+                            that.connect(slot.slot, output, 0);
+                        }}
+                    );
+                    menu_info.push({
+                        content: "Add ObjectList", callback: function() {
+                            var output = LiteGraph.createNode("Commands/ObjectList");
+                            output.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
+                            that.graph.add(output);
+                            that.connect(slot.slot, output, 0);
+                        }
+                    });
+                    menu_info.push({
+                        content: "Add GeomObject", callback: function() {
+                            var output = LiteGraph.createNode("Commands/GeomObject");
+                            output.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
+                            that.graph.add(output);
+                            that.connect(slot.slot, output, 0);
+                        }
+                    });
+                    menu_info.push({
+                        content: "Select Point", callback: function() {
+                            var pointobject = LiteGraph.createNode("Commands/PointObject");
+                            pointobject.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
+                            that.graph.add(pointobject);
+                            that.connect(slot.slot, pointobject, 0);
+                        }
+                    });
+                    menu_info.push({
+                        content: "Select Curve", callback: function() {
+                            var curve = LiteGraph.createNode("Commands/Curve");
+                            curve.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
+                            that.graph.add(curve);
+                            that.connect(slot.slot, curve, 0);
+                        }
+                    });
+                    menu_info.push({
+                        content: "Select Edge", callback: function() {
+                            var edge = LiteGraph.createNode("Commands/Edge");
+                            edge.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
+                            that.graph.add(edge);
+                            that.connect(slot.slot, edge, 0);
+                        }
+                    });
+                    menu_info.push({
+                        content: "Select Face", callback: function() {
+                            var face = LiteGraph.createNode("Commands/Face");
+                            face.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
+                            that.graph.add(face);
+                            that.connect(slot.slot, face, 0);
+                        }
+                    });
+                    menu_info.push({
+                        content: "Select BRep", callback: function() {
+                            var face = LiteGraph.createNode("Commands/BRep");
+                            face.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
+                            that.graph.add(face);
+                            that.connect(slot.slot, face, 0);
+                        }
+                    });
+                } else if (_slot.type == "pointarray") {
+                    menu_info.push({
+                        content: "Make point", callback: function() {
+                            var point = LiteGraph.createNode("Commands/point");
+                            point.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
+                            that.graph.add(point);
+                            that.connect(slot.slot, point, 0);
+                        }
+                    });
+                }
+            } else {
+                if (_slot.type == "objectlist") {
+                    menu_info.push({
+                        content: "Current selection", callback: function() {
+                            var point = LiteGraph.createNode("Commands/XXX");
+                            point.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
+                            that.graph.add(point);
+                            that.connect(slot.slot, point, 0);
+                        }
+                    });
+                } else if (_slot.type == "pointarray") {
+                    menu_info.push({
+                        content: "From point", callback: function() {
+                            var point = LiteGraph.createNode("Commands/PointObject");
+                            point.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
+                            that.graph.add(point);
+                            that.connect(slot.slot, point, 0);
+                        }
+                    });
+                    menu_info.push({
+                        content: "From bounding box", callback: function() {
+                            var point = LiteGraph.createNode("Commands/PointObject");
+                            point.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
+                            that.graph.add(point);
+                            that.connect(slot.slot, point, 0);
+                        }
+                    });
+                    menu_info.push({
+                        content: "Pick point(s)", callback: function() {
+                            var point = LiteGraph.createNode("Commands/XXX");
+                            point.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
+                            that.graph.add(point);
+                            that.connect(slot.slot, point, 0);
+                        }
+                    });
+                }
+
+            }
+            return menu_info;
         }
         node.prototype.serialize = function(includeIO) {
             var o = LGraphNode.prototype.serialize.call(this, includeIO);

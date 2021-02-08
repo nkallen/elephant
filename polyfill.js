@@ -56,12 +56,11 @@ if (!Array.prototype.findIndex) {
         writable: true
     });
 }
-storage = {
-    setItem: function(key, value) {
-        this[key] = value;
-    },
-    getItem: function(key) {
-        return this[key];
-    }
-}
+window.localStorage_avoidConflict = {
+    _data       : {},
+    setItem     : function(id, val) { return this._data[id] = String(val); },
+    getItem     : function(id) { return this._data.hasOwnProperty(id) ? this._data[id] : undefined; },
+    removeItem  : function(id) { return delete this._data[id]; },
+    clear       : function() { return this._data = {}; }
+  };
 })();

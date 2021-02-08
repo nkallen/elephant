@@ -51,6 +51,10 @@
         this.onClear();
         var changeStyle = (this.properties.style[0] !== this.properties.style[1] && this.sIndex !== -1);
         var inObj = this.getInputData(0, moi.geometryDatabase.createObjectList());
+        // if (!inObj) {
+        //     console.log("ERRROR");
+        //     return;
+        // }
         switch (this.properties.displayMode) {
             case "Normal":
                 inObj.setProperty('displayMode', 0);
@@ -84,6 +88,7 @@
     
     MoIOutput.prototype.onExecute = function()
     {
+        console.log("moioutput");
         this.updateObjects();
         if(this.inputs[0].link !== null) { if (this.tempobjects.length === 0) {this.boxcolor = "#F80"} else {this.boxcolor = "#0F5"}} else {this.boxcolor = "#F05"}
     }
