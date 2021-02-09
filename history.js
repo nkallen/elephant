@@ -10,9 +10,19 @@
     LGraph.prototype.addHistoryItem = function(sources, node) {
         history.push([sources, node]);
         nodeId2historyId[node.id] = history.length-1;
+
+        var ids = {};
+        ids[node.id] = true;
+        for (var i = 0; i < sources.length; i++) ids[sources[i].id] = true;
     
         var startx = 20;
-        var starty = cursor;
+        var max = 0;
+        for (var i = 0; i < this._nodes.length; i++) {
+            var node = this._nodes[i];
+            if (node.id in ids) continue;
+            max = Math.max(max, node.pos[1] + node.size[1]);
+        }
+        cursor = max + 50;
     
         // Layout newly created sources on the left
         if (sources.length > 0) {
@@ -27,7 +37,6 @@
     
         // Layout the node
         node.pos = [startx, cursor];
-        cursor += node.computeSize()[1] + 50;
     
         this.setDirtyCanvas(true, true);
         return node;
