@@ -226,10 +226,11 @@
 }
 
 .litegraph .dialog.settings {
-	left: 10px;
-	top: 10px;
-	height: calc( 100% - 20px );
-	margin: auto;
+    position: absolute;
+    right: 10px;
+    left: 30%;
+    top: 10px;
+    margin: auto;
 }
 
 .litegraph .dialog .close {

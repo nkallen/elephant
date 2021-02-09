@@ -16,13 +16,13 @@
         for (var i = 0; i < sources.length; i++) ids[sources[i].id] = true;
     
         var startx = 20;
-        var max = 0;
+        var maxheight = 0;
         for (var i = 0; i < this._nodes.length; i++) {
-            var node = this._nodes[i];
-            if (node.id in ids) continue;
-            max = Math.max(max, node.pos[1] + node.size[1]);
+            var n = this._nodes[i];
+            if (n.id in ids) continue;
+            maxheight = Math.max(maxheight, n.pos[1] + n.size[1]);
         }
-        cursor = max + 50;
+        cursor = maxheight + 50;
     
         // Layout newly created sources on the left
         if (sources.length > 0) {
