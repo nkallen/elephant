@@ -52,7 +52,6 @@
         node.title = name;
         node.desc = name;
         node.prototype.onExecute = function() { // FIXME nk move into loop
-            console.log("onExecute " + name);
             var call = [[name]];
             for (var i = 0; i < input.length; i++) {
                 var value = this.getInputData(i, this.properties[input[i].name]);
@@ -77,7 +76,6 @@
                             for (var j = 0; j < value.length; j++) {
                                 tmp.push(value.getPoint(j));
                             }
-                            console.log(value.getPoint(j).toString());
                             value = tmp;
                             break;
                         case "float":
@@ -97,7 +95,6 @@
                 }
                 if (value == null) value = [null];
                 call.push(value);
-                console.log(-1);
             }
             var calls = unroll(call);
     
@@ -264,7 +261,6 @@
         }
         var output = factory.calculate();
         if (output.length > 0) this.boxcolor = "#0F5";
-        console.log("polyline output: " + output.length);
         factory.cancel();
         this.setOutputData(0, output);
     }
@@ -292,7 +288,6 @@
         }
         var node = makeNodeType(name, ins, outs);
         node.prototype.onExecute = function() {
-            console.log("onExecute: " + this.name);
             this.boxcolor = "#F80";
             var outs = this.output;
             var enm = geomobjects[this.name].enum; // FIXME nk this is ugly
@@ -363,7 +358,6 @@
         }
         var node = makeNodeType(name, classes[name].singleton ? [] : ins, outs, classes[name]);
         node.prototype.onExecute = function() {
-            console.log("onExecute: " + this.name);
             var outs = this.output;
             var singleton = classes[this.name].singleton;
             var objects;
@@ -499,7 +493,6 @@
         this.internal.i = 0;
     }
     loopbegin.prototype.onExecute = function() {
-        console.log("in loopbegin + " + this.internal.i);
         this.boxcolor = "#F80";
         var objects = this.getInputData(0, this.properties["Objects"]);
         if (objects == null || objects.length == 0) return;

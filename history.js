@@ -13,20 +13,19 @@
     
         var startx = 20;
         var starty = cursor;
-        // node_output.pos = [300, cursor];
     
         // Layout newly created sources on the left
         if (sources.length > 0) {
             var maxwidth = 0;
             for (var i = 0; i < sources.length; i++) {
                 var source = sources[i];
-                source.pos = [startx, cursor + i * 50];
-                maxwidth = Math.max(maxwidth, source.size[0]);
+                source.pos = [startx + 10 * i, cursor + i * 50];
+                maxwidth = Math.max(maxwidth, source.size[0] + 10 * i);
             }
-            startx += maxwidth + 30;
+            startx += maxwidth + 40;
         }
     
-        // Layout t7Mhe node
+        // Layout the node
         node.pos = [startx, cursor];
         cursor += node.computeSize()[1] + 50;
     
@@ -34,10 +33,10 @@
         return node;
     }
     
-    LGraph.prototype.showHistoryItem = function(subhistory, i) {
-        if (subhistory == null) subhistory = history;
-        if (history_output == null) history_output = LiteGraph.createNode("Basic/Output");
-        var row = subhistory[i];
+    LGraph.prototype.showHistoryItem = function(i) {
+        if (history.length == 0) return;
+        if (history_output == null) history_output = LiteGraph.createNode("basic/Output");
+        var row = history[i];
         var node = row[1];
         history_output.pos[0] = node.pos[0] + 200;
         history_output.pos[1] = node.pos[1];
@@ -183,40 +182,17 @@
     }
     
     var history_cursor = -1;
-    var lastHistoryQuery = null;
-    var lastSubhistory = null;
-    LGraph.prototype.beginHistoryQuery = function(objects) {
-        var objectIds = [];
-        for (var i = 0; i < objects.length; i++) objectIds.push(objects[i].id);
-        if (lastHistoryQuery != null && lastHistoryQuery.toString() == objectIds.toString()) return lastSubhistory;
-        
-        history_cursor = -1;
-        lastHistoryQuery = objectIds;
     
-        if (objectIds.length == 0) {
-            lastSubhistory = history;
-        } else {
-            lastSubhistory = [];
-            var historyIds = this.historyIdsForObjectIds(objectIds);
-            for (var i = 0; i < historyIds.length; i++) {
-                var historium = history[historyIds[i]];
-                lastSubhistory.push(historium);
-            }
-        }
-        return lastSubhistory;
+    LGraph.prototype.showPreviousHistoryItem = function() {
+        history_cursor = Math.min(history_cursor+1, history.length-1);
+        var i = history.length-1 - history_cursor;
+        this.showHistoryItem(i);
     }
     
-    LGraph.prototype.showPreviousHistoryItem = function(subhistory) {
-        if (subhistory == null) subhistory = history;
-        history_cursor = Math.min(history_cursor+1, subhistory.length-1);
-        var i = subhistory.length-1 - history_cursor;
-        this.showHistoryItem(subhistory, i);
-    }
-    
-    LGraph.prototype.showNextHistoryItem = function(subhistory) {
+    LGraph.prototype.showNextHistoryItem = function() {
         history_cursor = Math.max(history_cursor-1, 0);
-        var i = subhistory.length-1 - history_cursor;
-        this.showHistoryItem(subhistory, i);
+        var i = history.length-1 - history_cursor;
+        this.showHistoryItem(i);
     }
     
     })();

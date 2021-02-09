@@ -831,22 +831,22 @@
     LiteGraph.registerNodeType("basic/set_array", SetArray );
 
     function ArrayElement() {
-        this.addInput("array", "numarray,objectlist,pointarry");
+        this.addInput("array", "numarray,objectlist,pointarray");
         this.addInput("index", "numarray");
-        this.addProperty("index",0);
+        this.addProperty("index", 0);
     }
 
     ArrayElement.title = "Array[i]";
     ArrayElement.desc = "Returns an element from an array";
 
     ArrayElement.prototype.onExecute = function() {
-        var type = this.type;
-        if (this.type == undefined) return;
+        var type = this.properties.type;
+        if (type == undefined) return;
         this.properties["index"] = this.getInputData(1, this.properties["index"]);
 
         if (type === "numarray") {
             var out = [];
-            var source = this.getInputData(0, "numarray");
+            var source = this.getInputData(0);
             for (var i = 0; i < this.properties["index"].length; i++) {
                 var idx = Math.round(this.properties["index"][i]);
                 if (idx >= 0 && idx < source.length) out.push(source[idx]);
@@ -883,10 +883,10 @@
     };
 
     ArrayElement.prototype.onConnectInput = function(slot, type, link, source, source_slot) {
-        if (slot == 0) this.type = type;
+        if (slot == 0) this.addProperty("type", type);
         this.addOutput("value", type);
     }
-    ArrayElement.prototype.getSlotMenuOptions = LGraphNode.prototype.getSlotMenuOptions;
+    ArrayElement.prototype.getSlotMenuOptions = Elephant.getSlotMenuOptions;
 
     LiteGraph.registerNodeType("basic/array[]", ArrayElement);
 
