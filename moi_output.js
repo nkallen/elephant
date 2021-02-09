@@ -92,7 +92,6 @@
             this.tempobjects = factory('move', this.tempobjects, zero, offset);
         }
         if (this.properties.edges[0] === "Off") for ( var breps = this.tempobjects.getBReps(), i = breps.length; i > 0; ) { breps.item(--i).getEdges().setProperty( 'hidden', true ); }
-        moi.ui.alert(this.tempobjects.length);
         moi.geometryDatabase.addObjects(this.tempobjects);
     }
     

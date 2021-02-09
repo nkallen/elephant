@@ -4,16 +4,17 @@
 
     //Constant
     function Time() {
-        this.addOutput("in ms", "number");
-        this.addOutput("in sec", "number");
+        this.addOutput("in ms", "numarray");
+        this.addOutput("in sec", "numarray");
+        this.mode == LiteGraph.IMMORTAL;
     }
 
     Time.title = "Time";
     Time.desc = "Time";
 
     Time.prototype.onExecute = function() {
-        this.setOutputData(0, this.graph.globaltime * 1000);
-        this.setOutputData(1, this.graph.globaltime);
+        this.setOutputData(0, [this.graph.globaltime * 1000]);
+        this.setOutputData(1, [this.graph.globaltime]);
     };
 
     LiteGraph.registerNodeType("basic/time", Time);
@@ -32,7 +33,7 @@
 
         this.subgraph.onTrigger = this.onSubgraphTrigger.bind(this);
 
-		//nodes input node added inside
+        //nodes input node added inside
         this.subgraph.onInputAdded = this.onSubgraphNewInput.bind(this);
         this.subgraph.onInputRenamed = this.onSubgraphRenamedInput.bind(this);
         this.subgraph.onInputTypeChanged = this.onSubgraphTypeChangeInput.bind(this);
@@ -52,7 +53,7 @@
         return [["enabled", "boolean"]];
     };
 
-	/*
+    /*
     Subgraph.prototype.onDrawTitle = function(ctx) {
         if (this.flags.collapsed) {
             return;
@@ -69,7 +70,7 @@
         ctx.lineTo(x + w * 0.5, -w * 0.3);
         ctx.fill();
     };
-	*/
+    */
 
     Subgraph.prototype.onDblClick = function(e, pos, graphcanvas) {
         var that = this;
@@ -78,7 +79,7 @@
         }, 10);
     };
 
-	/*
+    /*
     Subgraph.prototype.onMouseDown = function(e, pos, graphcanvas) {
         if (
             !this.flags.collapsed &&
@@ -91,7 +92,7 @@
             }, 10);
         }
     };
-	*/
+    */
 
     Subgraph.prototype.onAction = function(action, param) {
         this.subgraph.onAction(action, param);
@@ -131,45 +132,45 @@
         }
     };
 
-	Subgraph.prototype.onDrawBackground = function(ctx, graphcanvas, canvas, pos)
-	{
-		if(this.flags.collapsed)
-			return;
+    Subgraph.prototype.onDrawBackground = function(ctx, graphcanvas, canvas, pos)
+    {
+        if(this.flags.collapsed)
+            return;
 
-		var y = this.size[1] - LiteGraph.NODE_TITLE_HEIGHT + 0.5;
+        var y = this.size[1] - LiteGraph.NODE_TITLE_HEIGHT + 0.5;
 
-		//button
-		var over = LiteGraph.isInsideRectangle(pos[0],pos[1],this.pos[0],this.pos[1] + y,this.size[0],LiteGraph.NODE_TITLE_HEIGHT);
-		ctx.fillStyle = over ? "#555" : "#222";
-		ctx.beginPath();
-		if (this._shape == LiteGraph.BOX_SHAPE)
-			ctx.rect(0, y, this.size[0]+1, LiteGraph.NODE_TITLE_HEIGHT);
-		else
-			ctx.roundRect( 0, y, this.size[0]+1, LiteGraph.NODE_TITLE_HEIGHT, 0, 8);
-		ctx.fill();
+        //button
+        var over = LiteGraph.isInsideRectangle(pos[0],pos[1],this.pos[0],this.pos[1] + y,this.size[0],LiteGraph.NODE_TITLE_HEIGHT);
+        ctx.fillStyle = over ? "#555" : "#222";
+        ctx.beginPath();
+        if (this._shape == LiteGraph.BOX_SHAPE)
+            ctx.rect(0, y, this.size[0]+1, LiteGraph.NODE_TITLE_HEIGHT);
+        else
+            ctx.roundRect( 0, y, this.size[0]+1, LiteGraph.NODE_TITLE_HEIGHT, 0, 8);
+        ctx.fill();
 
-		//button
-		ctx.textAlign = "center";
-		ctx.font = "24px Arial";
-		ctx.fillStyle = over ? "#DDD" : "#999";
-		ctx.fillText( "+", this.size[0] * 0.5, y + 24 );
-	}
+        //button
+        ctx.textAlign = "center";
+        ctx.font = "24px Arial";
+        ctx.fillStyle = over ? "#DDD" : "#999";
+        ctx.fillText( "+", this.size[0] * 0.5, y + 24 );
+    }
 
-	Subgraph.prototype.onMouseDown = function(e, localpos, graphcanvas)
-	{
-		var y = this.size[1] - LiteGraph.NODE_TITLE_HEIGHT + 0.5;
-		if(localpos[1] > y)
-		{
-			graphcanvas.showSubgraphPropertiesDialog(this);
-		}
-	}
+    Subgraph.prototype.onMouseDown = function(e, localpos, graphcanvas)
+    {
+        var y = this.size[1] - LiteGraph.NODE_TITLE_HEIGHT + 0.5;
+        if(localpos[1] > y)
+        {
+            graphcanvas.showSubgraphPropertiesDialog(this);
+        }
+    }
 
-	Subgraph.prototype.computeSize = function()
-	{
-		var num_inputs = this.inputs ? this.inputs.length : 0;
-		var num_outputs = this.outputs ? this.outputs.length : 0;
-		return [ 200, Math.max(num_inputs,num_outputs) * LiteGraph.NODE_SLOT_HEIGHT + LiteGraph.NODE_TITLE_HEIGHT ];
-	}
+    Subgraph.prototype.computeSize = function()
+    {
+        var num_inputs = this.inputs ? this.inputs.length : 0;
+        var num_outputs = this.outputs ? this.outputs.length : 0;
+        return [ 200, Math.max(num_inputs,num_outputs) * LiteGraph.NODE_SLOT_HEIGHT + LiteGraph.NODE_TITLE_HEIGHT ];
+    }
 
     //**** INPUTS ***********************************
     Subgraph.prototype.onSubgraphTrigger = function(event, param) {
@@ -281,94 +282,94 @@
         return node;
     };
 
-	Subgraph.prototype.buildFromNodes = function(nodes)
-	{
-		//clear all?
-		//TODO
+    Subgraph.prototype.buildFromNodes = function(nodes)
+    {
+        //clear all?
+        //TODO
 
-		//nodes that connect data between parent graph and subgraph
-		var subgraph_inputs = [];
-		var subgraph_outputs = [];
+        //nodes that connect data between parent graph and subgraph
+        var subgraph_inputs = [];
+        var subgraph_outputs = [];
 
-		//mark inner nodes
-		var ids = {};
-		var min_x = 0;
-		var max_x = 0;
-		for(var i = 0; i < nodes.length; ++i)
-		{
-			var node = nodes[i];
-			ids[ node.id ] = node;
-			min_x = Math.min( node.pos[0], min_x );
-			max_x = Math.max( node.pos[0], min_x );
-		}
-		
-		var last_input_y = 0;
-		var last_output_y = 0;
+        //mark inner nodes
+        var ids = {};
+        var min_x = 0;
+        var max_x = 0;
+        for(var i = 0; i < nodes.length; ++i)
+        {
+            var node = nodes[i];
+            ids[ node.id ] = node;
+            min_x = Math.min( node.pos[0], min_x );
+            max_x = Math.max( node.pos[0], min_x );
+        }
+        
+        var last_input_y = 0;
+        var last_output_y = 0;
 
-		for(var i = 0; i < nodes.length; ++i)
-		{
-			var node = nodes[i];
-			//check inputs
-			if( node.inputs )
-				for(var j = 0; j < node.inputs.length; ++j)
-				{
-					var input = node.inputs[j];
-					if( !input || !input.link )
-						continue;
-					var link = node.graph.links[ input.link ];
-					if(!link)
-						continue;
-					if( ids[ link.origin_id ] )
-						continue;
-					//this.addInput(input.name,link.type);
-					this.subgraph.addInput(input.name,link.type);
-					/*
-					var input_node = LiteGraph.createNode("graph/input");
-					this.subgraph.add( input_node );
-					input_node.pos = [min_x - 200, last_input_y ];
-					last_input_y += 100;
-					*/
-				}
+        for(var i = 0; i < nodes.length; ++i)
+        {
+            var node = nodes[i];
+            //check inputs
+            if( node.inputs )
+                for(var j = 0; j < node.inputs.length; ++j)
+                {
+                    var input = node.inputs[j];
+                    if( !input || !input.link )
+                        continue;
+                    var link = node.graph.links[ input.link ];
+                    if(!link)
+                        continue;
+                    if( ids[ link.origin_id ] )
+                        continue;
+                    //this.addInput(input.name,link.type);
+                    this.subgraph.addInput(input.name,link.type);
+                    /*
+                    var input_node = LiteGraph.createNode("graph/input");
+                    this.subgraph.add( input_node );
+                    input_node.pos = [min_x - 200, last_input_y ];
+                    last_input_y += 100;
+                    */
+                }
 
-			//check outputs
-			if( node.outputs )
-				for(var j = 0; j < node.outputs.length; ++j)
-				{
-					var output = node.outputs[j];
-					if( !output || !output.links || !output.links.length )
-						continue;
-					var is_external = false;
-					for(var k = 0; k < output.links.length; ++k)
-					{
-						var link = node.graph.links[ output.links[k] ];
-						if(!link)
-							continue;
-						if( ids[ link.target_id ] )
-							continue;
-						is_external = true;
-						break;
-					}
-					if(!is_external)
-						continue;
-					//this.addOutput(output.name,output.type);
-					/*
-					var output_node = LiteGraph.createNode("graph/output");
-					this.subgraph.add( output_node );
-					output_node.pos = [max_x + 50, last_output_y ];
-					last_output_y += 100;
-					*/
-				}
-		}
+            //check outputs
+            if( node.outputs )
+                for(var j = 0; j < node.outputs.length; ++j)
+                {
+                    var output = node.outputs[j];
+                    if( !output || !output.links || !output.links.length )
+                        continue;
+                    var is_external = false;
+                    for(var k = 0; k < output.links.length; ++k)
+                    {
+                        var link = node.graph.links[ output.links[k] ];
+                        if(!link)
+                            continue;
+                        if( ids[ link.target_id ] )
+                            continue;
+                        is_external = true;
+                        break;
+                    }
+                    if(!is_external)
+                        continue;
+                    //this.addOutput(output.name,output.type);
+                    /*
+                    var output_node = LiteGraph.createNode("graph/output");
+                    this.subgraph.add( output_node );
+                    output_node.pos = [max_x + 50, last_output_y ];
+                    last_output_y += 100;
+                    */
+                }
+        }
 
-		//detect inputs and outputs
-			//split every connection in two data_connection nodes
-			//keep track of internal connections
-			//connect external connections
+        //detect inputs and outputs
+            //split every connection in two data_connection nodes
+            //keep track of internal connections
+            //connect external connections
 
-		//clone nodes inside subgraph and try to reconnect them
+        //clone nodes inside subgraph and try to reconnect them
 
-		//connect edge subgraph nodes to extarnal connections nodes
-	}
+        //connect edge subgraph nodes to extarnal connections nodes
+    }
 
     LiteGraph.Subgraph = Subgraph;
     LiteGraph.registerNodeType("graph/subgraph", Subgraph);
@@ -379,10 +380,10 @@
 
         this.name_in_graph = "";
         this.properties = {
-			name: "",
-			type: "number",
-			value: 0
-		}; 
+            name: "",
+            type: "number",
+            value: 0
+        }; 
 
         var that = this;
 
@@ -402,7 +403,7 @@
             "Type",
             this.properties.type,
             function(v) {
-				that.setProperty("type",v);
+                that.setProperty("type",v);
             }
         );
 
@@ -422,82 +423,82 @@
     GraphInput.title = "Input";
     GraphInput.desc = "Input of the graph";
 
-	GraphInput.prototype.onConfigure = function()
-	{
-		this.updateType();
-	}
+    GraphInput.prototype.onConfigure = function()
+    {
+        this.updateType();
+    }
 
-	//ensures the type in the node output and the type in the associated graph input are the same
-	GraphInput.prototype.updateType = function()
-	{
-		var type = this.properties.type;
-		this.type_widget.value = type;
+    //ensures the type in the node output and the type in the associated graph input are the same
+    GraphInput.prototype.updateType = function()
+    {
+        var type = this.properties.type;
+        this.type_widget.value = type;
 
-		//update output
-		if(this.outputs[0].type != type)
-		{
-	        if (!LiteGraph.isValidConnection(this.outputs[0].type,type))
-				this.disconnectOutput(0);
-			this.outputs[0].type = type;
-		}
+        //update output
+        if(this.outputs[0].type != type)
+        {
+            if (!LiteGraph.isValidConnection(this.outputs[0].type,type))
+                this.disconnectOutput(0);
+            this.outputs[0].type = type;
+        }
 
-		//update widget
-		if(type == "number")
-		{
-			this.value_widget.type = "number";
-			this.value_widget.value = 0;
-		}
-		else if(type == "boolean")
-		{
-			this.value_widget.type = "toggle";
-			this.value_widget.value = true;
-		}
-		else if(type == "string")
-		{
-			this.value_widget.type = "text";
-			this.value_widget.value = "";
-		}
-		else
-		{
-			this.value_widget.type = null;
-			this.value_widget.value = null;
-		}
-		this.properties.value = this.value_widget.value;
+        //update widget
+        if(type == "number")
+        {
+            this.value_widget.type = "number";
+            this.value_widget.value = 0;
+        }
+        else if(type == "boolean")
+        {
+            this.value_widget.type = "toggle";
+            this.value_widget.value = true;
+        }
+        else if(type == "string")
+        {
+            this.value_widget.type = "text";
+            this.value_widget.value = "";
+        }
+        else
+        {
+            this.value_widget.type = null;
+            this.value_widget.value = null;
+        }
+        this.properties.value = this.value_widget.value;
 
-		//update graph
-		if (this.graph && this.name_in_graph) {
-			this.graph.changeInputType(this.name_in_graph, type);
-		}
-	}
+        //update graph
+        if (this.graph && this.name_in_graph) {
+            this.graph.changeInputType(this.name_in_graph, type);
+        }
+    }
 
-	//this is executed AFTER the property has changed
-	GraphInput.prototype.onPropertyChanged = function(name,v)
-	{
-		if( name == "name" )
-		{
-			if (v == "" || v == this.name_in_graph || v == "enabled") {
-				return false;
-			}
-			if(this.graph)
-			{
-				if (this.name_in_graph) {
-					//already added
-					this.graph.renameInput( this.name_in_graph, v );
-				} else {
-					this.graph.addInput( v, this.properties.type );
-				}
-			} //what if not?!
-			this.name_widget.value = v;
-			this.name_in_graph = v;
-		}
-		else if( name == "type" )
-		{
-			this.updateType();
-		}
-		else if( name == "value" )
-		{
-		}
-	}
+    //this is executed AFTER the property has changed
+    GraphInput.prototype.onPropertyChanged = function(name,v)
+    {
+        if( name == "name" )
+        {
+            if (v == "" || v == this.name_in_graph || v == "enabled") {
+                return false;
+            }
+            if(this.graph)
+            {
+                if (this.name_in_graph) {
+                    //already added
+                    this.graph.renameInput( this.name_in_graph, v );
+                } else {
+                    this.graph.addInput( v, this.properties.type );
+                }
+            } //what if not?!
+            this.name_widget.value = v;
+            this.name_in_graph = v;
+        }
+        else if( name == "type" )
+        {
+            this.updateType();
+        }
+        else if( name == "value" )
+        {
+        }
+    }
 
     GraphInput.prototype.getTitle = function() {
         if (this.flags.collapsed) {
@@ -518,7 +519,7 @@
         var data = this.graph.inputs[name];
         if (!data) {
             this.setOutputData(0, this.properties.value );
-			return;
+            return;
         }
 
         this.setOutputData(0, data.value !== undefined ? data.value : this.properties.value );
@@ -569,8 +570,8 @@
                 if (v == "action" || v == "event") {
                     v = LiteGraph.ACTION;
                 }
-		        if (!LiteGraph.isValidConnection(that.inputs[0].type,v))
-					that.disconnectInput(0);
+                if (!LiteGraph.isValidConnection(that.inputs[0].type,v))
+                    that.disconnectInput(0);
                 that.inputs[0].type = v;
                 if (that.name_in_graph) {
                     //already added
@@ -622,7 +623,7 @@
 
     //Constant
     function ConstantNumber() {
-        this.addOutput("value", "number");
+        this.addOutput("value", "numarray");
         this.addProperty("value", 1.0);
         this.widget = this.addWidget("number","value",1,"value");
         this.widgets_up = true;
@@ -643,10 +644,10 @@
         return this.title;
     };
 
-	ConstantNumber.prototype.setValue = function(v)
-	{
-		this.setProperty("value",v);
-	}
+    ConstantNumber.prototype.setValue = function(v)
+    {
+        this.setProperty("value",[v]);
+    }
 
     ConstantNumber.prototype.onDrawBackground = function(ctx) {
         //show the current value
@@ -668,19 +669,19 @@
     ConstantBoolean.prototype.getTitle = ConstantNumber.prototype.getTitle;
 
     ConstantBoolean.prototype.onExecute = function() {
-        this.setOutputData(0, this.properties["value"]);
+        this.setOutputData(0, [this.properties["value"]]);
     };
 
-	ConstantBoolean.prototype.setValue = ConstantNumber.prototype.setValue;
+    ConstantBoolean.prototype.setValue = ConstantNumber.prototype.setValue;
 
-	ConstantBoolean.prototype.onGetInputs = function() {
-		return [["toggle", LiteGraph.ACTION]];
-	};
+    ConstantBoolean.prototype.onGetInputs = function() {
+        return [["toggle", LiteGraph.ACTION]];
+    };
 
-	ConstantBoolean.prototype.onAction = function(action)
-	{
-		this.setValue( !this.properties.value );
-	}
+    ConstantBoolean.prototype.onAction = function(action)
+    {
+        this.setValue( !this.properties.value );
+    }
 
     LiteGraph.registerNodeType("basic/boolean", ConstantBoolean);
 
@@ -701,18 +702,18 @@
         this.setOutputData(0, [this.properties["value"]]);
     };
 
-	ConstantString.prototype.setValue = ConstantNumber.prototype.setValue;
+    ConstantString.prototype.setValue = ConstantNumber.prototype.setValue;
 
-	ConstantString.prototype.onDropFile = function(file)
-	{
-		var that = this;
-		var reader = new FileReader();
-		reader.onload = function(e)
-		{
-			that.setProperty("value",e.target.result);
-		}
-		reader.readAsText(file);
-	}
+    ConstantString.prototype.onDropFile = function(file)
+    {
+        var that = this;
+        var reader = new FileReader();
+        reader.onload = function(e)
+        {
+            that.setProperty("value",e.target.result);
+        }
+        reader.readAsText(file);
+    }
 
     LiteGraph.registerNodeType("basic/string", ConstantString);
 
@@ -745,7 +746,7 @@
     };
 
 
-	ConstantPoint.prototype.setValue = function() {
+    ConstantPoint.prototype.setValue = function() {
         var old = this.properties.pointarray.getFrame();
         old.set(this.widgetX.value, this.widgetY.value, this.widgetZ.value, old.xaxis.x, old.xaxis.y, old.xaxis.z, old.yaxis.x, old.yaxis.y, old.yaxis.z);
         var pa = new pointArray();
@@ -754,160 +755,11 @@
     };
 
     LiteGraph.registerNodeType("basic/point", ConstantPoint);
-    function ConstantObject() {
-        this.addOutput("obj", "object");
-        this.size = [120, 30];
-		this._object = {};
-    }
-
-    ConstantObject.title = "Const Object";
-    ConstantObject.desc = "Constant Object";
-
-    ConstantObject.prototype.onExecute = function() {
-        this.setOutputData(0, this._object);
-    };
-
-    LiteGraph.registerNodeType( "basic/object", ConstantObject );
-
-    function ConstantFile() {
-        this.addInput("url", "");
-        this.addOutput("", "");
-        this.addProperty("url", "");
-        this.addProperty("type", "text");
-        this.widget = this.addWidget("text","url","","url");
-        this._data = null;
-    }
-
-    ConstantFile.title = "Const File";
-    ConstantFile.desc = "Fetches a file from an url";
-    ConstantFile["@type"] = { type: "enum", values: ["text","arraybuffer","blob","json"] };
-
-    ConstantFile.prototype.onPropertyChanged = function(name, value) {
-        if (name == "url")
-		{
-			if( value == null || value == "")
-				this._data = null;
-			else
-			{
-				this.fetchFile(value);
-			}
-		}
-	}
-
-    ConstantFile.prototype.onExecute = function() {
-		var url = this.getInputData(0) || this.properties.url;
-		if(url && (url != this._url || this._type != this.properties.type))
-			this.fetchFile(url);
-        this.setOutputData(0, this._data );
-    };
-
-	ConstantFile.prototype.setValue = ConstantNumber.prototype.setValue;
-
-    ConstantFile.prototype.fetchFile = function(url) {
-		var that = this;
-		if(!url || url.constructor !== String)
-		{
-			that._data = null;
-            that.boxcolor = null;
-			return;
-		}
-
-		this._url = url;
-		this._type = this.properties.type;
-        if (url.substr(0, 4) == "http" && LiteGraph.proxy) {
-            url = LiteGraph.proxy + url.substr(url.indexOf(":") + 3);
-        }
-		fetch(url)
-		.then(function(response) {
-			if(!response.ok)
-				 throw new Error("File not found");
-
-			if(that.properties.type == "arraybuffer")
-				return response.arrayBuffer();
-			else if(that.properties.type == "text")
-				return response.text();
-			else if(that.properties.type == "json")
-				return response.json();
-			else if(that.properties.type == "blob")
-				return response.blob();
-		})
-		.then(function(data) {
-			that._data = data;
-            that.boxcolor = "#AEA";
-		})
-		.catch(function(error) {
-			that._data = null;
-            that.boxcolor = "red";
-			console.error("error fetching file:",url);
-		});
-    };
-
-	ConstantFile.prototype.onDropFile = function(file)
-	{
-		var that = this;
-		this._url = file.name;
-		this._type = this.properties.type;
-		this.properties.url = file.name;
-		var reader = new FileReader();
-		reader.onload = function(e)
-		{
-            that.boxcolor = "#AEA";
-			var v = e.target.result;
-			if( that.properties.type == "json" )
-				v = JSON.parse(v);
-			that._data = v;
-		}
-		if(that.properties.type == "arraybuffer")
-			reader.readAsArrayBuffer(file);
-		else if(that.properties.type == "text" || that.properties.type == "json")
-			reader.readAsText(file);
-		else if(that.properties.type == "blob")
-			return reader.readAsBinaryString(file);
-	}
-
-    LiteGraph.registerNodeType("basic/file", ConstantFile);
-
-	//to store json objects
-    function ConstantData() {
-        this.addOutput("", "");
-        this.addProperty("value", "");
-        this.widget = this.addWidget("text","json","","value");
-        this.widgets_up = true;
-        this.size = [140, 30];
-        this._value = null;
-    }
-
-    ConstantData.title = "Const Data";
-    ConstantData.desc = "Constant Data";
-
-    ConstantData.prototype.onPropertyChanged = function(name, value) {
-        this.widget.value = value;
-        if (value == null || value == "") {
-            return;
-        }
-
-        try {
-            this._value = JSON.parse(value);
-            this.boxcolor = "#AEA";
-        } catch (err) {
-            this.boxcolor = "red";
-        }
-    };
-
-    ConstantData.prototype.onExecute = function() {
-        this.setOutputData(0, this._value);
-    };
-
-	ConstantData.prototype.setValue = ConstantNumber.prototype.setValue;
-
-    LiteGraph.registerNodeType("basic/data", ConstantData);
-
-	//to store json objects
     function ConstantArray() {
         this._value = [];
         this.addInput("", "");
         this.addOutput("", "array");
-        this.addOutput("length", "number");
+        this.addOutput("length", "numarray");
         this.addProperty("value", "[]");
         this.widget = this.addWidget("text","array",this.properties.value,"value");
         this.widgets_up = true;
@@ -924,10 +776,10 @@
         }
 
         try {
-			if(value[0] != "[")
-	            this._value = JSON.parse("[" + value + "]");
-			else
-	            this._value = JSON.parse(value);
+            if(value[0] != "[")
+                this._value = JSON.parse("[" + value + "]");
+            else
+                this._value = JSON.parse(value);
             this.boxcolor = "#AEA";
         } catch (err) {
             this.boxcolor = "red";
@@ -936,100 +788,146 @@
 
     ConstantArray.prototype.onExecute = function() {
         var v = this.getInputData(0);
-		if(v && v.length) //clone
-		{
-			if(!this._value)
-				this._value = new Array();
-			this._value.length = v.length;
-			for(var i = 0; i < v.length; ++i)
-				this._value[i] = v[i];
-		}
-		this.setOutputData(0, this._value );
-		this.setOutputData(1, this._value ? ( this._value.length || 0) : 0 );
+        if(v && v.length) //clone
+        {
+            if(!this._value)
+                this._value = new Array();
+            this._value.length = v.length;
+            for(var i = 0; i < v.length; ++i)
+                this._value[i] = v[i];
+        }
+        this.setOutputData(0, this._value );
+        this.setOutputData(1, this._value ? ( this._value.length || 0) : 0 );
     };
 
-	ConstantArray.prototype.setValue = ConstantNumber.prototype.setValue;
+    ConstantArray.prototype.setValue = ConstantNumber.prototype.setValue;
 
     LiteGraph.registerNodeType("basic/array", ConstantArray);
 
-	function SetArray()
-	{
+    function SetArray()
+    {
         this.addInput("arr", "array");
         this.addInput("value", "");
         this.addOutput("arr", "array");
-		this.properties = { index: 0 };
+        this.properties = { index: 0 };
         this.widget = this.addWidget("number","i",this.properties.index,"index");
-	}
+    }
 
     SetArray.title = "Set Array";
     SetArray.desc = "Sets index of array";
 
     SetArray.prototype.onExecute = function() {
         var arr = this.getInputData(0);
-		if(!arr)
-			return;
+        if(!arr)
+            return;
         var v = this.getInputData(1);
-		if(v === undefined )
-			return;
-		if(this.properties.index)
-			arr[ Math.floor(this.properties.index) ] = v;
-		this.setOutputData(0,arr);
+        if(v === undefined )
+            return;
+        if(this.properties.index)
+            arr[ Math.floor(this.properties.index) ] = v;
+        this.setOutputData(0,arr);
     };
 
     LiteGraph.registerNodeType("basic/set_array", SetArray );
 
     function ArrayElement() {
-        this.addInput("array", "array,table,string");
-        this.addInput("index", "number");
-        this.addOutput("value", "");
-		this.addProperty("index",0);
+        this.addInput("array", "numarray,objectlist,pointarry");
+        this.addInput("index", "numarray");
+        this.addProperty("index",0);
     }
 
     ArrayElement.title = "Array[i]";
     ArrayElement.desc = "Returns an element from an array";
 
     ArrayElement.prototype.onExecute = function() {
-        var array = this.getInputData(0);
-        var index = this.getInputData(1);
-		if(index == null)
-			index = this.properties.index;
-		if(array == null || index == null )
-			return;
-        this.setOutputData(0, array[Math.floor(Number(index))] );
+        var type = this.type;
+        if (this.type == undefined) return;
+        this.properties["index"] = this.getInputData(1, this.properties["index"]);
+
+        if (type === "numarray") {
+            var out = [];
+            var source = this.getInputData(0, "numarray");
+            for (var i = 0; i < this.properties["index"].length; i++) {
+                var idx = Math.round(this.properties["index"][i]);
+                if (idx >= 0 && idx < source.length) out.push(source[idx]);
+            }
+        } else if (type === "pointarray") {
+            var source = this.getInputData(0, new pointArray());
+            var out = new pointArray(false);
+            var sourceLen=source.getLength();
+            for(var i=0; i<this.properties["index"].length;i++){
+                var idx=Math.round(this.properties["index"][i]);
+                if(idx>=0&&idx<sourceLen){
+                var elemSource = source.getElement(idx);
+                    out.push(elemSource.data[0],
+                            elemSource.data[1],
+                            elemSource.data[2],
+                            elemSource.data[3],
+                            elemSource.data[4],
+                            elemSource.data[5],
+                            elemSource.data[6]);
+                            }
+            }
+        } else if (type === "objectlist") {
+            var out = moi.geometryDatabase.createObjectList();
+            var source = this.getInputData(0, moi.geometryDatabase.createObjectList());
+            for (var i=0; i<this.properties["index"].length; i++) {
+                var idx=Math.round(this.properties["index"][i]);
+                if (idx>=0 && idx<source.length) {
+                    out.addObject(source.item(idx));
+                }            
+            }
+        }
+        this.setOutputData(0, out);
+        this.boxcolor = out.length == 0 ? "#F80" : "#0F5";
     };
+
+    ArrayElement.prototype.onConnectInput = function(slot, type, link, source, source_slot) {
+        if (slot == 0) this.type = type;
+        this.addOutput("value", type);
+    }
+    ArrayElement.prototype.getSlotMenuOptions = LGraphNode.prototype.getSlotMenuOptions;
 
     LiteGraph.registerNodeType("basic/array[]", ArrayElement);
 
-    function TableElement() {
-        this.addInput("table", "table");
-        this.addInput("row", "number");
-        this.addInput("col", "number");
-        this.addOutput("value", "");
-		this.addProperty("row",0);
-		this.addProperty("column",0);
+    function Concat() {
+        this.addInput("a", "numarray,objectlist,pointarray");
+        this.addProperty("index",0);
     }
 
-    TableElement.title = "Table[row][col]";
-    TableElement.desc = "Returns an element from a table";
+    Concat.title = "Concat";
+    Concat.desc = "Concatenates an objectlist or pointarray";
 
-    TableElement.prototype.onExecute = function() {
-        var table = this.getInputData(0);
-        var row = this.getInputData(1);
-        var col = this.getInputData(2);
-		if(row == null)
-			row = this.properties.row;
-		if(col == null)
-			col = this.properties.column;
-		if(table == null || row == null || col == null)
-			return;
-		var row = table[Math.floor(Number(row))];
-		if(row)
-	        this.setOutputData(0, row[Math.floor(Number(col))] );
-		else
-	        this.setOutputData(0, null );
+    Concat.prototype.onExecute = function() {
+        var out, i, j;
+            if ( this.inputs[1].type === "numarray") {
+            out = [];
+            for ( i = 0; i<this.inputs.length; i++) out = out.concat(this.getInputData(i, []));
+        } else if ( this.inputs[1].type === "pointarray") {
+            out = new pointArray();
+            for ( i = 0; i<this.inputs.length; i++) out.concat(this.getInputData(i, new pointArray()));
+        } else if ( this.inputs[1].type === "objectlist") {
+            var inObj;
+            out = moi.geometryDatabase.createObjectList();
+            for ( i = 0; i<this.inputs.length; i++) {
+                inObj = this.getInputData(i, moi.geometryDatabase.createObjectList());
+                for ( j = 0; j < inObj.length; j++ ) out.addObject( inObj.item(j) );
+            }
+        }
+        this.setOutputData(0, out);
+        this.boxcolor = out.length == 0 ? "#F80" : "#0F5";
     };
+    Concat.prototype.getExtraMenuOptions = function() {
+        var that = this;
 
-    LiteGraph.registerNodeType("basic/table[][]", TableElement);
+    }
+    Concat.prototype.onConnectInput = function(slot, type, link, source, source_slot) {
+        if (slot == 0) this.addOutput("value", type);
+        var name = "abcdefghijklmnop"[this.inputs.length];
+        this.addInput(name, type);
+    }
+
+    LiteGraph.registerNodeType("basic/concat", Concat);
 
     function ObjectProperty() {
         this.addInput("obj", "");
@@ -1040,7 +938,6 @@
         this.size = [140, 30];
         this._value = null;
     }
-
     ObjectProperty.title = "Object property";
     ObjectProperty.desc = "Outputs the property of an object";
 
@@ -1086,195 +983,6 @@
     };
 
     LiteGraph.registerNodeType("basic/object_keys", ObjectKeys);
-
-
-	function SetObject()
-	{
-        this.addInput("obj", "");
-        this.addInput("value", "");
-        this.addOutput("obj", "");
-		this.properties = { property: "" };
-        this.name_widget = this.addWidget("text","prop.",this.properties.property,"property");
-	}
-
-    SetObject.title = "Set Object";
-    SetObject.desc = "Adds propertiesrty to object";
-
-    SetObject.prototype.onExecute = function() {
-        var obj = this.getInputData(0);
-		if(!obj)
-			return;
-        var v = this.getInputData(1);
-		if(v === undefined )
-			return;
-		if(this.properties.property)
-			obj[ this.properties.property ] = v;
-		this.setOutputData(0,obj);
-    };
-
-    LiteGraph.registerNodeType("basic/set_object", SetObject );
-
-
-    function MergeObjects() {
-        this.addInput("A", "");
-        this.addInput("B", "");
-        this.addOutput("", "");
-		this._result = {};
-		var that = this;
-		this.addWidget("button","clear","",function(){
-			that._result = {};
-		});
-		this.size = this.computeSize();
-    }
-
-    MergeObjects.title = "Merge Objects";
-    MergeObjects.desc = "Creates an object copying properties from others";
-
-    MergeObjects.prototype.onExecute = function() {
-        var A = this.getInputData(0);
-        var B = this.getInputData(1);
-		var C = this._result;
-		if(A)
-			for(var i in A)
-				C[i] = A[i];
-		if(B)
-			for(var i in B)
-				C[i] = B[i];
-		this.setOutputData(0,C);
-    };
-
-    LiteGraph.registerNodeType("basic/merge_objects", MergeObjects );
-
-    //Store as variable
-    function Variable() {
-        this.size = [60, 30];
-        this.addInput("in");
-        this.addOutput("out");
-		this.properties = { varname: "myname", container: Variable.LITEGRAPH };
-        this.value = null;
-    }
-
-    Variable.title = "Variable";
-    Variable.desc = "store/read variable value";
-
-	Variable.LITEGRAPH = 0; //between all graphs
-	Variable.GRAPH = 1;	//only inside this graph
-	Variable.GLOBALSCOPE = 2;	//attached to Window
-
-    Variable["@container"] = { type: "enum", values: {"litegraph":Variable.LITEGRAPH, "graph":Variable.GRAPH,"global": Variable.GLOBALSCOPE} };
-
-    Variable.prototype.onExecute = function() {
-		var container = this.getContainer();
-
-		if(this.isInputConnected(0))
-		{
-			this.value = this.getInputData(0);
-			container[ this.properties.varname ] = this.value;
-			this.setOutputData(0, this.value );
-			return;
-		}
-
-		this.setOutputData( 0, container[ this.properties.varname ] );
-    };
-
-	Variable.prototype.getContainer = function()
-	{
-		switch(this.properties.container)
-		{
-			case Variable.GRAPH:
-				if(this.graph)
-					return this.graph.vars;
-				return {};
-				break;
-			case Variable.GLOBALSCOPE:
-				return global;
-				break;
-			case Variable.LITEGRAPH:
-			default:
-				return LiteGraph.Globals;
-				break;
-		}
-	}
-
-    Variable.prototype.getTitle = function() {
-        return this.properties.varname;
-    };
-
-    LiteGraph.registerNodeType("basic/variable", Variable);
-
-    function length(v) {
-        if(v && v.length != null)
-			return Number(v.length);
-		return 0;
-    }
-
-    LiteGraph.wrapFunctionAsNode(
-        "basic/length",
-        length,
-        [""],
-        "number"
-    );
-
-	function DownloadData() {
-        this.size = [60, 30];
-        this.addInput("data", 0 );
-        this.addInput("download", LiteGraph.ACTION );
-		this.properties = { filename: "data.json" };
-        this.value = null;
-		var that = this;
-		this.addWidget("button","Download","", function(v){
-			if(!that.value)
-				return;
-			that.downloadAsFile();
-		});
-    }
-
-    DownloadData.title = "Download";
-    DownloadData.desc = "Download some data";
-
-	DownloadData.prototype.downloadAsFile = function()
-	{
-		if(this.value == null)
-			return;
-
-		var str = null;
-		if(this.value.constructor === String)
-			str = this.value;
-		else
-			str = JSON.stringify(this.value);
-
-		var file = new Blob([str]);
-		var url = URL.createObjectURL( file );
-		var element = document.createElement("a");
-		element.setAttribute('href', url);
-		element.setAttribute('download', this.properties.filename );
-		element.style.display = 'none';
-		document.body.appendChild(element);
-		element.click();
-		document.body.removeChild(element);
-		setTimeout( function(){ URL.revokeObjectURL( url ); }, 1000*60 ); //wait one minute to revoke url
-	}
-
-    DownloadData.prototype.onAction = function(action, param) {
-		var that = this;
-		setTimeout( function(){ that.downloadAsFile(); }, 100); //deferred to avoid blocking the renderer with the popup
-	}
-
-    DownloadData.prototype.onExecute = function() {
-        if (this.inputs[0]) {
-            this.value = this.getInputData(0);
-        }
-    };
-
-    DownloadData.prototype.getTitle = function() {
-        if (this.flags.collapsed) {
-            return this.properties.filename;
-        }
-        return this.title;
-    };
-
-    LiteGraph.registerNodeType("basic/download", DownloadData);
-
 
 
     //Watch a value in the editor
@@ -1323,22 +1031,6 @@
     };
 
     LiteGraph.registerNodeType("basic/watch", Watch);
-
-    //in case one type doesnt match other type but you want to connect them anyway
-    function Cast() {
-        this.addInput("in", 0);
-        this.addOutput("out", 0);
-        this.size = [40, 30];
-    }
-
-    Cast.title = "Cast";
-    Cast.desc = "Allows to connect different types";
-
-    Cast.prototype.onExecute = function() {
-        this.setOutputData(0, this.getInputData(0));
-    };
-
-    LiteGraph.registerNodeType("basic/cast", Cast);
 
     //Show value inside the debug console
     function Console() {
@@ -1423,8 +1115,8 @@
     NodeScript.prototype.onConfigure = function(o) {
         if (o.properties.onExecute && LiteGraph.allow_scripts)
             this.compileCode(o.properties.onExecute);
-		else
-			console.warn("Script not compiled, LiteGraph.allow_scripts is false");
+        else
+            console.warn("Script not compiled, LiteGraph.allow_scripts is false");
     };
 
     NodeScript.title = "Script";
@@ -1437,8 +1129,8 @@
     NodeScript.prototype.onPropertyChanged = function(name, value) {
         if (name == "onExecute" && LiteGraph.allow_scripts)
             this.compileCode(value);
-		else
-			console.warn("Script not compiled, LiteGraph.allow_scripts is false");
+        else
+            console.warn("Script not compiled, LiteGraph.allow_scripts is false");
     };
 
     NodeScript.prototype.compileCode = function(code) {

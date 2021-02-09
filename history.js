@@ -17,14 +17,16 @@
     
         // Layout newly created sources on the left
         if (sources.length > 0) {
+            var maxwidth = 0;
             for (var i = 0; i < sources.length; i++) {
                 var source = sources[i];
-                source.pos = [startx, cursor + i * 100];
+                source.pos = [startx, cursor + i * 50];
+                maxwidth = Math.max(maxwidth, source.size[0]);
             }
-            startx += 120;
+            startx += maxwidth + 30;
         }
     
-        // Layout the node
+        // Layout t7Mhe node
         node.pos = [startx, cursor];
         cursor += node.computeSize()[1] + 50;
     
@@ -97,10 +99,9 @@
         for (var nodeId in idxs) {
             var item = idxs[nodeId];
             if (item.length > 0) {
-                var idx_node = LiteGraph.createNode("ArraysExt/idxSelect");
+                var idx_node = LiteGraph.createNode("basic/array[]");
                 this.add(idx_node, false, true);
-                idx_node.convertTo("objectlist");
-                idx_node.properties["Idx"] = item;
+                idx_node.setProperty("index", item);
                 var parent_node = this.getNodeById(nodeId);
                 parent_node.connect(0, idx_node, 0, true);
                 toBeConcatted.push(idx_node);
@@ -114,10 +115,9 @@
             var nodeId = item.nodeId, parentIndex = item.parentIndex;
             var parent_node = this.getNodeById(nodeId);
             if (parentIndex != null) {
-                var idx_node = LiteGraph.createNode("ArraysExt/idxSelect");
+                var idx_node = LiteGraph.createNode("basic/array[]");
                 this.add(idx_node, false, true);
-                idx_node.convertTo("objectlist");
-                idx_node.properties["Idx"] = [parentIndex];
+                idx_node.setProperty("index", [parentIndex]);
                 parent_node.connect(0, idx_node, 0, true);
                 allCreated.push(idx_node);
                 parent_node = idx_node;
@@ -133,12 +133,11 @@
         if (toBeConcatted.length == 1) {
             return [toBeConcatted[0], allCreated];
         } else {
-            var concat = LiteGraph.createNode("Basic/Concat");
+            var concat = LiteGraph.createNode("basic/concat");
             this.add(concat);
             allCreated.push(concat);
             for (var j = 0; j < toBeConcatted.length; j++) {
                 var source = toBeConcatted[j];
-                if (j > concat.inputs.length - 1) concat.addInput(concat.labels.charAt(j), "objectlist");
                 source.connect(0, concat, j, true);
             }
             return [concat, allCreated];
