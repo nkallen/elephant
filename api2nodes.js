@@ -1,6 +1,6 @@
 (function(){
     LiteGraph.createNodeFromFactory = function(factory) {
-        var node = LiteGraph.createNode("Commands/" + factory.name);
+        var node = LiteGraph.createNode(Elephant.api.factories[factory.name].category + "/" + factory.name);
         node.createFromFactory(factory);
         return node;
     }
@@ -57,7 +57,6 @@
             for (var i = 0; i < input.length; i++) {
                 var value = this.getInputData(i, this.properties[input[i].name]);
                 var type = input[i].type;
-                console.log("i: " + value + " " + type);
                 if (value != null) {
                     switch (type) {
                         case "ObjectList":
@@ -217,8 +216,9 @@
     }
     
     for (var name in Elephant.api.factories) {
-        var node = makeNodeType(name, Elephant.api.factories[name]);
-        LiteGraph.registerNodeType("Commands/" + node.title, node);
+        var info = Elephant.api.factories[name];
+        var node = makeNodeType(name, info.in);
+        LiteGraph.registerNodeType(info.category + "/" + node.title, node);
     }
     
     /// Some exceptional cases:

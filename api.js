@@ -1,20 +1,20 @@
 Elephant.api = {
     factories: {
-        "addpoint": [
+        "addpoint": {category: "edit", in: [
             {
             "pos": 0,
             "name": "Is corner",
             "type": "boolean"
             }
-        ],
-        "booleanunion": [
+        ]},
+        "booleanunion": {category: "construct", in: [
             {
             "pos": 0,
             "name": "Objects",
             "type": "ObjectList"
             }
-        ],
-        "ellipsediameter": [
+        ]},
+        "ellipsediameter": {category: "curve", in: [
             {
             "pos": 0,
             "name": "First axis start",
@@ -30,15 +30,15 @@ Elephant.api = {
             "name": "Second axis pt",
             "type": "Point"
             }
-        ],
-        "planarsrf": [
+        ]},
+        "planarsrf": {category: "construct", in: [
             {
             "pos": 0,
             "name": "Objects",
             "type": "ObjectList"
             }
-        ],
-        "rotateaxis": [
+        ]},
+        "rotateaxis": {category: "transform", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -74,8 +74,8 @@ Elephant.api = {
             "name": "Make copies",
             "type": "boolean"
             }
-        ],
-        "align": [
+        ]},
+        "align": {category: "transform", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -91,8 +91,8 @@ Elephant.api = {
             "name": "Align mode",
             "type": "string"
             }
-        ],
-        "box": [
+        ]},
+        "box": {category: "solid", in: [
             {
             "pos": 0,
             "name": "Base pt",
@@ -123,8 +123,8 @@ Elephant.api = {
             "name": "Extrusion pt",
             "type": "Point"
             }
-        ],
-        "extend": [
+        ]},
+        "extend": {category: "edit", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -135,8 +135,8 @@ Elephant.api = {
             "name": "Boundaries",
             "type": "ObjectList"
             }
-        ],
-        "plane": [
+        ]},
+        "plane": {category: "solid", in: [
             {
             "pos": 0,
             "name": "Base pt",
@@ -157,8 +157,8 @@ Elephant.api = {
             "name": "Height",
             "type": "float"
             }
-        ],
-        "scale": [
+        ]},
+        "scale": {category: "transform", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -189,8 +189,8 @@ Elephant.api = {
             "name": "Make copies",
             "type": "boolean"
             }
-        ],
-        "alignbackgroundimage": [
+        ]},
+        "alignbackgroundimage": {category: "factory", in: [
             {
             "pos": 0,
             "name": "P1",
@@ -211,8 +211,8 @@ Elephant.api = {
             "name": "P4",
             "type": "Point"
             }
-        ],
-        "box3pts": [
+        ]},
+        "box3pts": {category: "solid", in: [
             {
             "pos": 0,
             "name": "Pt A",
@@ -248,8 +248,8 @@ Elephant.api = {
             "name": "Extrusion pt",
             "type": "Point"
             }
-        ],
-        "extrude": [
+        ]},
+        "extrude": {category: "construct", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -295,8 +295,8 @@ Elephant.api = {
             "name": "Path reversed",
             "type": "boolean"
             }
-        ],
-        "plane3pts": [
+        ]},
+        "plane3pts": {category: "solid", in: [
             {
             "pos": 0,
             "name": "Pt A",
@@ -322,8 +322,8 @@ Elephant.api = {
             "name": "Height",
             "type": "float"
             }
-        ],
-        "scale1d": [
+        ]},
+        "scale1d": {category: "transform", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -354,8 +354,8 @@ Elephant.api = {
             "name": "Make copies",
             "type": "boolean"
             }
-        ],
-        "arc3pt": [
+        ]},
+        "arc3pt": {category: "curve", in: [
             {
             "pos": 0,
             "name": "Pt A",
@@ -376,8 +376,8 @@ Elephant.api = {
             "name": "Style",
             "type": "string"
             }
-        ],
-        "boxcenter": [
+        ]},
+        "boxcenter": {category: "solid", in: [
             {
             "pos": 0,
             "name": "Base pt",
@@ -408,8 +408,8 @@ Elephant.api = {
             "name": "Extrusion pt",
             "type": "Point"
             }
-        ],
-        "fillet": [
+        ]},
+        "fillet": {category: "construct", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -440,8 +440,8 @@ Elephant.api = {
             "name": "BlendScale",
             "type": "float"
             }
-        ],
-        "planecenter": [
+        ]},
+        "planecenter": {category: "solid", in: [
             {
             "pos": 0,
             "name": "Base pt",
@@ -462,8 +462,8 @@ Elephant.api = {
             "name": "Height",
             "type": "float"
             }
-        ],
-        "scale2d": [
+        ]},
+        "scale2d": {category: "transform", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -494,8 +494,8 @@ Elephant.api = {
             "name": "Make copies",
             "type": "boolean"
             }
-        ],
-        "arccenter": [
+        ]},
+        "arccenter": {category: "curve", in: [
             {
             "pos": 0,
             "name": "Center",
@@ -521,8 +521,8 @@ Elephant.api = {
             "name": "Elliptical",
             "type": "boolean"
             }
-        ],
-        "chamfer": [
+        ]},
+        "chamfer": {category: "construct", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -548,29 +548,29 @@ Elephant.api = {
             "name": "Dist B",
             "type": "float"
             }
-        ],
-        "flip": [
+        ]},
+        "flip": {category: "factory", in: [
             {
             "pos": 0,
             "name": "Objects",
             "type": "ObjectList"
             }
-        ],
-        "point": [
+        ]},
+        "point": {category: "factory", in: [
             {
             "pos": 0,
             "name": "Pt",
             "type": "Point"
             }
-        ],
-        "separate": [
+        ]},
+        "separate": {category: "edit", in: [
             {
             "pos": 0,
             "name": "Objects",
             "type": "ObjectList"
             }
-        ],
-        "arccontinue": [
+        ]},
+        "arccontinue": {category: "curve", in: [
             {
             "pos": 0,
             "name": "Start pt",
@@ -586,8 +586,8 @@ Elephant.api = {
             "name": "Angle",
             "type": "float"
             }
-        ],
-        "circle": [
+        ]},
+        "circle": {category: "curve", in: [
             {
             "pos": 0,
             "name": "Is radius",
@@ -613,8 +613,8 @@ Elephant.api = {
             "name": "Vertical",
             "type": "boolean"
             }
-        ],
-        "helix": [
+        ]},
+        "helix": {category: "curve", in: [
             {
             "pos": 0,
             "name": "Base point",
@@ -665,8 +665,8 @@ Elephant.api = {
             "name": "Reverse twist",
             "type": "boolean"
             }
-        ],
-        "polygon": [
+        ]},
+        "polygon": {category: "curve", in: [
             {
             "pos": 0,
             "name": "Center",
@@ -682,8 +682,8 @@ Elephant.api = {
             "name": "Num sides",
             "type": "int"
             }
-        ],
-        "shell": [
+        ]},
+        "shell": {category: "construct", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -704,8 +704,8 @@ Elephant.api = {
             "name": "Flip",
             "type": "boolean"
             }
-        ],
-        "arctangent": [
+        ]},
+        "arctangent": {category: "curve", in: [
             {
             "pos": 0,
             "name": "Is radius",
@@ -736,8 +736,8 @@ Elephant.api = {
             "name": "Side pt",
             "type": "Point"
             }
-        ],
-        "circle3pt": [
+        ]},
+        "circle3pt": {category: "curve", in: [
             {
             "pos": 0,
             "name": "Pt A",
@@ -753,9 +753,9 @@ Elephant.api = {
             "name": "Pt C",
             "type": "Point"
             }
-        ],
-        "interpcurve": [],
-        "polygonedge": [
+        ]},
+        "interpcurve": {category: "factory", in: []},
+        "polygonedge": {category: "factory", in: [
             {
             "pos": 0,
             "name": "Pt A",
@@ -776,15 +776,15 @@ Elephant.api = {
             "name": "Flip",
             "type": "boolean"
             }
-        ],
-        "shrinktrimmedsrf": [
+        ]},
+        "shrinktrimmedsrf": {category: "factory", in: [
             {
             "pos": 0,
             "name": "Objects",
             "type": "ObjectList"
             }
-        ],
-        "arraycircular": [
+        ]},
+        "arraycircular": {category: "transform", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -820,8 +820,8 @@ Elephant.api = {
             "name": "Angle mode",
             "type": "string"
             }
-        ],
-        "circlediameter": [
+        ]},
+        "circlediameter": {category: "curve", in: [
             {
             "pos": 0,
             "name": "Pt A",
@@ -837,15 +837,15 @@ Elephant.api = {
             "name": "Vertical",
             "type": "boolean"
             }
-        ],
-        "intersect": [
+        ]},
+        "intersect": {category: "construct", in: [
             {
             "pos": 0,
             "name": "Objects",
             "type": "ObjectList"
             }
-        ],
-        "polygonstar": [
+        ]},
+        "polygonstar": {category: "curve", in: [
             {
             "pos": 0,
             "name": "Center",
@@ -866,9 +866,9 @@ Elephant.api = {
             "name": "Second radius",
             "type": "Point"
             }
-        ],
-        "sketchcurve": [],
-        "arraycurve": [
+        ]},
+        "sketchcurve": {category: "curve", in: []},
+        "arraycurve": {category: "transform", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -913,8 +913,8 @@ Elephant.api = {
             "name": "Alignment surface",
             "type": "GeomObject"
             }
-        ],
-        "circletangent": [
+        ]},
+        "circletangent": {category: "curve", in: [
             {
             "pos": 0,
             "name": "Is radius",
@@ -940,15 +940,15 @@ Elephant.api = {
             "name": "Radius",
             "type": "float"
             }
-        ],
-        "join": [
+        ]},
+        "join": {category: "edit", in: [
             {
             "pos": 0,
             "name": "Objects",
             "type": "ObjectList"
             }
-        ],
-        "sphere": [
+        ]},
+        "sphere": {category: "solid", in: [
             {
             "pos": 0,
             "name": "Is radius",
@@ -969,8 +969,8 @@ Elephant.api = {
             "name": "Radius",
             "type": "float"
             }
-        ],
-        "arraydir": [
+        ]},
+        "arraydir": {category: "transform", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -1001,8 +1001,8 @@ Elephant.api = {
             "name": "Mode",
             "type": "string"
             }
-        ],
-        "cone": [
+        ]},
+        "cone": {category: "solid", in: [
             {
             "pos": 0,
             "name": "Is radius",
@@ -1033,8 +1033,8 @@ Elephant.api = {
             "name": "Height",
             "type": "float"
             }
-        ],
-        "line": [
+        ]},
+        "line": {category: "curve", in: [
             {
             "pos": 0,
             "name": "Start",
@@ -1045,8 +1045,8 @@ Elephant.api = {
             "name": "End",
             "type": "Point"
             }
-        ],
-        "project": [
+        ]},
+        "project": {category: "construct", in: [
             {
             "pos": 0,
             "name": "BaseObjects",
@@ -1072,8 +1072,8 @@ Elephant.api = {
             "name": "Direction end pt",
             "type": "Point"
             }
-        ],
-        "sweep": [
+        ]},
+        "sweep": {category: "construct", in: [
             {
             "pos": 0,
             "name": "Profiles",
@@ -1134,8 +1134,8 @@ Elephant.api = {
             "name": "Num Profile Points",
             "type": "int"
             }
-        ],
-        "arraygrid": [
+        ]},
+        "arraygrid": {category: "transform", in: [
             {
             "pos": 0,
             "name": "Base pt",
@@ -1186,8 +1186,8 @@ Elephant.api = {
             "name": "Objects",
             "type": "ObjectList"
             }
-        ],
-        "copy": [
+        ]},
+        "copy": {category: "edit", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -1218,8 +1218,8 @@ Elephant.api = {
             "name": "From edge cplane",
             "type": "CoordinateFrame"
             }
-        ],
-        "loft": [
+        ]},
+        "loft": {category: "construct", in: [
             {
             "pos": 0,
             "name": "Sections",
@@ -1260,8 +1260,8 @@ Elephant.api = {
             "type": "int",
             "default": 10
             }
-        ],
-        "railrevolve": [
+        ]},
+        "railrevolve": {category: "construct", in: [
             {
             "pos": 0,
             "name": "Profile",
@@ -1287,8 +1287,8 @@ Elephant.api = {
             "name": "Cap ends",
             "type": "boolean"
             }
-        ],
-        "text": [
+        ]},
+        "text": {category: "solid", in: [
             {
             "pos": 0,
             "name": "Base point",
@@ -1334,8 +1334,8 @@ Elephant.api = {
             "name": "PreviewMode",
             "type": "boolean"
             }
-        ],
-        "backgroundimage": [
+        ]},
+        "backgroundimage": {category: "view", in: [
             {
             "pos": 0,
             "name": "FileName",
@@ -1351,16 +1351,16 @@ Elephant.api = {
             "name": "Corner",
             "type": "Point"
             }
-        ],
-        // "curve": [],
-        "merge": [
+        ]},
+        // "curve": {category: "factory", in: []},
+        "merge": {category: "construct", in: [
             {
             "pos": 0,
             "name": "Objects",
             "type": "ObjectList"
             }
-        ],
-        "rect3pts": [
+        ]},
+        "rect3pts": {category: "curve", in: [
             {
             "pos": 0,
             "name": "Pt A",
@@ -1401,8 +1401,8 @@ Elephant.api = {
             "name": "Round radius",
             "type": "float"
             }
-        ],
-        "trim": [
+        ]},
+        "trim": {category: "edit", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -1438,8 +1438,8 @@ Elephant.api = {
             "name": "Trim pts",
             "type": "List"
             }
-        ],
-        "blend": [
+        ]},
+        "blend": {category: "construct", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -1460,8 +1460,8 @@ Elephant.api = {
             "name": "Bulge",
             "type": "float"
             }
-        ],
-        "cylinder": [
+        ]},
+        "cylinder": {category: "solid", in: [
             {
             "pos": 0,
             "name": "Is radius",
@@ -1492,8 +1492,8 @@ Elephant.api = {
             "name": "Height",
             "type": "float"
             }
-        ],
-        "mirror": [
+        ]},
+        "mirror": {category: "transform", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -1514,8 +1514,8 @@ Elephant.api = {
             "name": "Delete inputs",
             "type": "boolean"
             }
-        ],
-        "rectangle": [
+        ]},
+        "rectangle": {category: "curve", in: [
             {
             "pos": 0,
             "name": "Base pt",
@@ -1551,8 +1551,8 @@ Elephant.api = {
             "name": "Round radius",
             "type": "float"
             }
-        ],
-        "booleandifference": [
+        ]},
+        "booleandifference": {category: "construct", in: [
             {
             "pos": 0,
             "name": "Base objects",
@@ -1568,15 +1568,15 @@ Elephant.api = {
             "name": "Keep cutting objects",
             "type": "boolean"
             }
-        ],
-        "delete": [
+        ]},
+        "delete": {category: "edit", in: [
             {
             "pos": 0,
             "name": "Objects",
             "type": "ObjectList"
             }
-        ],
-        "move": [
+        ]},
+        "move": {category: "transform", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -1607,8 +1607,8 @@ Elephant.api = {
             "name": "From edge cplane",
             "type": "CoordinateFrame"
             }
-        ],
-        "rectcenter": [
+        ]},
+        "rectcenter": {category: "curve", in: [
             {
             "pos": 0,
             "name": "Base pt",
@@ -1644,8 +1644,8 @@ Elephant.api = {
             "name": "Round radius",
             "type": "float"
             }
-        ],
-        "booleanintersection": [
+        ]},
+        "booleanintersection": {category: "construct", in: [
             {
             "pos": 0,
             "name": "Base objects",
@@ -1656,8 +1656,8 @@ Elephant.api = {
             "name": "Intersectors",
             "type": "ObjectList"
             }
-        ],
-        "ellipse": [
+        ]},
+        "ellipse": {category: "curve", in: [
             {
             "pos": 0,
             "name": "Center pt",
@@ -1683,8 +1683,8 @@ Elephant.api = {
             "name": "Height",
             "type": "float"
             }
-        ],
-        "network": [
+        ]},
+        "network": {category: "construct", in: [
             {
             "pos": 0,
             "name": "U curves",
@@ -1705,8 +1705,8 @@ Elephant.api = {
             "name": "V orientations",
             "type": "List"
             }
-        ],
-        "revolve": [
+        ]},
+        "revolve": {category: "construct", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -1732,15 +1732,15 @@ Elephant.api = {
             "name": "Cap ends",
             "type": "boolean"
             }
-        ],
-        "booleanmerge": [
+        ]},
+        "booleanmerge": {category: "construct", in: [
             {
             "pos": 0,
             "name": "Objects",
             "type": "ObjectList"
             }
-        ],
-        "ellipsecorner": [
+        ]},
+        "ellipsecorner": {category: "curve", in: [
             {
             "pos": 0,
             "name": "Base corner",
@@ -1761,8 +1761,8 @@ Elephant.api = {
             "name": "Height",
             "type": "float"
             }
-        ],
-        "offset": [
+        ]},
+        "offset": {category: "construct", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -1803,8 +1803,8 @@ Elephant.api = {
             "name": "Cap ends",
             "type": "boolean"
             }
-        ],
-        "rotate": [
+        ]},
+        "rotate": {category: "transform", in: [
             {
             "pos": 0,
             "name": "Objects",
@@ -1835,8 +1835,8 @@ Elephant.api = {
             "name": "Make copies",
             "type": "boolean"
             }
-        ],
-        "isocurve": [
+        ]},
+        "isocurve": {category: "construct", in: [
             {
                 "pos": 0,
                 "name": "Face",
@@ -1853,8 +1853,8 @@ Elephant.api = {
                 "type": "string",
                 "options": ["both", "both", "u", "v"]
             },
-        ],
-        "rebuildcurve": [
+        ]},
+        "rebuildcurve": {category: "factory", in: [
             {
                 "pos": 0,
                 "name": "Objects",
@@ -1890,7 +1890,7 @@ Elephant.api = {
                 "name": "Break angle",
                 "type": "float"
             }
-        ]
+        ]}
     },
         
     geomobjects: {
@@ -4344,5 +4344,4 @@ Elephant.api = {
     //     return {name: $(item).attr("href").substring(2,25), out: $.extend({}, props, methods)}
     // })
 
-    // Type conversion
 };
