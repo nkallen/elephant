@@ -66,10 +66,6 @@
         this.onClear();
         var changeStyle = (this.properties.style[0] !== this.properties.style[1] && this.sIndex !== -1);
         var inObj = this.getInputData(0, moi.geometryDatabase.createObjectList());
-        // if (!inObj) {
-        //     console.log("ERRROR");
-        //     return;
-        // }
         switch (this.properties.displayMode) {
             case "Normal":
                 inObj.setProperty('displayMode', 0);
@@ -78,12 +74,13 @@
                 inObj.setProperty('displayMode', 1);
                 break;
         }
+
         for ( var i = 0; i<inObj.length; i++) {
             var object = changeStyle ? inObj.item(i).clone() : inObj.item(i);
             object.locked = true;
+            this.tempobjects.addObject(object);
         }
 
-        for ( var i = 0; i<inObj.length; i++) this.tempobjects.addObject(object);
         for ( var i = this.tempobjects.length; i > 0; ) this.tempobjects.item(--i).setHitTest(0);
         if (changeStyle) this.tempobjects.setProperty( 'styleIndex', this.sIndex);
         if (this.properties.xOffset != 0.0) {
@@ -95,8 +92,7 @@
         moi.geometryDatabase.addObjects(this.tempobjects);
     }
     
-    MoIOutput.prototype.onExecute = function()
-    {
+    MoIOutput.prototype.onExecute = function() {
         this.unlockButton.disabled = true;
         this.updateObjects();
         if (this.inputs[0].link !== null) {
