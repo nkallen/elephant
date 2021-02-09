@@ -9,7 +9,7 @@ Elephant.getSlotMenuOptions = function(slot) {
         if (_slot.type == "objectlist") {
             menu_info.push({
                 content: "Add output", callback: function() {
-                    var output = LiteGraph.createNode("Basic/Output");
+                    var output = LiteGraph.createNode("basic/Output");
                     output.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
                     that.graph.add(output);
                     that.connect(slot.slot, output, 0);

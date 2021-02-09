@@ -125,5 +125,5 @@
         this.inputs[0].label = (this.tempobjects.length > 0) ? this.tempobjects.length.toFixed(0) : "--";
     };
 
-    LiteGraph.registerNodeType("Basic/Output", MoIOutput);    
+    LiteGraph.registerNodeType("basic/Output", MoIOutput);    
 }());
