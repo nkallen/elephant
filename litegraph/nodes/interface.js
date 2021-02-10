@@ -211,6 +211,7 @@
     WidgetNumber.prototype.onPropertyChanged = function(name, value) {
         var t = (this.properties.step + "").split(".");
         this._precision = t.length > 1 ? t[1].length : 0;
+        this.markChanged();
     };
 
     WidgetNumber.prototype.onMouseDown = function(e, pos) {
@@ -250,6 +251,7 @@
         );
         this.properties.value = v;
         this.graph._version++;
+        this.markChanged();
         this.setDirtyCanvas(true);
     };
 
@@ -261,6 +263,7 @@
                 this.properties.min,
                 this.properties.max
             );
+            this.markChanged();
             this.graph._version++;
             this.setDirtyCanvas(true);
         }
@@ -416,6 +419,7 @@
         this.properties.value =
             this.properties.min +
             (this.properties.max - this.properties.min) * this.value;
+        this.markChanged();
         this.oldmouse = m;
         this.setDirtyCanvas(true);
     };
@@ -430,6 +434,7 @@
     WidgetKnob.prototype.onPropertyChanged = function(name, value) {
         if (name == "min" || name == "max" || name == "value") {
             this.properties[name] = parseFloat(value);
+            this.markChanged();
             return true; //block
         }
     };
@@ -452,6 +457,7 @@
             "V",
             this.properties.value,
             function(v) {
+                that.markChanged();
                 that.properties.value = v;
             },
             this.properties
@@ -464,6 +470,7 @@
         if (name == "value") {
             this.slider.value = value;
         }
+        this.markChanged();
     };
 
     WidgetSliderGUI.prototype.onExecute = function() {

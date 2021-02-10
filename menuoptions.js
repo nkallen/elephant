@@ -122,13 +122,33 @@ Elephant.getSlotMenuOptions = function(slot) {
             menu_info.push({
                 content: "Pick point(s)", callback: function() {
                     var point = LiteGraph.createNode("Commands/PickPoint");
-                    point.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
+                    point.pos = [that.pos[0] - point.size[0] - 30, that.pos[1]];
                     that.graph.add(point);
-                    that.connect(slot.slot, point, 0);
+                    point.connect(0, that, slot.slot);
+                }
+            });
+        } else if (_slot.type == "numarray") {
+            menu_info.push({
+                content: "Float slider", callback: function() {
+                    var newnode = LiteGraph.createNode("widget/hslider");
+                    newnode.pos = [that.pos[0] - newnode.size[0] - 30, that.pos[1]];
+                    that.graph.add(newnode);
+                    newnode.setProperty("value", that.properties[_slot.name])
+                    newnode.setProperty("min", Math.floor(that.properties[_slot.name]*0.5))
+                    newnode.setProperty("max", Math.ceil(that.properties[_slot.name]*2))
+                    newnode.connect(0, that, slot.slot);
+                }
+            });
+            menu_info.push({
+                content: "Int counter", callback: function() {
+                    var newnode = LiteGraph.createNode("widget/number");
+                    newnode.pos = [that.pos[0] - newnode.size[0] - 30, that.pos[1]];
+                    that.graph.add(newnode);
+                    newnode.setProperty("value", that.properties[_slot.name])
+                    newnode.connect(0, that, slot.slot);
                 }
             });
         }
-
     }
     return menu_info;
 }

@@ -44,6 +44,8 @@
             for (var i = 0; i < input.length; i++) {
                 var type = input[i].type;
                 var value = this.getInputData(i, this.properties[input[i].name]);
+                console.log(">");
+                console.json(value);
                 if (value != null) {
                     switch (type) {
                         case "ObjectList":
@@ -71,6 +73,7 @@
                         case "boolean":
                         case "string":
                             if (!Array.isArray(value)) value = [value];
+                            break;
                         default:
                             value = [value];
                             break;
@@ -78,11 +81,11 @@
                 } else value = [null];
                 call.push(value);
             }
+            console.json(call);
             var calls = unroll(call);
     
             var acc = moi.geometryDatabase.createObjectList();
             for (var i = 0; i < calls.length; i++) {
-                console.json(calls[i]);
                 var temp = factory.apply(null, calls[i]);
                 for (var j = 0; j < temp.length; j++) {
                     acc.addObject(temp.item(j));
@@ -108,7 +111,7 @@
             return result;
         }
     
-        node.prototype.createFromFactory = function(factory) {
+        node.prototype.createFromFactory = function(factory) { // FIXME nk move into loop
             for (var i = 0; i < input.length; i++) {
                 var arg = input[i];
                 var type = arg.type;
@@ -438,7 +441,6 @@
         var objects = this.getInputData(0, this.properties["Objects"]);
         var index = this.getInputData(1, this.properties["Index"]);
         var output = moi.geometryDatabase.createObjectList();
-        this.setOutputData(0, output);
     
         for (var i = 0; i < objects.length; i++) {
             var subobjects = objects.item(i).getSubObjects();
@@ -447,6 +449,7 @@
                 output.addObject(subobj);
             }
         }
+        this.setOutputData(0, output);
         this.boxcolor = output.length == 0 ? "#F80" : "#0F5";
     }
     LiteGraph.registerNodeType("Commands/subobject", subobject);

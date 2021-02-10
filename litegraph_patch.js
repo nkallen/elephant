@@ -58,7 +58,7 @@ LGraphNode.prototype.onAddPropertyToPanel = function(name, panel) {
     var options = info.options || {};
     var type = info.type;
     if (type == "boolean" || type == "enum" || type == "combo") return false;
-    if (type == "pointarray") return true;
+    if (type == "pointarray" || type == "objectlist") return true;
 
     var str_value = String(value);
     if(type == "number")
