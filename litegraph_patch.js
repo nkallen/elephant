@@ -5,6 +5,16 @@
  */
 (function(){
 
+LGraphCanvas.link_type_colors = {
+    "-1": LiteGraph.EVENT_LINK_COLOR,
+    number: "#AAA",
+    node: "#DCA",
+    number:     "#399",
+    numarray:   "#9CA",
+    pointarray: "#B7A",
+    objectlist: "#CA0",
+    boolean:    "#9BC",
+};
 LGraphNode.prototype.getInputData = function(slot, defaultdata) {
     var type = this.inputs[slot].type;
     if (!defaultdata) {
@@ -37,6 +47,45 @@ LGraphNode.prototype.getInputData = function(slot, defaultdata) {
 };
 
 LGraphNode.prototype.hasChanged = function() {
+    return true;
+}
+
+////
+
+LGraphNode.prototype.onAddPropertyToPanel = function(name, panel) {
+    var value = this.properties[name];
+    var info = this.getPropertyInfo(name);
+    var options = info.options || {};
+    var type = info.type;
+    if (type == "boolean" || type == "enum" || type == "combo") return false;
+    if (type == "pointarray") return true;
+
+    var str_value = String(value);
+    if(type == "number")
+        str_value = value.toFixed(3);
+
+    var elem = document.createElement("div");
+    elem.className = "property";
+    elem.innerHTML = "<span class='property_name'></span><input type='text' class='property_value' />";
+    elem.querySelector(".property_name").innerText = name;
+    var value_element = elem.querySelector(".property_value");
+    elem.dataset["property"] = name;
+    elem.dataset["type"] = options.type || type;
+    elem.options = options;
+    elem.value = value;
+    panel.content.appendChild(elem);
+    value_element.addEventListener("keydown", function(e) { 
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            this.blur();
+        }
+    });
+    var node = this;
+    value_element.addEventListener("blur", function(){ 
+        var v = this.value;
+        v = Number(v);
+        node.setProperty(name, [v]);
+    });
     return true;
 }
 
@@ -102,7 +151,7 @@ LGraph.prototype.runStep = function(num, do_not_catch_errors, limit ) {
             for (var j = 0; j < limit; ++j) {
                 var node = nodes[j];
                 if ((node.mode == LiteGraph.ALWAYS || node.mode == LiteGraph.IMMORTAL) && node.onExecute) {
-                    node.onExecute(); //hard to send elapsed time
+                    node.onExecute (); //hard to send elapsed time
                 }
             }
 

@@ -1,19 +1,17 @@
 (function(){
-    function MoIOutput()
-    {
-        // this.minsize = [70, 0];
+    function MoIOutput() {
         this.size = [164, 84];
-        this.boxcolor = "#F05";
         this.addInput("","objectlist");
-        this.flags = { isOutput: true };
-        this.properties = {style:["--", "--"], edges:["On", "Off", "On"], displayMode: ["Normal", "Normal", "FaintWireframe"], xOffset: 0.0};
+        var styles = moi.geometryDatabase.getObjectStyles();
+        var names = []
+        for ( var n=0; n<styles.length; n++ ) names.push(styles.item(n).name);
+        this.addProperty("style", "Default", "enum", {values: names});
+        this.addProperty("edges", true, "boolean");
+        this.addProperty("displayMode", "Normal", "enum", {values: ["Normal", "FaintWireframe"]});
+        this.addProperty("xOffset", 0.0, "number")
         this.sIndex = -1;
         this.tempobjects = moi.geometryDatabase.createObjectList();
 
-        this.addProperty("text", "click me");
-        this.addProperty("font_size", 30);
-        this.size = [164, 84];
-        this.clicked = false;
         var that = this;
         this.unlockButton = this.addWidget("button", "Unlock", "value", function() {
             if (that.tempobjects) {
@@ -34,23 +32,12 @@
     MoIOutput.title = "Output";
     MoIOutput.desc = "Output";
     
-    MoIOutput.prototype.onClear = function()
-    {
+    MoIOutput.prototype.onClear = function() {
         moi.geometryDatabase.removeObjects(this.tempobjects);
         this.tempobjects = moi.geometryDatabase.createObjectList();
     }
-    
-    MoIOutput.prototype.onAdded = function()
-    {
-        if ( !this.properties ) { this.properties = {style:["--", "--"]} } else { if (!this.properties.style) this.properties.style = ["--", "--"]}
-        this.properties.style = this.properties.style.slice(0,2);
-        var styles = moi.geometryDatabase.getObjectStyles();
-        for ( var n=0; n<styles.length; n++ ) this.properties.style.push(styles.item(n).name);
-        this.updateStyles();
-    }
-    
-    MoIOutput.prototype.onRemoved = function()
-    {
+        
+    MoIOutput.prototype.onRemoved = function() {
         this.onClear();
     }
     
@@ -58,7 +45,7 @@
     {
         var styles = moi.geometryDatabase.getObjectStyles();
         this.sIndex = -1;
-        for ( var x=0; x<styles.length; x++ ) if ( this.properties.style[0] === styles.item(x).name ) { this.sIndex = x; break; }
+        for ( var x=0; x<styles.length; x++ ) if ( this.properties.style === styles.item(x).name ) { this.sIndex = x; break; }
     }
     
     MoIOutput.prototype.updateObjects = function()

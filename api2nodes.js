@@ -20,25 +20,13 @@
         options = options || {};
         var node = function() {
             this.internal = {};
-            this.properties = {};
             this.mode = options.mode || LiteGraph.ALWAYS;
             for (var i = 0; i < input.length; i++) {
                 var arg = input[i];
                 var type = mapType(arg.type);
                 this.addInput(arg.name, type);
-                this.properties[arg.name] = null; // this is necessary for saving/loading
-                switch (arg.type) {
-                    case "boolean":
-                        this.properties[arg.name] == [arg.default ? "On" : "Off", "On", "Off"];
-                        break;
-                    case "string":
-                        this.properties[arg.name] = arg.options;
-                        break;
-                    default:
-                        if ("default" in arg)
-                            this.properties[arg.name] = [arg.default];
-                        break;
-                    }
+                var ptype = (type == "string" && arg.options) ? "enum" : type;
+                this.addProperty(arg.name, arg.default, ptype, {values: arg.options, original_type: arg.type});
             }
             if (output == null) { output = [{name: "Out", type: "ObjectList"}] }
             for (var i = 0; i < output.length; i++) {
@@ -54,8 +42,8 @@
         node.prototype.onExecute = function() { // FIXME nk move into loop
             var call = [[name]];
             for (var i = 0; i < input.length; i++) {
-                var value = this.getInputData(i, this.properties[input[i].name]);
                 var type = input[i].type;
+                var value = this.getInputData(i, this.properties[input[i].name]);
                 if (value != null) {
                     switch (type) {
                         case "ObjectList":
@@ -80,26 +68,21 @@
                             break;
                         case "float":
                         case "int":
-                            value = value.length == 0 ? [null] : value;
-                            break;
                         case "boolean":
-                            value = [value[0] == "On"];
-                            break;
                         case "string":
-                            value = [value[0]];
-                            break;
+                            if (!Array.isArray(value)) value = [value];
                         default:
                             value = [value];
                             break;
                     }
-                }
-                if (value == null) value = [null];
+                } else value = [null];
                 call.push(value);
             }
             var calls = unroll(call);
     
             var acc = moi.geometryDatabase.createObjectList();
             for (var i = 0; i < calls.length; i++) {
+                console.json(calls[i]);
                 var temp = factory.apply(null, calls[i]);
                 for (var j = 0; j < temp.length; j++) {
                     acc.addObject(temp.item(j));
@@ -151,12 +134,9 @@
                         break;
                     case "int":
                     case "float":
-                        value = value == null ? [] : [value];
-                        break;
                     case "boolean":
-                        value = [value ? "On" : "Off", "On", "Off"];
                     case "string":
-                        value = [value].concat(arg.options || []);
+                        break;
                 }
                 this.properties[arg.name] = value;
             }
@@ -207,7 +187,6 @@
             o.boxcolor = "#F05";
             return o;
         }
-    
     
         return node;
     }
