@@ -72,7 +72,7 @@ LGraphNode.prototype.onAddPropertyToPanel = function(name, panel) {
     elem.dataset["property"] = name;
     elem.dataset["type"] = options.type || type;
     elem.options = options;
-    elem.value = value;
+    value_element.value = value;
     panel.content.appendChild(elem);
     value_element.addEventListener("keydown", function(e) { 
         if (e.keyCode == 13) {
