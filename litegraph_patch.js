@@ -111,12 +111,15 @@ LGraph.prototype.updateExecutionOrder = function() {
 
 var hasChanged = {};
 LGraphNode.prototype.markChanged = function() {
+    if (this.id == null) throw "Node not yet added to graph";
     hasChanged[this.id] = true;
 }
 LGraphNode.prototype.onPropertyChanged = function(prop) {
+    if (this.id == null) return;
     hasChanged[this.id] = true;
 }
 LGraph.prototype.onNodeConnectionChange = function(_, node) {
+    if (node.id == null) throw "Node not yet added to graph";
     hasChanged[node.id] = true;
 }
 LGraph.prototype.onNodeAdded = function(node) {

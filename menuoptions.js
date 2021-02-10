@@ -133,9 +133,10 @@ Elephant.getSlotMenuOptions = function(slot) {
                     var newnode = LiteGraph.createNode("widget/hslider");
                     newnode.pos = [that.pos[0] - newnode.size[0] - 30, that.pos[1]];
                     that.graph.add(newnode);
-                    newnode.setProperty("value", that.properties[_slot.name])
-                    newnode.setProperty("min", Math.floor(that.properties[_slot.name]*0.5))
-                    newnode.setProperty("max", Math.ceil(that.properties[_slot.name]*2))
+                    newnode.setProperty("value", that.properties[_slot.name]);
+                    newnode.setProperty("min", Math.floor(that.properties[_slot.name]*0.5) || 0);
+                    newnode.setProperty("max", Math.ceil(that.properties[_slot.name]*2) || 1);
+                    newnode.title = _slot.name;
                     newnode.connect(0, that, slot.slot);
                 }
             });
@@ -144,7 +145,8 @@ Elephant.getSlotMenuOptions = function(slot) {
                     var newnode = LiteGraph.createNode("widget/number");
                     newnode.pos = [that.pos[0] - newnode.size[0] - 30, that.pos[1]];
                     that.graph.add(newnode);
-                    newnode.setProperty("value", that.properties[_slot.name])
+                    newnode.setProperty("value", that.properties[_slot.name] || 0);
+                    newnode.title = _slot.name;
                     newnode.connect(0, that, slot.slot);
                 }
             });
