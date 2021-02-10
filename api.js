@@ -2594,6 +2594,7 @@ Elephant.api = {
             ]
         },
         "FilesystemOM": {
+            singleton: "moi.filesystem",
             "out": [
             {
                 "name": "getCompactPath",
@@ -2747,6 +2748,7 @@ Elephant.api = {
             ]
         },
         "VectorMath": {
+            singleton: "moi.vectorMath",
             "out": [
             {
                 "name": "add",
@@ -2906,6 +2908,7 @@ Elephant.api = {
             ]
         },
         "View": {
+            singleton: "moi.view",
             "out": [
             {
                 "name": "allowRotationTilt3dx",
@@ -3884,6 +3887,7 @@ Elephant.api = {
             ]
         },
         "Settings": {
+            singleton: "moi.settings",
             "out": [
             {
                 "name": "igesJoinOnImport",

@@ -81,9 +81,10 @@ LGraphNode.prototype.onAddPropertyToPanel = function(name, panel) {
         }
     });
     var node = this;
-    value_element.addEventListener("blur", function(){ 
+    value_element.addEventListener("blur", function() { 
         var v = this.value;
-        v = Number(v);
+        if (type == "numarray" || type == "number")
+            v = Number(v);
         node.setProperty(name, [v]);
     });
     return true;
@@ -135,16 +136,17 @@ LGraph.prototype.runStep = function(num, do_not_catch_errors, limit ) {
     var start = LiteGraph.getTime();
     this.globaltime = 0.001 * (start - this.starttime);
 
-    var needsExecution = this.computeNeedsExecution();
-    var _nodes_executable = [];
+    // this is just a 
+    var needsExecutionNow = this.computeNeedsExecution();
+    var toExecuteNowSorted = [];
     for (var i = 0; i < executable.length; i++) {
-        if (executable[i].id in needsExecution) {
-            _nodes_executable.push(executable[i]);
+        if (executable[i].id in needsExecutionNow) {
+            toExecuteNowSorted.push(executable[i]);
         }
     }
     num = num || 1;
 
-    var nodes = _nodes_executable;
+    var nodes = toExecuteNowSorted;
 
     limit = limit || nodes.length;
 
@@ -202,7 +204,6 @@ LGraph.prototype.runStep = function(num, do_not_catch_errors, limit ) {
     }
 
     hasChanged = {};
-    for (var id in immortal) hasChanged[id] = true;
 
     var now = LiteGraph.getTime();
     var elapsed = now - start;
@@ -216,7 +217,13 @@ LGraph.prototype.runStep = function(num, do_not_catch_errors, limit ) {
     this.last_update_time = now;
 };
 
+// Looks at all the hasChanged nodes and includes all dependencies
 LGraph.prototype.computeNeedsExecution = function() {
+    for (var id in immortal) {
+        if (this.getNodeById(id).hasChanged())
+            hasChanged[id] = true;
+    }
+
     var result = {};
     var S = [];
     for (var id in hasChanged) {

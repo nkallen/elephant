@@ -1103,18 +1103,18 @@
     //Execites simple code
     function NodeScript() {
         this.size = [60, 30];
-        this.addProperty("onExecute", "return A;");
+        this.addProperty("onExecute", ["return A;"]);
         this.addInput("A", "");
         this.addInput("B", "");
         this.addOutput("out", "");
 
-        this._func = null;
+        this._func = function(o) { return o };
         this.data = {};
     }
 
     NodeScript.prototype.onConfigure = function(o) {
         if (o.properties.onExecute && LiteGraph.allow_scripts)
-            this.compileCode(o.properties.onExecute);
+            this.compileCode(o.properties.onExecute[0]);
         else
             console.warn("Script not compiled, LiteGraph.allow_scripts is false");
     };
@@ -1128,7 +1128,7 @@
 
     NodeScript.prototype.onPropertyChanged = function(name, value) {
         if (name == "onExecute" && LiteGraph.allow_scripts)
-            this.compileCode(value);
+            this.compileCode(value[0]);
         else
             console.warn("Script not compiled, LiteGraph.allow_scripts is false");
     };
@@ -1153,8 +1153,13 @@
                     return;
                 }
             }
+            console.log("0");
+
             try {
                 this._func = new Function("A", "B", "C", "DATA", "node", code);
+                this.markChanged();
+                console.log("1");
+
             } catch (err) {
                 console.error("Error parsing script");
                 console.error(err);
@@ -1163,23 +1168,20 @@
     };
 
     NodeScript.prototype.onExecute = function() {
+        console.log("2");
         if (!this._func) {
             return;
         }
 
-        try {
+        console.log("3");
+        // try {
             var A = this.getInputData(0);
             var B = this.getInputData(1);
-            var C = this.getInputData(2);
-            this.setOutputData(0, this._func(A, B, C, this.data, this));
-        } catch (err) {
-            console.error("Error in script");
-            console.error(err);
-        }
-    };
-
-    NodeScript.prototype.onGetOutputs = function() {
-        return [["C", ""]];
+            this.setOutputData(0, this._func(A, B, this.data, this));
+        // } catch (err) {
+        //     console.error("Error in script");
+        //     console.error(err);
+        // }
     };
 
     LiteGraph.registerNodeType("basic/script", NodeScript);

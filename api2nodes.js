@@ -44,8 +44,6 @@
             for (var i = 0; i < input.length; i++) {
                 var type = input[i].type;
                 var value = this.getInputData(i, this.properties[input[i].name]);
-                console.log(">");
-                console.json(value);
                 if (value != null) {
                     switch (type) {
                         case "ObjectList":
@@ -287,7 +285,7 @@
                         outputDatas.push([]);
                         break;
                 }
-                this.setOutputData(i, outputDatas[outputDatas.length-1]);
+                this.setOutputData(i, outputDatas[i]);
             }
     
             if (objects == null) return;
@@ -348,8 +346,8 @@
                 if (objects == undefined) return;
             }
             var outputDatas = [];
-            for (var i = 0; i < outs.length; i++) {
-                switch (outs[i].type) {
+            for (var j = 0; j < outs.length; j++) {
+                switch (outs[j].type) {
                     case "Point":
                     case "CoordinateFrame":
                         outputDatas.push(new pointArray());
@@ -361,31 +359,47 @@
                         outputDatas.push([]);
                         break;
                 }
-                this.setOutputData(i, outputDatas[outputDatas.length-1]);
+                this.setOutputData(j, outputDatas[outputDatas.length-1]);
             }
             this.boxcolor = "#F80";
+            var that = this;
 
-            for (var i = 0; i < outs.length; i++) {
-                var outData = outputDatas[i];
-                // using call/apply doesn't seem to work with MoI's javascript host, so use eval instead
-                var result = eval((singleton ? singleton : "objects") + '.' + outs[i].originalName + (outs[i].slot == "method" ? "()" : ""));
-                if (result == null) continue;
-                switch (outs[i].type) {
-                    case "Point":
-                        outData.pushPoint(result);
-                        break;
-                    case "CoordinateFrame":
-                        outData.pushFrame(result);
-                    case "ObjectList":
-                        for (var k = 0; k < result.length; k++) {
-                            outData.addObject(result.item(k));
-                        }
-                        break;
-                    default:
-                        outData.push(result);
-                        break;
+            if (name != "ObjectList") {
+                for (var i = 0; i < objects.length; i++) {
+                    foo(objects[i])
                 }
-                this.boxcolor = "#0F5";
+            } else {
+                foo(objects)
+            }
+
+            function foo(variable) {
+                for (var j = 0; j < outs.length; j++) {
+                    var outData = outputDatas[j];
+                    // using call/apply doesn't seem to work with MoI's javascript host, so use eval instead
+                    var result = eval((singleton ? singleton : "variable") + '.' + outs[j].originalName + (outs[j].slot == "method" ? "()" : ""));
+                    console.log("====")
+                    console.log(variable);
+                    console.log((singleton ? singleton : "variable") + '.' + outs[j].originalName + (outs[j].slot == "method" ? "()" : ""));
+                    console.log(result);
+                    console.log(".====")
+                    if (result == null) continue;
+                    switch (outs[j].type) {
+                        case "Point":
+                            outData.pushPoint(result);
+                            break;
+                        case "CoordinateFrame":
+                            outData.pushFrame(result);
+                        case "ObjectList":
+                            for (var k = 0; k < result.length; k++) {
+                                outData.addObject(result.item(k));
+                            }
+                            break;
+                        default:
+                            outData.push(result);
+                            break;
+                    }
+                    that.boxcolor = "#0F5";
+                }
             }
         }
         LiteGraph.registerNodeType("Classes/" + name, node);
@@ -415,8 +429,9 @@
         var selectionChange = false;
         for (var i = 0; i < selection.length; i++) {
             ids.push(selection[i].id);
-            if (!selectionChange && this.prevSelection.length > i - 1 && this.prevSelection[i] != selection[i].id);
-                selectionChange = true;
+            if (!selectionChange)
+                if (this.prevSelection.length > i - 1 && this.prevSelection[i] != selection[i].id);
+                    selectionChange = true;
         }
         this.prevSelection = ids;
         return revChange || selectionChange;
