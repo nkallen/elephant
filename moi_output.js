@@ -15,12 +15,15 @@
         var that = this;
         this.unlockButton = this.addWidget("button", "Unlock", "value", function() {
             if (that.tempobjects) {
+                var created = [];
                 for (var i = 0; i < that.tempobjects.length; i++) {
                     var o = that.tempobjects[i];
+                    created.push(o);
                     o.locked = false;
                     o.setHitTest(true);
                 }
             }
+            that.graph.updateIndex(that.getInputNode(0), created);
         });
         this.unlockButton.disabled = true;
         this.offsetSlider = this.addWidget("slider", "x-offset", 0.0, function(n) {
