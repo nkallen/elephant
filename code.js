@@ -1,8 +1,12 @@
 LiteGraph.node_images_path = "./litegraph/imgs/";
 var editor = new LiteGraph.Editor("main",{miniwindow:false, skip_livemode:true, skip_maximize:true});
-window.graphcanvas = editor.graphcanvas;
+var graphcanvas = editor.graphcanvas;
+window.graphcanvas = graphcanvas;
 window.graph = editor.graph;
 graph.supported_types = ["number","string","boolean","numarray","pointarray","objectlist"];
+
+
+///
 
 window.addEventListener("resize", function() { editor.graphcanvas.resize(); } );
 //window.addEventListener("keydown", editor.graphcanvas.processKey.bind(editor.graphcanvas) );
@@ -11,7 +15,6 @@ window.onbeforeunload = function(){
 	localStorage.setItem("litegraphg demo backup", data );
 }
 
-//enable scripting
 LiteGraph.allow_scripts = true;
 
 //create scene selector

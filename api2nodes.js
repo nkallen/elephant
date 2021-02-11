@@ -364,15 +364,15 @@
             this.boxcolor = "#F80";
             var that = this;
 
-            if (name != "ObjectList") {
+            if (Array.isArray(objects)) {
                 for (var i = 0; i < objects.length; i++) {
-                    foo(objects[i])
+                    processPropertiesAndGetters(objects[i])
                 }
             } else {
-                foo(objects)
+                processPropertiesAndGetters(objects)
             }
 
-            function foo(variable) {
+            function processPropertiesAndGetters(variable) {
                 for (var j = 0; j < outs.length; j++) {
                     var outData = outputDatas[j];
                     // using call/apply doesn't seem to work with MoI's javascript host, so use eval instead

@@ -8,7 +8,13 @@
     var nodeId2historyId = {};
     
     LGraph.prototype.addHistoryItem = function(sources, node) {
+        var pos = history.length;
         history.push([sources, node]);
+        var onRemoved = node.onRemoved;
+        node.onRemoved = function() {
+            if (onRemoved) onRemoved.call(this);
+            history.splice(pos, 1);
+        }
         nodeId2historyId[node.id] = history.length-1;
 
         var ids = {};
@@ -138,7 +144,9 @@
             allCreated.push(subobject_node);
         }
         // Finally, create a concat node if necessary!
-        if (toBeConcatted.length == 1) {
+        if (toBeConcatted.length == 0) {
+            return [null, allCreated];
+        } if (toBeConcatted.length == 1) {
             return [toBeConcatted[0], allCreated];
         } else {
             var concat = LiteGraph.createNode("basic/concat");

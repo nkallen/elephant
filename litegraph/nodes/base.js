@@ -917,10 +917,6 @@
         this.setOutputData(0, out);
         this.boxcolor = out.length == 0 ? "#F80" : "#0F5";
     };
-    Concat.prototype.getExtraMenuOptions = function() {
-        var that = this;
-
-    }
     Concat.prototype.onConnectInput = function(slot, type, link, source, source_slot) {
         if (slot == 0) this.addOutput("value", type);
         var name = "abcdefghijklmnop"[this.inputs.length];
@@ -928,6 +924,26 @@
     }
 
     LiteGraph.registerNodeType("basic/concat", Concat);
+
+    Store.title = "Store";
+    Store.desc = "Stores an objectlist";
+    function Store() {
+        this.addOutput("Out", "objectlist")
+    }
+    Store.prototype.onExecute = function() {
+        var inObj;
+        out = moi.geometryDatabase.createObjectList();
+        for ( i = 0; i<this.inputs.length; i++) {
+            inObj = this.getInputData(i, this.properties["abcdefghijklmnopqrstuvwxyz"[i]]);
+            console.json(this.properties);
+            console.log("abcdefghijklmnopqrstuvwxyz"[i]);
+            console.log(this.properties["abcdefghijklmnopqrstuvwxyz"[i]]);
+            for ( j = 0; j < inObj.length; j++ ) out.addObject( inObj.item(j) );
+        }
+        this.setOutputData(0, out);
+        this.boxcolor = out.length == 0 ? "#F80" : "#0F5";
+    };
+    LiteGraph.registerNodeType("basic/store", Store);
 
     function ObjectProperty() {
         this.addInput("obj", "");
