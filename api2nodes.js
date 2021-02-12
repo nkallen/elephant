@@ -133,11 +133,6 @@
                             value.pushPoint(rawValue);
                         }
                         break;
-                    case "int":
-                    case "float":
-                    case "boolean":
-                    case "string":
-                        break;
                 }
                 this.properties[arg.name] = value;
             }
@@ -249,7 +244,21 @@
         }
         LiteGraph.registerNodeType("curve/" + factoryname, polyline);
     }
-    
+    LiteGraph.getNodeType("edit/trim").prototype.onExecute = function() {
+        var input = Elephant.api.factories.trim.in;
+        var factory = moi.command.createFactory('trim');
+        for (var i = 0; i < input.length; i++) {
+            var value = this.getInputData(i, this.properties[input[i].name]);
+            factory.setInput(input[i].pos, value);
+        }
+        factory.generateFragments(); // this seems to be required unlike most factories
+        var acc = factory.calculate();
+        factory.cancel();
+        
+        this.boxcolor = acc.length == 0 ? "#F80" : "#0F5";
+        this.setOutputData(0, acc);
+        this.setDirtyCanvas(true);
+    }
     // curve interpcurve sketchcurve
 
     ////////////////////////////////////////////////////////////////

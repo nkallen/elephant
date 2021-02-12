@@ -47,6 +47,8 @@ function createAndConnectSources(factory, node) {
         }
         if (input.type == 8 || input.type == 7) { // objectlist
             var info = graph.nodeForObjects(value);
+            if (info == null) continue;
+
             var source = info[0], created = info[1];
             if (source != null) {
                 source.connect(0, node, i, true);

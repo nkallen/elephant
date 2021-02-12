@@ -1434,6 +1434,16 @@ Elephant.api = {
             "pos": 6,
             "name": "Trim pts",
             "type": "List"
+            },
+            {
+                "pos": 7,
+                "name": "Delete cutting objects",
+                "type": "boolean"
+                },
+            {
+                "pos": 9, // unclear what 8 is
+                "name": "Keep all joined",
+                "type": "boolean"
             }
         ]},
         "blend": {category: "construct", in: [
