@@ -200,14 +200,15 @@
     
     /// Some exceptional cases:
     
-    var polyline = [
+    var polyline_in = [
         {
             "pos": 0,
             "name": "Pts",
             "type": "pointarray"
         }
     ];
-    var polyline = makeNodeType("polyline", polyline);
+    Elephant.api.factories.polyline = { category: "curve", in: polyline_in};
+    var polyline = makeNodeType("polyline", polyline_in);
     polyline.onStart = function() {
         this.boxcolor = "#F80";
     }
@@ -244,7 +245,7 @@
         factory.cancel();
         this.setOutputData(0, output);
     }
-    LiteGraph.registerNodeType("Commands/polyline", polyline);
+    LiteGraph.registerNodeType("curve/polyline", polyline);
     
     ////////////////////////////////////////////////////////////////
     /// Basic Object-Oriented node wrappers. An ONM if you will ///
