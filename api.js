@@ -754,7 +754,6 @@ Elephant.api = {
             "type": "Point"
             }
         ]},
-        "interpcurve": {category: "factory", in: []},
         "polygonedge": {category: "factory", in: [
             {
             "pos": 0,
@@ -867,7 +866,6 @@ Elephant.api = {
             "type": "Point"
             }
         ]},
-        "sketchcurve": {category: "curve", in: []},
         "arraycurve": {category: "transform", in: [
             {
             "pos": 0,
@@ -1352,7 +1350,6 @@ Elephant.api = {
             "type": "Point"
             }
         ]},
-        // "curve": {category: "factory", in: []},
         "merge": {category: "construct", in: [
             {
             "pos": 0,

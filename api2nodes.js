@@ -199,54 +199,59 @@
     }
     
     /// Some exceptional cases:
-    
-    var polyline_in = [
-        {
-            "pos": 0,
-            "name": "Pts",
-            "type": "pointarray"
-        }
-    ];
-    Elephant.api.factories.polyline = { category: "curve", in: polyline_in};
-    var polyline = makeNodeType("polyline", polyline_in);
-    polyline.onStart = function() {
-        this.boxcolor = "#F80";
-    }
-    polyline.prototype.createFromFactory = function(factory) {
-        var points = new pointArray();
-        for (var i = 0; i < factory.numInputs; i++) {
-            var input = factory.getInput(i);
-            var value = input.getValue();
-            switch (input.type) {
-                case 1:
-                    points.pushPoint(value);
-                    break;
-                case 3:
-                    break;
+    var polies = ["polyline", "curve", "interpcurve", "sketchcurve"];
+    for (var i = 0; i < polies.length; i++) {
+        var factoryname = polies[i];
+        var polyline_in = [
+            {
+                "pos": 0,
+                "name": "Pts",
+                "type": "pointarray"
             }
+        ];
+        Elephant.api.factories[factoryname] = { category: "curve", in: polyline_in};
+        var polyline = makeNodeType(factoryname, polyline_in);
+        polyline.onStart = function() {
+            this.boxcolor = "#F80";
         }
-        this.properties["Pts"] = points;
-    }
-    polyline.prototype.onExecute = function() {
-        this.boxcolor = "#F80";
-        var output = moi.geometryDatabase.createObjectList();
-        this.setOutputData(0, output);
-    
-        var points = this.getInputData(0, this.properties["Pts"]);
-        if (points == null) return;
-    
-        var factory = moi.command.createFactory( 'polyline' );
-        for (var i = 0; i < points.length; i++) {
-            factory.createInput('point');
-            factory.setInput(i, points.getPoint(i));
+        polyline.prototype.createFromFactory = function(factory) {
+            var points = new pointArray();
+            for (var i = 0; i < factory.numInputs; i++) {
+                var input = factory.getInput(i);
+                var value = input.getValue();
+                switch (input.type) {
+                    case 1:
+                        points.pushPoint(value);
+                        break;
+                    case 3:
+                        break;
+                }
+            }
+            this.properties["Pts"] = points;
         }
-        var output = factory.calculate();
-        if (output.length > 0) this.boxcolor = "#0F5";
-        factory.cancel();
-        this.setOutputData(0, output);
+        polyline.prototype.onExecute = function() {
+            this.boxcolor = "#F80";
+            var output = moi.geometryDatabase.createObjectList();
+            this.setOutputData(0, output);
+        
+            var points = this.getInputData(0, this.properties["Pts"]);
+            if (points == null) return;
+        
+            var factory = moi.command.createFactory( factoryname );
+            for (var i = 0; i < points.length; i++) {
+                factory.createInput('point');
+                factory.setInput(i, points.getPoint(i));
+            }
+            var output = factory.calculate();
+            if (output.length > 0) this.boxcolor = "#0F5";
+            factory.cancel();
+            this.setOutputData(0, output);
+        }
+        LiteGraph.registerNodeType("curve/" + factoryname, polyline);
     }
-    LiteGraph.registerNodeType("curve/polyline", polyline);
     
+    // curve interpcurve sketchcurve
+
     ////////////////////////////////////////////////////////////////
     /// Basic Object-Oriented node wrappers. An ONM if you will ///
     
