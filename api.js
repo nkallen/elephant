@@ -7,6 +7,30 @@ Elephant.api = {
             "type": "boolean"
             }
         ]},
+        "addpointsrf": {category: "edit", in: [
+            {
+            "pos": 0,
+            "name": "Face",
+            "type": "GeomObject"
+            },
+            {
+                "pos": 1,
+                "name": "Point",
+                "type": "Point"
+                },
+            {
+            "pos": 2,
+            "name": "Isocurve direction",
+            "type": "String",
+            "options": ["both", "u", "v"],
+            "default": "both"
+            },
+            {
+            "pos": 3,
+            "name": "Symmetrical",
+            "type": "boolean"
+            }
+        ]},
         "booleanunion": {category: "construct", in: [
             {
             "pos": 0,
@@ -1128,7 +1152,7 @@ Elephant.api = {
             "type": "string"
             },
             {
-            "pos": "11",
+            "pos": 11,
             "name": "Num Profile Points",
             "type": "int"
             }
@@ -1897,7 +1921,158 @@ Elephant.api = {
                 "name": "Break angle",
                 "type": "float"
             }
-        ]}
+        ]},
+        "nsided": {category: "construct", in: [
+            {
+                "pos": 0,
+                "name": "Objects",
+                "type": "ObjectList"
+            },
+            {
+                "pos": 1,
+                "name": "Bulge",
+                "type": "float"
+            },
+            {
+                "pos": 2,
+                "name": "Num U",
+                "type": "int"
+            },
+            {
+                "pos": 3,
+                "name": "Num V",
+                "type": "int"
+            },
+        ]},
+
+        "silhouette": {category: "construct", in: [
+            {
+                "pos": 0,
+                "name": "Objects",
+                "type": "ObjectList"
+            },
+            {
+                "pos": 1,
+                "name": "Origin",
+                "type": "Point"
+            },
+            {
+                "pos": 2,
+                "name": "Forward",
+                "type": "Point"
+            },
+            {
+                "pos": 3,
+                "name": "Is Perspective",
+                "type": "boolean"
+            },
+            {
+                "pos": 4,
+                "name": "Include Edges",
+                "type": "boolean"
+            },
+        ]},
+        "orient": {category: "transform", in: [
+            {
+                "pos": 0,
+                "name": "Objects",
+                "type": "ObjectList"
+            },
+            {
+                "pos": 1,
+                "name": "Base Frame",
+                "type": "CoordinateFrame"
+            },
+            {
+                "pos": 2,
+                "name": "New Frame",
+                "type": "CoordinateFrame"
+            },
+            {
+                "pos": 3,
+                "name": "Make Copies",
+                "type": "boolean"
+            },
+        ]},
+        "flow": {category: "construct", in: [
+            {
+                "pos": 0,
+                "name": "Objects",
+                "type": "ObjectList"
+            },
+            {
+                "pos": 1,
+                "name": "Base Object",
+                "type": "GeomObject"
+            },
+            {
+                "pos": 2,
+                "name": "Target Object",
+                "type": "GeomObject"
+            },
+            {
+                "pos": 3,
+                "name": "Delete Inputs",
+                "type": "boolean"
+            },
+            {
+                "pos": 4,
+                "name": "Flow Stretch",
+                "type": "boolean"
+            },
+            {
+                "pos": 5,
+                "name": "Flow Rigid",
+                "type": "boolean"
+            },
+            {
+                "pos": 6,
+                "name": "Flip normal",
+                "type": "boolean"
+            },
+            {
+                "pos": 7,
+                "name": "Flow Straight",
+                "type": "boolean"
+            },
+        ]},
+        "twist": {category: "construct", in: [
+            {
+                "pos": 0,
+                "name": "Objects",
+                "type": "ObjectList"
+            },
+            {
+                "pos": 1,
+                "name": "Axist Start",
+                "type": "Point"
+            },
+            {
+                "pos": 2,
+                "name": "Axis End",
+                "type": "Point"
+            },
+            {
+                "pos": 3,
+                "name": "Angle",
+                "type": "float"
+            },
+            {
+                "pos": 4,
+                "name": "Limit to axis",
+                "type": "boolean"
+            },
+            {
+                "pos": 5,
+                "name": "Ease in",
+                "type": "float"
+            },
+            {
+                "pos": 6,
+                "name": "Ease out",
+                "type": "float"
+            },
+        ]},
     },
         
     geomobjects: {

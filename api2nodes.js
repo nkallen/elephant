@@ -53,8 +53,9 @@
                             var tmp = [];
                             for (var j = 0; j < value.length; j++) {
                                 tmp.push(value.item(j));
+                                console.log(value.item(j).id);
                             }
-                            value = tmp;
+                            value = tmp.length == 0 ? [null] : tmp;
                             break;
                         case "CoordinateFrame":
                             value = [value.getFrame()];
@@ -64,7 +65,7 @@
                             for (var j = 0; j < value.length; j++) {
                                 tmp.push(value.getPoint(j));
                             }
-                            value = tmp;
+                            value = tmp.length == 0 ? [null] : tmp;
                             break;
                         case "float":
                         case "int":
@@ -84,6 +85,7 @@
     
             var acc = moi.geometryDatabase.createObjectList();
             for (var i = 0; i < calls.length; i++) {
+                console.json(calls[i]);
                 var temp = factory.apply(null, calls[i]);
                 for (var j = 0; j < temp.length; j++) {
                     acc.addObject(temp.item(j));

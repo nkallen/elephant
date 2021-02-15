@@ -72,7 +72,7 @@
             node.createdObjectIds.push(object.id);
     
             var subobjects = object.getSubObjects();
-            for (var j = 0; j < subobjects.length; j++) { // FIXME nk make recursive?
+            for (var j = 0; j < subobjects.length; j++) {
                 var subobj = subobjects.item(j);
                 subobjectIds[subobj.id] = { nodeId: node.id, type: subobj.type, parentIndex: index, subobjectIndex: j }
             }

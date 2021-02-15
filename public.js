@@ -21,7 +21,6 @@ window.storeSelection = function() {
             if (source != null) {
                 source.connect(0, store, i, true);
             } else {
-                console.log("adding property");
                 var itemz = moi.geometryDatabase.createObjectList();
                 itemz.addObject(item);
                 store.addProperty(letter, itemz, "objectlist");
@@ -45,8 +44,8 @@ function createAndConnectSources(factory, node) {
         } catch (e) {
             continue;
         }
-        if (input.type == 8 || input.type == 7) { // objectlist
-            var info = graph.nodeForObjects(value);
+        if (input.type == 8 || input.type == 7) { // objectlist || (geo)object
+            var info = input.type == 8 ? graph.nodeForObjects(value) : graph.nodeForObject(value);
             if (info == null) continue;
 
             var source = info[0], created = info[1];
@@ -60,14 +59,18 @@ function createAndConnectSources(factory, node) {
     return allCreated;
 }
 
-window.commit = function(factory) {
+window.commit = function(factory, newFactory) {
     var node = LiteGraph.createNodeFromFactory(factory);
     graph.add(node, false, true);
 
     var sources = createAndConnectSources(factory, node);
     var rev = moi.geometryDatabase.revision;
     factory.update(); // This is a hack. By capturing the revision and forcing an update, any temporary objects that would actually be committed are recreated, allowing us to "easily" identify everything created by this factory.
-    factory.commit();
+    if (newFactory != null) {
+        factory.commitAndPrepOther(newFactory);
+    } else {
+        factory.commit();
+    }
     var createdObjects = Created(rev);
     graph.addHistoryItem(sources, node);
     graph.updateIndex(node, createdObjects);
