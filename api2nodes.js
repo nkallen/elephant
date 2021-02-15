@@ -203,7 +203,7 @@
             {
                 "pos": 0,
                 "name": "Pts",
-                "type": "pointarray"
+                "type": "Point"
             }
         ];
         Elephant.api.factories[factoryname] = { category: "curve", in: polyline_in};
@@ -234,7 +234,7 @@
             var points = this.getInputData(0, this.properties["Pts"]);
             if (points == null) return;
         
-            var factory = moi.command.createFactory( factoryname );
+            var factory = moi.command.createFactory( this.name );
             for (var i = 0; i < points.length; i++) {
                 factory.createInput('point');
                 factory.setInput(i, points.getPoint(i));

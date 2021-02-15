@@ -2036,7 +2036,7 @@ Elephant.api = {
                 "type": "boolean"
             },
         ]},
-        "twist": {category: "construct", in: [
+        "twist": {category: "transform", in: [
             {
                 "pos": 0,
                 "name": "Objects",
@@ -2070,6 +2070,49 @@ Elephant.api = {
             {
                 "pos": 6,
                 "name": "Ease out",
+                "type": "float"
+            },
+        ]},
+        "inset": {category: "construct", in: [
+            {
+                "pos": 0,
+                "name": "Objects",
+                "type": "ObjectList"
+            },
+            {
+                "pos": 1,
+                "name": "Thickness",
+                "type": "float"
+            },
+            {
+                "pos": 2,
+                "name": "Direction",
+                "type": "String",
+                "options": ["Inwards", "Outwards"]
+            },
+            {
+                "pos": 3,
+                "name": "Expand",
+                "type": "boolean"
+            },
+            {
+                "pos": 4,
+                "name": "Uses Separate Height",
+                "type": "boolean"
+            },
+            {
+                "pos": 5,
+                "name": "Height",
+                "type": "float"
+            },
+            {
+                "pos": 6,
+                "name": "Grooved",
+                "type": "boolean"
+            },
+            {
+                "pos": 6,
+                "name": "Groove width",
                 "type": "float"
             },
         ]},

@@ -14,14 +14,17 @@
 
         var that = this;
         this.unlockButton = this.addWidget("button", "Unlock", "value", function() {
+            var unlocked = moi.geometryDatabase.createObjectList();
             if (that.tempobjects) {
                 var created = [];
                 for (var i = 0; i < that.tempobjects.length; i++) {
-                    var o = that.tempobjects[i];
+                    var o = that.tempobjects[i].clone();
+                    unlocked.addObject(o);
                     created.push(o);
                     o.locked = false;
                     o.setHitTest(true);
                 }
+                moi.geometryDatabase.addObjects(unlocked);
             }
             that.graph.updateIndex(that.getInputNode(0), created);
         });
