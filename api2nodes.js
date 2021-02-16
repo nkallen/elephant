@@ -10,6 +10,7 @@
             case "CoordinateFrame": return "pointarray";
             case "Point": return "pointarray";
             case "float": return "numarray";
+            case "int": return "numarray";
             case "ObjectList": return "objectlist";
             case "GeomObject": return "objectlist";
         }
@@ -19,7 +20,6 @@
     function makeNodeType(name, input, output, options) {
         options = options || {};
         var node = function() {
-            this.internal = {};
             this.mode = options.mode || LiteGraph.ALWAYS;
             for (var i = 0; i < input.length; i++) {
                 var arg = input[i];
@@ -53,7 +53,6 @@
                             var tmp = [];
                             for (var j = 0; j < value.length; j++) {
                                 tmp.push(value.item(j));
-                                console.log(value.item(j).id);
                             }
                             value = tmp.length == 0 ? [null] : tmp;
                             break;
@@ -85,7 +84,6 @@
     
             var acc = moi.geometryDatabase.createObjectList();
             for (var i = 0; i < calls.length; i++) {
-                console.json(calls[i]);
                 var temp = factory.apply(null, calls[i]);
                 for (var j = 0; j < temp.length; j++) {
                     acc.addObject(temp.item(j));
@@ -312,7 +310,7 @@
                     for (var j = 0; j < outs.length; j++) {
                         var outData = outputDatas[j];
                         // using call/apply doesn't seem to work with MoI's javascript host, so use eval instead
-                        console.log("object." + outs[j].originalName + (outs[j].slot == "method" ? "()" : ""));
+                        // console.log("object." + outs[j].originalName + (outs[j].slot == "method" ? "()" : ""));
                         var result = eval("object." + outs[j].originalName + (outs[j].slot == "method" ? "()" : ""));
                         if (result == null) continue;
                         switch (outs[j].type) {
@@ -394,11 +392,6 @@
                     var outData = outputDatas[j];
                     // using call/apply doesn't seem to work with MoI's javascript host, so use eval instead
                     var result = eval((singleton ? singleton : "variable") + '.' + outs[j].originalName + (outs[j].slot == "method" ? "()" : ""));
-                    console.log("====")
-                    console.log(variable);
-                    console.log((singleton ? singleton : "variable") + '.' + outs[j].originalName + (outs[j].slot == "method" ? "()" : ""));
-                    console.log(result);
-                    console.log(".====")
                     if (result == null) continue;
                     switch (outs[j].type) {
                         case "Point":
@@ -466,17 +459,28 @@
             "pos": 1,
             "name": "Index",
             "type": "numarray"
+        },
+        {
+            "pos": 2,
+            "name": "Type",
+            "type": "string",
+            "options": ["Curves", "Edges", "Faces", "BReps", "Points"],
         }
     ];
     var subobject = makeNodeType("subobject", subobjectdesc);
     subobject.prototype.onExecute = function() {
         var objects = this.getInputData(0, this.properties["Objects"]);
         var index = this.getInputData(1, this.properties["Index"]);
+        var type = this.getInputData(2, this.properties["Type"]);
         var output = moi.geometryDatabase.createObjectList();
     
         for (var i = 0; i < objects.length; i++) {
             var subobjects = objects.item(i).getSubObjects();
+            if (type != null) {
+                subobjects = subobjects["get" + type]();
+            }
             for (var j = 0; j < index.length; j++) {
+                if (index[j] >= subobjects.length) continue;
                 var subobj = subobjects.item(index[j]);
                 output.addObject(subobj);
             }
@@ -484,7 +488,7 @@
         this.setOutputData(0, output);
         this.boxcolor = output.length == 0 ? "#F80" : "#0F5";
     }
-    LiteGraph.registerNodeType("Commands/subobject", subobject);
+    LiteGraph.registerNodeType("basic/subobject", subobject);
     
     var loopbegindesc = {
         in: [
@@ -496,7 +500,7 @@
         ],
         out: [
             { name: "Object", type: "ObjectList" },
-            { name: "Loop", type: "token" },
+            { name: "Loop End", type: LiteGraph.EVENT },
         ]
     };
     var loopbegin = makeNodeType("loopbegin", loopbegindesc.in, loopbegindesc.out);
@@ -504,44 +508,34 @@
         this.onPropertyChanged();
     }
     loopbegin.prototype.onPropertyChanged = function() {
-        this.internal.i = 0;
+        this.currentIteration = 0;
     }
     loopbegin.prototype.onExecute = function() {
         this.boxcolor = "#F80";
         var objects = this.getInputData(0, this.properties["Objects"]);
-        if (objects == null || objects.length == 0) return;
+        if (objects == null || objects.length == 0) {
+            this.setOutputData(0, moi.geometryDatabase.createObjectList());
+            this.setOutputData(1, "empty");
+            return;
+        }
     
-        if (this.internal.i < objects.length) {
-            var object = objects.item(this.internal.i);
+        if (this.currentIteration < objects.length) {
+            var object = objects.item(this.currentIteration);
             var down = moi.geometryDatabase.createObjectList();
             down.addObject(object);
             this.setOutputData(0, down);
-            this.setOutputData(1, this.internal.i == 0 ? "start" : "continue");
+            this.setOutputData(1, this.currentIteration == 0 ? "start" : "continue");
     
-            this.internal.i++;
-            var body = this.outputs[0];
-            this.isChanged = true;
-            for (var i = 0; i < body.links.length; i++) {
-                var link_id = body.links[i];
-                var link = this.graph.links[link_id];
-                if (!link) continue;
-                this.graph.setisChangedFlag(link.target_id);
-            }
-        } else if (this.internal.i == objects.length) {
+            this.currentIteration++;
+            this.markChanged();
+        } else if (this.currentIteration == objects.length) {
             console.log("loopbegin done!");
-            var end = this.outputs[1];
-            for (var i = 0; i < end.links.length; i++) {
-                var link_id = end.links[i];
-                var link = this.graph.links[link_id];
-                if (!link) continue;
-                this.graph.setisChangedFlag(link.target_id);
-            }
-            this.internal.i = 0; // prepare for future invocations if someone else triggers change
+            this.currentIteration = 0; // prepare for future invocations if someone else triggers change
             this.setOutputData(1, "end");
             this.boxcolor = "#0F5";
         }
     }
-    LiteGraph.registerNodeType("Macros/loopbegin", loopbegin); // FIXME nk not macros
+    LiteGraph.registerNodeType("advanced/loopbegin", loopbegin); // FIXME nk not macros
     
     var loopenddesc = {
         in: [
@@ -553,7 +547,7 @@
             {
                 "pos": 1,
                 "name": "Loop",
-                "type": "token"
+                "type": LiteGraph.EVENT
             },
         ],
         out: [
@@ -566,32 +560,36 @@
         this.boxcolor = "#F80";
         var state = this.getInputData(1, this.properties["Loop"]);
         switch (state) {
+            case "empty":
+                this.setOutputData(0, moi.geometryDatabase.createObjectList());
             case "start":
                 console.log("case start");
-                this.internal.finished = false;
-                this.internal.acc = moi.geometryDatabase.createObjectList();
+                this.isFinished = false;
+                this.accumulator = moi.geometryDatabase.createObjectList();
+                // no break on purpose
             case "continue":
                 console.log("case continue");
                 var objects = this.getInputData(0, this.properties["Objects"]);
                 for (var i = 0; i < objects.length; i++) {
-                    this.internal.acc.addObject(objects[i]);
+                    this.accumulator.addObject(objects[i]);
                 }
                 break;
             case "end":
                 console.log("case end");
-                if (!this.internal.finished) {
-                    var output = this.internal.acc;
+                if (!this.isFinished) {
+                    var output = this.accumulator;
                     this.setOutputData(0, output);
                     this.boxcolor = output.length == 0 ? "#F80" : "#0F5";
-                    this.internal.finished = true;
+                    this.isFinished = true;
                 } else {
                     var begin = this.inputs[1];
                     var link = this.graph.links[begin.link];
                     if (!link) return;
-                    this.graph.setisChangedFlag(link.origin_id);
+                    var source_node = this.graph.getNodeById(link.origin_id);
+                    source_node.markChanged();
                 }
                 break;
         }
     }
-    LiteGraph.registerNodeType("Macros/loopend", loopend); // FIXME nk not macros
+    LiteGraph.registerNodeType("advanced/loopend", loopend); // FIXME nk not macros
 })();

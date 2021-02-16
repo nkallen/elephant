@@ -107,7 +107,7 @@
         return list;
     }
     
-    MoIOutput.prototype.getExtraMenuOptions = function(graphcanvas) { var that = this, thatgraph = this.graph; return [{content:lang.getTranslation("Clear"), callback: function() { that.onAdded(); that.onClear(); that.graph.setisChangedFlag(that.id); }}]; }
+    MoIOutput.prototype.getExtraMenuOptions = function(graphcanvas) { var that = this, thatgraph = this.graph; return [{content:lang.getTranslation("Clear"), callback: function() { that.onAdded(); that.onClear(); }}]; }
     
     MoIOutput.prototype.onDrawBackground = function(ctx) {
         if (!this.tempobjects) return;

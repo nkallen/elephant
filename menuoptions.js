@@ -74,7 +74,7 @@ Elephant.getSlotMenuOptions = function(slot) {
         } else if (_slot.type == "pointarray") {
             menu_info.push({
                 content: "Make point", callback: function() {
-                    var point = LiteGraph.createNode("Commands/point");
+                    var point = LiteGraph.createNode("factory/point");
                     point.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
                     that.graph.add(point);
                     that.connect(slot.slot, point, 0);
@@ -85,7 +85,7 @@ Elephant.getSlotMenuOptions = function(slot) {
         if (_slot.type == "objectlist") {
             menu_info.push({
                 content: "Current selection", callback: function() {
-                    var point = LiteGraph.createNode("Commands/XXX");
+                    var point = LiteGraph.createNode("Classes/ObjectList");
                     point.pos = [that.pos[0] - point.size[0] - 30, that.pos[1]];
                     that.graph.add(point);
                     point.connect(0, that, slot.slot);
@@ -104,7 +104,7 @@ Elephant.getSlotMenuOptions = function(slot) {
                 }
             });  
             menu_info.push({
-                content: "From point", callback: function() {
+                content: "From PointObject", callback: function() {
                     var point = LiteGraph.createNode("Classes/PointObject");
                     point.pos = [that.pos[0] - point.size[0] - 30, that.pos[1]];
                     that.graph.add(point);

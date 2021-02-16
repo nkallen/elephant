@@ -20,7 +20,7 @@ LiteGraph.allow_scripts = true;
 //create scene selector
 var elem = document.createElement("span");
 elem.className = "selector";
-elem.innerHTML = "<button class='btn' id='save'>Save</button><button class='btn' id='load'>Load</button>";
+elem.innerHTML = "<button class='btn' id='save'>Save</button><button class='btn' id='load'>Load</button><button class='btn' id='new'>New</button>";
 editor.tools.appendChild(elem);
 
 elem.querySelector("#save").addEventListener("click",function(){
@@ -48,6 +48,13 @@ elem.querySelector("#load").addEventListener("click",function(){
 	editor.graph.sendEventToAllNodes("onClear");
 	editor.graph.configure( JSON.parse(data), false, true);
 	editor.graph.filename = loadFilePath;
+});
+
+elem.querySelector("#new").addEventListener("click",function(){
+	if ( graph.status !== LGraph.STATUS_STOPPED ) editor.onPlayButton();
+    editor.graph.clearHistory();
+	editor.graph.sendEventToAllNodes("onClear");
+	editor.graph.configure( {}, false, true);
 });
 
 LiteGraph.JSONprettify = function (obj, options)

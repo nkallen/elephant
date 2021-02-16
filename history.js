@@ -7,6 +7,15 @@
     var history_output = null;
     var nodeId2historyId = {};
     
+    LGraph.prototype.clearHistory = function() {
+        cursor = 100;
+        objectIds = {};
+        subobjectIds = {};
+        history = [];
+        history_output = null;
+        nodeId2historyId = {};
+    }
+
     LGraph.prototype.addHistoryItem = function(sources, node) {
         var pos = history.length;
         history.push([sources, node]);

@@ -138,6 +138,7 @@ LGraph.prototype.runStep = function(num, do_not_catch_errors, limit ) {
 
     // this is just a 
     var needsExecutionNow = this.computeNeedsExecution();
+    hasChanged = {};
     var toExecuteNowSorted = [];
     for (var i = 0; i < executable.length; i++) {
         if (executable[i].id in needsExecutionNow) {
@@ -202,8 +203,6 @@ LGraph.prototype.runStep = function(num, do_not_catch_errors, limit ) {
             }
         }
     }
-
-    hasChanged = {};
 
     var now = LiteGraph.getTime();
     var elapsed = now - start;

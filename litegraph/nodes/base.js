@@ -899,8 +899,10 @@
     Concat.desc = "Concatenates an objectlist or pointarray";
 
     Concat.prototype.onExecute = function() {
+        if (this.inputs.length == 1) return;
+
         var out, i, j;
-            if ( this.inputs[1].type === "numarray") {
+        if ( this.inputs[1].type === "numarray") {
             out = [];
             for ( i = 0; i<this.inputs.length; i++) out = out.concat(this.getInputData(i, []));
         } else if ( this.inputs[1].type === "pointarray") {

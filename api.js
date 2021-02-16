@@ -1256,7 +1256,8 @@ Elephant.api = {
             "pos": 2,
             "name": "Style",
             "type": "string",
-            "options": ["normal", "normal", "loose", "straight"]
+            "options": ["normal", "loose", "straight"],
+            "default": "normal"
             },
             {
             "pos": 3,
@@ -1274,7 +1275,8 @@ Elephant.api = {
             "pos": 5,
             "name": "Profile synch type",
             "type": "string", 
-            "options": ["Auto", "Auto", "Exact", "Refit", "NumPoints"]
+            "options": ["Auto", "Exact", "Refit", "NumPoints"],
+            "default": "Auto"
             },
             {
             "pos": 6,
@@ -1882,7 +1884,8 @@ Elephant.api = {
                 "pos": 2,
                 "name": "Direction",
                 "type": "string",
-                "options": ["both", "both", "u", "v"]
+                "options": ["both", "u", "v"],
+                "default": "both"
             },
         ]},
         "rebuildcurve": {category: "factory", in: [
