@@ -130,7 +130,16 @@ LGraph.prototype.onNodeRemoved = function(node) {
     delete hasChanged[node.id];
     delete immortal[node.id];
 }
+LGraph.prototype.onClear = function() {
+    hasChanged = {};
+    immortal = {};    
+}
+
 LGraph.prototype.runStep = function(num, do_not_catch_errors, limit ) {
+    for (var id in immortal) {
+        if (this.getNodeById(id).hasChanged())
+            hasChanged[id] = true;
+    }
     if (Object.keys(hasChanged).length == 0) return;
 
     var start = LiteGraph.getTime();
@@ -218,11 +227,6 @@ LGraph.prototype.runStep = function(num, do_not_catch_errors, limit ) {
 
 // Looks at all the hasChanged nodes and includes all dependencies
 LGraph.prototype.computeNeedsExecution = function() {
-    for (var id in immortal) {
-        if (this.getNodeById(id).hasChanged())
-            hasChanged[id] = true;
-    }
-
     var result = {};
     var S = [];
     for (var id in hasChanged) {

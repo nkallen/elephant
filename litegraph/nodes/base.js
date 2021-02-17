@@ -920,9 +920,14 @@
         this.boxcolor = out.length == 0 ? "#F80" : "#0F5";
     };
     Concat.prototype.onConnectInput = function(slot, type, link, source, source_slot) {
-        if (slot == 0) this.addOutput("value", type);
+        if (slot == 0 && this.outputs == null) this.addOutput("value", type);
         var name = "abcdefghijklmnop"[this.inputs.length];
         this.addInput(name, type);
+    }
+    Concat.prototype.onConnectionsChange = function(type, slot, connectionMade, link_info, input_info) {
+        if (!connectionMade && type == LiteGraph.INPUT && slot > 1 && slot == this.inputs.length - 2) {
+            this.removeInput(slot);
+        }
     }
 
     LiteGraph.registerNodeType("basic/concat", Concat);
@@ -935,6 +940,8 @@
     Store.prototype.onExecute = function() {
         var inObj;
         out = moi.geometryDatabase.createObjectList();
+        this.setOutputData(0, out);
+        if (this.outputs == null) return;
         for ( i = 0; i<this.inputs.length; i++) {
             inObj = this.getInputData(i, this.properties["abcdefghijklmnopqrstuvwxyz"[i]]);
             console.json(this.properties);
@@ -942,7 +949,6 @@
             console.log(this.properties["abcdefghijklmnopqrstuvwxyz"[i]]);
             for ( j = 0; j < inObj.length; j++ ) out.addObject( inObj.item(j) );
         }
-        this.setOutputData(0, out);
         this.boxcolor = out.length == 0 ? "#F80" : "#0F5";
     };
     LiteGraph.registerNodeType("basic/store", Store);

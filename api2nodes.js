@@ -434,17 +434,29 @@
     LiteGraph.getNodeType("Classes/GeometryDatabase").prototype.hasChanged = function() {
         var revChange = moi.geometryDatabase.revision != this.prevRev;
         this.prevRev = moi.geometryDatabase.revision;
+        if (this.prevSelection == null) this.prevSelection = [];
         var selection = moi.geometryDatabase.getSelectedObjects();
         var ids = [];
         var selectionChange = false;
         for (var i = 0; i < selection.length; i++) {
-            ids.push(selection[i].id);
-            if (!selectionChange)
-                if (this.prevSelection.length > i - 1 && this.prevSelection[i] != selection[i].id);
+            ids.push(selection.item(i).id);
+        }
+        // console.json(ids);
+        // console.json(this.prevSelection);
+        if (this.prevSelection.length == ids.length) {
+            // console.log("len mat");
+            for (var i = 0; i < ids.length; i++) {
+                if (ids[i] != this.prevSelection[i]) {
+                    console.log("sel chan");
                     selectionChange = true;
+                    break;
+                }
+            }
+        } else {
+            selectionChange = true;
         }
         this.prevSelection = ids;
-        return revChange || selectionChange;
+        return selectionChange;
     }
     /////////////////////// Finally /////////////////////
     /// Exceptional cases that may be replaced ///

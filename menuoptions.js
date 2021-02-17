@@ -48,14 +48,6 @@ Elephant.getSlotMenuOptions = function(slot) {
                 }
             });
             menu_info.push({
-                content: "Select Edge", callback: function() {
-                    var edge = LiteGraph.createNode("Classes/Edge");
-                    edge.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
-                    that.graph.add(edge);
-                    that.connect(slot.slot, edge, 0);
-                }
-            });
-            menu_info.push({
                 content: "Select Face", callback: function() {
                     var face = LiteGraph.createNode("Classes/Face");
                     face.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
@@ -121,7 +113,7 @@ Elephant.getSlotMenuOptions = function(slot) {
             });
             menu_info.push({
                 content: "Pick point(s)", callback: function() {
-                    var point = LiteGraph.createNode("Commands/PickPoint");
+                    var point = LiteGraph.createNode("Classes/PointPicker");
                     point.pos = [that.pos[0] - point.size[0] - 30, that.pos[1]];
                     that.graph.add(point);
                     point.connect(0, that, slot.slot);

@@ -145,7 +145,7 @@
                 allCreated.push(idx_node);
                 parent_node = idx_node;
             }
-            var subobject_node = LiteGraph.createNode("Commands/subobject");
+            var subobject_node = LiteGraph.createNode("basic/subobject");
             subobject_node.properties["Index"] = item.subobjectIndexes;
             this.add(subobject_node, false, true);
             parent_node.connect(0, subobject_node, 0, true);

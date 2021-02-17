@@ -13,7 +13,9 @@
         this.tempobjects = moi.geometryDatabase.createObjectList();
 
         var that = this;
-        this.unlockButton = this.addWidget("button", "Unlock", "value", function() {
+        this.unlockButton = this.addWidget("button", "Unlock", "value", function(w, canvas, node, pos, event) {
+            if (event.type !== "mousedown") return;
+
             var unlocked = moi.geometryDatabase.createObjectList();
             if (that.tempobjects) {
                 var created = [];
