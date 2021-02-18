@@ -639,3 +639,71 @@ LGraphCanvas.prototype.processMouseMove = function(e) {
     if (this.dragging_canvas) { this.canvas_moved = true}
 }
 })();
+
+LGraphNode.prototype.getMenuOptions = function(canvas) {
+    return [
+        {
+            content: "Title",
+            callback: LGraphCanvas.onShowPropertyEditor
+        },
+        {
+            content: "Collapse",
+            callback: LGraphCanvas.onMenuNodeCollapse
+        },
+        {
+            content: "Colors",
+            has_submenu: true,
+            callback: LGraphCanvas.onMenuNodeColors
+        },
+        {
+            content: "Shapes",
+            has_submenu: true,
+            callback: LGraphCanvas.onMenuNodeShapes
+        },
+        null,
+        {
+            content: "Select node dependencies",
+            has_submenu: true,
+            callback: this.selectDependencies.bind(this)
+        },
+    ];
+}
+
+LGraphNode.prototype.selectDependencies = function() {
+    var S = [this];
+    var L = [];
+    var visited_links = {};
+
+    while (true) {
+        console.log("iter");
+        if (S.length == 0) break;
+
+        var node = S.shift();
+        L.push(node);
+
+        if (node.inputs == null) continue;
+        for (var i = 0; i < node.inputs.length; i++) {
+            console.log("link");
+            var input = node.inputs[i];
+            if (input == null) continue;
+            console.log(1);
+            var link_id = input.link;
+            if (link_id == null) continue;
+            console.log(2);
+            var link = this.graph.links[link_id];
+            if (link == null) continue;
+            
+            if (visited_links[link.id]) continue;
+            console.log(3);
+            visited_links[link.id] = true;
+
+            console.json(link);
+            var origin_node = this.graph.getNodeById(link.origin_id);
+            if (origin_node == null) continue;
+            console.log(4);
+            S.push(origin_node);
+        }
+    }
+    console.log(L.length);
+    this.graph.sendActionToCanvas("selectNodes", [L]);
+}

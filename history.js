@@ -64,8 +64,10 @@
         var node = row[1];
         history_output.pos[0] = node.pos[0] + 200;
         history_output.pos[1] = node.pos[1];
-        graph.add(history_output);
+        if (history_output.graph == null)
+            this.add(history_output);
         node.connect(0, history_output, 0);
+        this.sendActionToCanvas("centerOnNode", [node]);
     }
     
     // Note any objects created by the node for lookup later
@@ -101,7 +103,7 @@
         if (objectlist.length == 0) return null;
     
         var allCreated = [];
-        var idxs = {}, subobjs = {};
+        var idxs = {}, subobjs = {}, free = moi.geometryDatabase.createObjectList();
         // First, aggregate everything we want to connect together
         for (var j = 0; j < objectlist.length; j++) {
             var item = objectlist.item(j);
@@ -115,9 +117,11 @@
                 var key = [info.nodeId, info.parentIndex];
                 if (!(key in subobjs)) subobjs[key] = {nodeId: info.nodeId, parentIndex: info.parentIndex, subobjectIndexes: []};
                 subobjs[key].subobjectIndexes.push(info.subobjectIndex);
+            } else {
+                free.addObject(item);
             }
         }
-        // Next, build the compact node graph
+        // Next, build the compact node graph; there are things ref'd by index, subobject, and "free"/lacking a ref
         var toBeConcatted = [];
         for (var nodeId in idxs) {
             var item = idxs[nodeId];
@@ -151,6 +155,14 @@
             parent_node.connect(0, subobject_node, 0, true);
             toBeConcatted.push(subobject_node);
             allCreated.push(subobject_node);
+        }
+        if (free.length > 0) {
+            var store = LiteGraph.createNode("basic/store");
+            this.add(store, false, true);
+            store.addInput("a", "objectlist");
+            store.addProperty("a", free, "objectlist");
+            toBeConcatted.push(store);
+            allCreated.push(store);
         }
         // Finally, create a concat node if necessary!
         if (toBeConcatted.length == 0) {

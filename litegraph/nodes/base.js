@@ -944,9 +944,6 @@
         if (this.outputs == null) return;
         for ( i = 0; i<this.inputs.length; i++) {
             inObj = this.getInputData(i, this.properties["abcdefghijklmnopqrstuvwxyz"[i]]);
-            console.json(this.properties);
-            console.log("abcdefghijklmnopqrstuvwxyz"[i]);
-            console.log(this.properties["abcdefghijklmnopqrstuvwxyz"[i]]);
             for ( j = 0; j < inObj.length; j++ ) out.addObject( inObj.item(j) );
         }
         this.boxcolor = out.length == 0 ? "#F80" : "#0F5";

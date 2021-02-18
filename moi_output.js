@@ -29,6 +29,8 @@
                 moi.geometryDatabase.addObjects(unlocked);
             }
             that.graph.updateIndex(that.getInputNode(0), created);
+            that.graph.remove(that);
+            that.setDirtyCanvas(true, true);
         });
         this.unlockButton.disabled = true;
         this.offsetSlider = this.addWidget("slider", "x-offset", 0.0, function(n) {
@@ -71,7 +73,7 @@
         }
 
         for ( var i = 0; i<inObj.length; i++) {
-            var object = changeStyle ? inObj.item(i).clone() : inObj.item(i);
+            var object = inObj.item(i).clone();
             object.locked = true;
             this.tempobjects.addObject(object);
         }

@@ -1,7 +1,7 @@
 //	Nodeedit for Moment of inspiration 1.0, Max Smirnov Copyright (C) 2018
 //  Math/Geometry lib
 
-function factory( factoryname ) { var f = moi.command.createFactory( factoryname ); for ( var i = 1; i < arguments.length; i++ ) if (arguments[i] !==null) f.setInput( i - 1, arguments[i] ); var obj = f.calculate(); f.cancel(); return obj; }
+function factory( factoryname ) { var f = moi.command.createFactory( factoryname ); for ( var i = 1; i < arguments.length; i++ ) if (arguments[i] !==null) f.setInput( i - 1, arguments[i] ); f.update(); var obj = f.calculate(); f.cancel(); return obj; }
 
 
 

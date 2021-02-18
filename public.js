@@ -28,6 +28,7 @@ window.storeSelection = function() {
         }
     }
     graph.addHistoryItem(wasCreated, store);
+    return store;
 }
 window.selectNodes = graphcanvas.selectNodes.bind(graphcanvas);
 window.deselectAllNodes = graphcanvas.deselectAllNodes.bind(graphcanvas);
