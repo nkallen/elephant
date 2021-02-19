@@ -185,7 +185,7 @@ LGraph.prototype.runStep = function(num, do_not_catch_errors, limit ) {
             for (var i = 0; i < num; i++) {
                 for (var j = 0; j < limit; ++j) {
                     var node = nodes[j];
-                    console.log("runStep: " + node.title);
+                    console.log("// runStep: " + node.title);
                     if ((node.mode == LiteGraph.ALWAYS || node.mode == LiteGraph.IMMORTAL) && node.onExecute) {
                         node.onExecute();
                     }
@@ -706,4 +706,20 @@ LGraphNode.prototype.selectDependencies = function() {
     }
     console.log(L.length);
     this.graph.sendActionToCanvas("selectNodes", [L]);
+}
+
+LGraphCanvas.prototype.invertSelection = function() {
+    if (!this.graph) {
+        return;
+    }
+    var nodes = this.graph._nodes;
+    var toBeSelected = [];
+    for (var i = 0; i < nodes.length; ++i) {
+        var node = nodes[i];
+        if (!node.is_selected) {
+            toBeSelected.push(node);
+        }
+    }
+    this.deselectAllNodes();
+    this.selectNodes(toBeSelected);
 }

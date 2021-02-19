@@ -51,8 +51,7 @@
         this.onClear();
     }
     
-    MoIOutput.prototype.updateStyles = function()
-    {
+    MoIOutput.prototype.updateStyles = function() {
         var styles = moi.geometryDatabase.getObjectStyles();
         this.sIndex = -1;
         for ( var x=0; x<styles.length; x++ ) if ( this.properties.style === styles.item(x).name ) { this.sIndex = x; break; }
@@ -61,8 +60,25 @@
     MoIOutput.prototype.updateObjects = function()
     {
         this.onClear();
-        var changeStyle = (this.properties.style[0] !== this.properties.style[1] && this.sIndex !== -1);
         var inObj = this.getInputData(0, moi.geometryDatabase.createObjectList());
+
+        for ( var i = 0; i<inObj.length; i++) {
+            var object = inObj.item(i).clone();
+            this.tempobjects.addObject(object);
+        }
+        console.trace("var input = objects;");
+        console.trace("objects = moi.geometryDatabase.createObjectList();");
+        console.trace("for (var i = 0; i < input.length; i++) {");
+        console.trace("    var object = input.item(i).clone();");
+        console.trace("    objects.addObject(object)");
+        console.trace("}");
+
+        if (this.properties.xOffset != 0.0) {
+            var zero = moi.VectorMath.createPoint(0,0,0);
+            var offset = moi.VectorMath.createPoint(this.properties.xOffset,0,0);
+            this.tempobjects = factory('move', this.tempobjects, zero, offset, false);
+        }
+
         switch (this.properties.displayMode) {
             case "Normal":
                 inObj.setProperty('displayMode', 0);
@@ -71,22 +87,22 @@
                 inObj.setProperty('displayMode', 1);
                 break;
         }
-
-        for ( var i = 0; i<inObj.length; i++) {
-            var object = inObj.item(i).clone();
-            object.locked = true;
-            this.tempobjects.addObject(object);
-        }
-
         for ( var i = this.tempobjects.length; i > 0; ) this.tempobjects.item(--i).setHitTest(0);
-        if (changeStyle) this.tempobjects.setProperty( 'styleIndex', this.sIndex);
-        if (this.properties.xOffset != 0.0) {
-            var zero = moi.VectorMath.createPoint(0,0,0);
-            var offset = moi.VectorMath.createPoint(this.properties.xOffset,0,0);
-            this.tempobjects = factory('move', this.tempobjects, zero, offset);
+        for (var i = 0; i < this.tempobjects.length; i++) {
+            var object = this.tempobjects.item(i);
+            object.locked = true;
+            object.updateWithHistory = false;
         }
+        console.trace("for (var i = 0; i < objects.length; i++) {");
+        console.trace("    var object = objects.item(i);")
+        console.trace("    object.locked = true;")
+        console.trace("}");
         if (this.properties.edges[0] === "Off") for ( var breps = this.tempobjects.getBReps(), i = breps.length; i > 0; ) { breps.item(--i).getEdges().setProperty( 'hidden', true ); }
+        var changeStyle = (this.properties.style[0] !== this.properties.style[1] && this.sIndex !== -1);
+        if (changeStyle) this.tempobjects.setProperty( 'styleIndex', this.sIndex);
+
         moi.geometryDatabase.addObjects(this.tempobjects);
+        console.trace("moi.geometryDatabase.addObjects(objects)");
     }
     
     MoIOutput.prototype.onExecute = function() {
@@ -102,13 +118,6 @@
         } else {
             this.boxcolor = "#F05"
         }
-    }
-    
-    MoIOutput.prototype.onGetCreatedObjects = function()
-    {
-        var list = [];
-        for ( var i=0; i<this.tempobjects.length; i++) list.push(this.tempobjects.item(i).id);
-        return list;
     }
     
     MoIOutput.prototype.getExtraMenuOptions = function(graphcanvas) { var that = this, thatgraph = this.graph; return [{content:lang.getTranslation("Clear"), callback: function() { that.onAdded(); that.onClear(); }}]; }

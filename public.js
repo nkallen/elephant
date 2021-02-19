@@ -4,30 +4,34 @@
 
 window.copyToClipboard = graphcanvas.copyToClipboard.bind(graphcanvas);
 window.pasteFromClipboard = graphcanvas.pasteFromClipboard.bind(graphcanvas);
+window.invertSelection = graphcanvas.invertSelection.bind(graphcanvas);
 window.deleteSelectedNodes = graphcanvas.deleteSelectedNodes.bind(graphcanvas)
 window.arrange = graph.arrange.bind(graph);
 window.storeSelection = function() {
     var selectedObjects = moi.geometryDatabase.getSelectedObjects();
+    if (selectedObjects.length == 0) return;
     var store = LiteGraph.createNode("basic/store");
     store.title = "Store selection";
     graph.add(store, false, true);
+    var created = [];
     for (var i = 0; i < selectedObjects.length; i++) {
         var item = selectedObjects.item(i);
         var info = graph.nodeForObject(item);
         if (info != null) {
             var source = info[0], wasCreated = info[1];
+            created = created.concat(wasCreated);
             var letter = "abcdefghijklmnopqrstuvwxyz"[i];
             store.addInput(letter, "objectlist")
             if (source != null) {
                 source.connect(0, store, i, true);
             } else {
                 var itemz = moi.geometryDatabase.createObjectList();
-                itemz.addObject(item);
+                itemz.addObject(item.clone());
                 store.addProperty(letter, itemz, "objectlist");
             }
         }
     }
-    graph.addHistoryItem(wasCreated, store);
+    graph.addHistoryItem(created, store);
     return store;
 }
 window.selectNodes = graphcanvas.selectNodes.bind(graphcanvas);
@@ -65,16 +69,16 @@ window.commit = function(factory, newFactory) {
     graph.add(node, false, true);
 
     var sources = createAndConnectSources(factory, node);
-    var rev = moi.geometryDatabase.revision;
-    factory.update(); // This is a hack. By capturing the revision and forcing an update, any temporary objects that would actually be committed are recreated, allowing us to "easily" identify everything created by this factory.
+    factory.update();
+    var createdObjects = factory.getCreatedObjects();
     if (newFactory != null) {
         factory.commitAndPrepOther(newFactory);
     } else {
         factory.commit();
     }
-    var createdObjects = Created(rev);
     graph.addHistoryItem(sources, node);
     graph.updateIndex(node, createdObjects);
+
 }
 
 function Created(rev) {

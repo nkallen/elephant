@@ -79,7 +79,7 @@
                 } else value = [null];
                 call.push(value);
             }
-            console.json(call);
+            // console.json(call);
             var calls = unroll(call);
     
             var acc = moi.geometryDatabase.createObjectList();
@@ -447,7 +447,6 @@
             // console.log("len mat");
             for (var i = 0; i < ids.length; i++) {
                 if (ids[i] != this.prevSelection[i]) {
-                    console.log("sel chan");
                     selectionChange = true;
                     break;
                 }
@@ -541,7 +540,6 @@
             this.currentIteration++;
             this.markChanged();
         } else if (this.currentIteration == objects.length) {
-            console.log("loopbegin done!");
             this.currentIteration = 0; // prepare for future invocations if someone else triggers change
             this.setOutputData(1, "end");
             this.boxcolor = "#0F5";
@@ -568,26 +566,22 @@
     };
     var loopend = makeNodeType("loopend", loopenddesc.in, loopenddesc.out);
     loopend.prototype.onExecute = function() {
-        console.log("in loopend");
         this.boxcolor = "#F80";
         var state = this.getInputData(1, this.properties["Loop"]);
         switch (state) {
             case "empty":
                 this.setOutputData(0, moi.geometryDatabase.createObjectList());
             case "start":
-                console.log("case start");
                 this.isFinished = false;
                 this.accumulator = moi.geometryDatabase.createObjectList();
                 // no break on purpose
             case "continue":
-                console.log("case continue");
                 var objects = this.getInputData(0, this.properties["Objects"]);
                 for (var i = 0; i < objects.length; i++) {
                     this.accumulator.addObject(objects[i]);
                 }
                 break;
             case "end":
-                console.log("case end");
                 if (!this.isFinished) {
                     var output = this.accumulator;
                     this.setOutputData(0, output);

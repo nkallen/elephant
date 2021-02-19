@@ -1,11 +1,9 @@
 (function(){
-
     var cursor = 100;
     var objectIds = {};
     var subobjectIds = {};
     var history = [];
     var history_output = null;
-    var nodeId2historyId = {};
     
     LGraph.prototype.clearHistory = function() {
         cursor = 100;
@@ -13,18 +11,22 @@
         subobjectIds = {};
         history = [];
         history_output = null;
-        nodeId2historyId = {};
     }
 
     LGraph.prototype.addHistoryItem = function(sources, node) {
-        var pos = history.length;
-        history.push([sources, node]);
+        history.push(node);
         var onRemoved = node.onRemoved;
         node.onRemoved = function() {
             if (onRemoved) onRemoved.call(this);
-            history.splice(pos, 1);
+            // history is mutable so we must always search
+            for (var i = 0; i < history.length; i++) {
+                var candidate = history[i];
+                if (candidate.id == node.id) {
+                    history.splice(i, 1);
+                    break;
+                }
+            }
         }
-        nodeId2historyId[node.id] = history.length-1;
 
         var ids = {};
         ids[node.id] = true;
@@ -60,8 +62,7 @@
     LGraph.prototype.showHistoryItem = function(i) {
         if (history.length == 0) return;
         if (history_output == null) history_output = LiteGraph.createNode("basic/Output");
-        var row = history[i];
-        var node = row[1];
+        var node = history[i];
         history_output.pos[0] = node.pos[0] + 200;
         history_output.pos[1] = node.pos[1];
         if (history_output.graph == null)
@@ -118,7 +119,7 @@
                 if (!(key in subobjs)) subobjs[key] = {nodeId: info.nodeId, parentIndex: info.parentIndex, subobjectIndexes: []};
                 subobjs[key].subobjectIndexes.push(info.subobjectIndex);
             } else {
-                free.addObject(item);
+                free.addObject(item.clone());
             }
         }
         // Next, build the compact node graph; there are things ref'd by index, subobject, and "free"/lacking a ref
@@ -186,37 +187,6 @@
     
         var info = objectIds[id];
         return this.getNodeById(info.nodeId);
-    }
-    
-    LGraph.prototype.historyIdsForObjectId = function(id) {
-        var node = this.nodeForObjectId0(id);
-        if (node == null) return [];
-        var result = [nodeId2historyId[node.id]];
-    
-        var stack = [node];
-        while (stack.length > 0) {
-            var current = stack.pop();
-            for (var i = 0; i < current.inputs.length; i++) {
-                var input = current.inputs[i];
-                var link = input.link;
-                if (link != null) {
-                    var link_info = this.links[input.link];
-                    var link_node = this.getNodeById(link_info.origin_id);
-                    var historyId = nodeId2historyId[link_node.id];
-                    if (historyId != null) result.push(historyId);
-                    stack.push(link_node);
-                }
-            }
-        }
-        return result.sort();
-    }
-    
-    LGraph.prototype.historyIdsForObjectIds = function(objectIds) {
-        var result = [];
-        for (var i = 0; i < objectIds.length; i++) {
-            result = result.concat(this.historyIdsForObjectId(objectIds[i]));
-        }
-        return result.sort();
     }
     
     var history_cursor = -1;

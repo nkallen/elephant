@@ -840,8 +840,8 @@
     ArrayElement.desc = "Returns an element from an array";
 
     ArrayElement.prototype.onExecute = function() {
-        var type = this.properties.type;
-        if (type == undefined) return;
+        var type = this._arraytype;
+        if (type == undefined) type = "objectlist";
         this.properties["index"] = this.getInputData(1, this.properties["index"]);
 
         if (type === "numarray") {
@@ -870,11 +870,13 @@
             }
         } else if (type === "objectlist") {
             var out = moi.geometryDatabase.createObjectList();
+            console.trace("var objects = moi.geometryDatabase.createObjectList();");
             var source = this.getInputData(0, moi.geometryDatabase.createObjectList());
             for (var i=0; i<this.properties["index"].length; i++) {
                 var idx=Math.round(this.properties["index"][i]);
                 if (idx>=0 && idx<source.length) {
                     out.addObject(source.item(idx));
+                    console.trace("objects.addObject(input" + String(i) + ".item(" + String(idx) + "));");
                 }            
             }
         }
@@ -883,7 +885,7 @@
     };
 
     ArrayElement.prototype.onConnectInput = function(slot, type, link, source, source_slot) {
-        if (slot == 0) this.addProperty("type", type);
+        if (slot == 0) this._arraytype = type;
         this.addOutput("value", type);
     }
     ArrayElement.prototype.getSlotMenuOptions = Elephant.getSlotMenuOptions;
@@ -897,7 +899,7 @@
 
     Concat.title = "Concat";
     Concat.desc = "Concatenates an objectlist or pointarray";
-
+    Concat.prototype.getSlotMenuOptions = Elephant.getSlotMenuOptions;
     Concat.prototype.onExecute = function() {
         if (this.inputs.length == 1) return;
 
@@ -909,11 +911,14 @@
             out = new pointArray();
             for ( i = 0; i<this.inputs.length; i++) out.concat(this.getInputData(i, new pointArray()));
         } else if ( this.inputs[1].type === "objectlist") {
-            var inObj;
             out = moi.geometryDatabase.createObjectList();
+            console.trace("var objects = moi.geometryDatabase.createObjectList();")
             for ( i = 0; i<this.inputs.length; i++) {
-                inObj = this.getInputData(i, moi.geometryDatabase.createObjectList());
-                for ( j = 0; j < inObj.length; j++ ) out.addObject( inObj.item(j) );
+                var inObj = this.getInputData(i, moi.geometryDatabase.createObjectList());
+                for ( j = 0; j < inObj.length; j++ ) {
+                    console.trace("objects.addObject( input" + String(i) + ".item(" + String(j) + ") );");
+                    out.addObject( inObj.item(j) );
+                }
             }
         }
         this.setOutputData(0, out);
@@ -934,17 +939,21 @@
 
     Store.title = "Store";
     Store.desc = "Stores an objectlist";
+    Store.prototype.getSlotMenuOptions = Elephant.getSlotMenuOptions;
     function Store() {
         this.addOutput("Out", "objectlist")
     }
     Store.prototype.onExecute = function() {
-        var inObj;
-        out = moi.geometryDatabase.createObjectList();
+        var out = moi.geometryDatabase.createObjectList();
         this.setOutputData(0, out);
-        if (this.outputs == null) return;
+
+        console.trace("var objects = moi.geometryDatabase.createObjectList();")
         for ( i = 0; i<this.inputs.length; i++) {
-            inObj = this.getInputData(i, this.properties["abcdefghijklmnopqrstuvwxyz"[i]]);
-            for ( j = 0; j < inObj.length; j++ ) out.addObject( inObj.item(j) );
+            var inObj = this.getInputData(i, this.properties["abcdefghijklmnopqrstuvwxyz"[i]]);
+            for ( j = 0; j < inObj.length; j++ ) {
+                console.trace("objects.addObject( input" + String(i) + ".item(" + String(j) + ") );");
+                out.addObject( inObj.item(j) );
+            }
         }
         this.boxcolor = out.length == 0 ? "#F80" : "#0F5";
     };

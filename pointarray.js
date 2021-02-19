@@ -1,7 +1,36 @@
 //	Nodeedit for Moment of inspiration 1.0, Max Smirnov Copyright (C) 2018
 //  Math/Geometry lib
 
-function factory( factoryname ) { var f = moi.command.createFactory( factoryname ); for ( var i = 1; i < arguments.length; i++ ) if (arguments[i] !==null) f.setInput( i - 1, arguments[i] ); f.update(); var obj = f.calculate(); f.cancel(); return obj; }
+function pp(type, arg) {
+    switch (type) {
+        case 1:
+            return "moi.vectorMath.createPoint(" + String(arg) + ")";
+        case 2:
+            return "(function() { var frame = moi.vectorMath.createFrame(); frame.origin = " + pp(1, arg.origin) + "; return frame; })()"
+        case 6:
+            return "\"" + String(arg) + "\"";
+        case 8:
+            return "objects";
+        default:
+            return String(arg);
+    }
+
+}
+
+function factory( factoryname ) {
+    var f = moi.command.createFactory( factoryname );
+    console.trace("var factory = moi.command.createFactory('" + factoryname + "');");
+    for ( var i = 1; i < arguments.length; i++ )
+        if (arguments[i] !==null) {
+            f.setInput( i - 1, arguments[i] );
+            console.trace("factory.setInput(" + String(i-1) + ", " + pp(f.getInput(i-1).type, arguments[i]) + ");");
+        }
+    // f.update();
+    console.trace("factory.update(); var " + factoryname + " = factory.calculate(); factory.cancel();")
+    var obj = f.calculate();
+    f.cancel();
+    return obj;
+}
 
 
 
