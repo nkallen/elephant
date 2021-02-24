@@ -16,6 +16,20 @@ Elephant.getSlotMenuOptions = function(slot) {
                 }}
             );
             menu_info.push({
+                content: "Replace with GetNamed", callback: function() {
+                    var node = LiteGraph.createNode("basic/getnamed");
+                    node.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
+                    node.properties.name = that.title + "_" + String(that.id)
+                    that.graph.add(node);
+                    var outputs = that.outputs[slot.slot].links;
+                    for (var i = 0; i < outputs.length; i++) {
+                        var link = that.graph.links[outputs[i]];
+                        var target = that.graph.getNodeById(link.target_id);
+                        node.connect(0, target, link.target_slot);
+                    }
+                }}
+            );
+            menu_info.push({
                 content: "Add ObjectList", callback: function() {
                     var output = LiteGraph.createNode("Classes/ObjectList");
                     output.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
@@ -145,5 +159,34 @@ Elephant.getSlotMenuOptions = function(slot) {
         }
     }
     return menu_info;
+}
+
+LGraphNode.prototype.getMenuOptions = function(canvas) {
+    return [
+        {
+            content: "Title",
+            callback: LGraphCanvas.onShowPropertyEditor
+        },
+        {
+            content: "Collapse",
+            callback: LGraphCanvas.onMenuNodeCollapse
+        },
+        {
+            content: "Colors",
+            has_submenu: true,
+            callback: LGraphCanvas.onMenuNodeColors
+        },
+        {
+            content: "Shapes",
+            has_submenu: true,
+            callback: LGraphCanvas.onMenuNodeShapes
+        },
+        null,
+        {
+            content: "Select node dependencies",
+            has_submenu: true,
+            callback: this.selectDependencies.bind(this)
+        },
+    ];
 }
 })(this);

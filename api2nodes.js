@@ -233,12 +233,17 @@
             if (points == null) return;
         
             var factory = moi.command.createFactory( this.name );
+            console.trace("var factory = moi.command.createFactory('" + this.title + "');");
             for (var i = 0; i < points.length; i++) {
+                console.trace("factory.createInput('point')");
                 factory.createInput('point');
+                console.trace("factory.setInput(" + String(i) + ", " + pp(1, points.getPoint(i)) + ");");
                 factory.setInput(i, points.getPoint(i));
             }
+            console.trace("factory.calculate()");
             var output = factory.calculate();
             if (output.length > 0) this.boxcolor = "#0F5";
+            console.trace("factory.cancel()");
             factory.cancel();
             this.setOutputData(0, output);
         }
@@ -441,10 +446,7 @@
         for (var i = 0; i < selection.length; i++) {
             ids.push(selection.item(i).id);
         }
-        // console.json(ids);
-        // console.json(this.prevSelection);
         if (this.prevSelection.length == ids.length) {
-            // console.log("len mat");
             for (var i = 0; i < ids.length; i++) {
                 if (ids[i] != this.prevSelection[i]) {
                     selectionChange = true;

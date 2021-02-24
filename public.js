@@ -13,25 +13,11 @@ window.storeSelection = function() {
     var store = LiteGraph.createNode("basic/store");
     store.title = "Store selection";
     graph.add(store, false, true);
-    var created = [];
-    for (var i = 0; i < selectedObjects.length; i++) {
-        var item = selectedObjects.item(i);
-        var info = graph.nodeForObject(item);
-        if (info != null) {
-            var source = info[0], wasCreated = info[1];
-            created = created.concat(wasCreated);
-            var letter = "abcdefghijklmnopqrstuvwxyz"[i];
-            store.addInput(letter, "objectlist")
-            if (source != null) {
-                source.connect(0, store, i, true);
-            } else {
-                var itemz = moi.geometryDatabase.createObjectList();
-                itemz.addObject(item.clone());
-                store.addProperty(letter, itemz, "objectlist");
-            }
-        }
-    }
-    graph.addHistoryItem(created, store);
+    store.addInput("a", "objectlist");
+    var info = graph.nodeForObjects(selectedObjects);
+    var source = info[0], wasCreated = info[1];
+    source.connect(0, store, 0);
+    graph.addHistoryItem(wasCreated, store);
     return store;
 }
 window.selectNodes = graphcanvas.selectNodes.bind(graphcanvas);

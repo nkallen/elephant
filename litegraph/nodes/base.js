@@ -959,6 +959,40 @@
     };
     LiteGraph.registerNodeType("basic/store", Store);
 
+    GetNamed.title = "GetNamed";
+    GetNamed.desc = "Gets an object by name";
+    GetNamed.prototype.getSlotMenuOptions = Elephant.getSlotMenuOptions;
+    function GetNamed() {
+        this.addOutput("Out", "objectlist");
+        this.addInput("name", "string");
+        this.mode = LiteGraph.IMMORTAL;
+    }
+
+    GetNamed.prototype.hasChanged = function() {
+        var revChange = moi.command.lastCommandRevisionEnd != this.prevRev;
+        this.prevRev = moi.command.lastCommandRevisionEnd;
+        return revChange;
+    }
+
+    GetNamed.prototype.onExecute = function() {
+        var name = this.getInputData(0, this.properties["name"]);
+        var out = moi.geometryDatabase.createObjectList();
+        this.setOutputData(0, out);
+
+        var allobjects = moi.geometryDatabase.getObjects();
+        for (var o = 0; o < allobjects.length; o++) {
+            var obj = allobjects.item(o);
+            if (obj.name === name) {
+                obj = obj.clone();
+                obj.name = null;
+                out.addObject(obj);
+            }
+        }
+
+        this.boxcolor = out.length == 0 ? "#F80" : "#0F5";
+    };
+    LiteGraph.registerNodeType("basic/getnamed", GetNamed);
+
     function ObjectProperty() {
         this.addInput("obj", "");
         this.addOutput("", "");

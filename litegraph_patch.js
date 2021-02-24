@@ -119,9 +119,24 @@ LGraphNode.prototype.onPropertyChanged = function(prop) {
     if (this.id == null) return;
     hasChanged[this.id] = true;
 }
-LGraph.prototype.onNodeConnectionChange = function(_, node) {
+LGraph.prototype.onNodeConnectionChange = function(io, node, slot, target_node, target_slot) {
     if (node.id == null) throw "Node not yet added to graph";
-    hasChanged[node.id] = true;
+    if (io == LiteGraph.OUTPUT) {
+        // Rather than re-executing the node when an output link changes,
+        // just copy already computed data.
+        var output_info = node.outputs[slot];
+        if (!output_info) return;
+
+        if (node.outputs[slot].links) {
+            for (var i = 0; i < node.outputs[slot].links.length; i++) {
+                var link_id = node.outputs[slot].links[i];
+				var link = this.links[link_id];
+				if (link) link.data = output_info._data;
+            }
+        }
+    } else {
+        hasChanged[node.id] = true;
+    }
 }
 LGraph.prototype.onNodeAdded = function(node) {
     hasChanged[node.id] = true;
@@ -187,7 +202,11 @@ LGraph.prototype.runStep = function(num, do_not_catch_errors, limit ) {
                     var node = nodes[j];
                     console.log("// runStep: " + node.title);
                     if ((node.mode == LiteGraph.ALWAYS || node.mode == LiteGraph.IMMORTAL) && node.onExecute) {
+                        var before = LiteGraph.getTime();
                         node.onExecute();
+                        var after = LiteGraph.getTime();
+                        var elapsed = after - before;
+                        node.execution_time = 0.001 * elapsed;
                     }
                 }
 
@@ -640,33 +659,9 @@ LGraphCanvas.prototype.processMouseMove = function(e) {
 }
 })();
 
-LGraphNode.prototype.getMenuOptions = function(canvas) {
-    return [
-        {
-            content: "Title",
-            callback: LGraphCanvas.onShowPropertyEditor
-        },
-        {
-            content: "Collapse",
-            callback: LGraphCanvas.onMenuNodeCollapse
-        },
-        {
-            content: "Colors",
-            has_submenu: true,
-            callback: LGraphCanvas.onMenuNodeColors
-        },
-        {
-            content: "Shapes",
-            has_submenu: true,
-            callback: LGraphCanvas.onMenuNodeShapes
-        },
-        null,
-        {
-            content: "Select node dependencies",
-            has_submenu: true,
-            callback: this.selectDependencies.bind(this)
-        },
-    ];
+var getTitle = LGraphNode.prototype.getTitle;
+LGraphNode.prototype.getTitle = function() {
+    return getTitle.call(this) + (this.execution_time == null ? "" : " (" + this.execution_time.toFixed(2) + "s)");
 }
 
 LGraphNode.prototype.selectDependencies = function() {

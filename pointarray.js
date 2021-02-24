@@ -25,7 +25,6 @@ function factory( factoryname ) {
             f.setInput( i - 1, arguments[i] );
             console.trace("factory.setInput(" + String(i-1) + ", " + pp(f.getInput(i-1).type, arguments[i]) + ");");
         }
-    // f.update();
     console.trace("factory.update(); var " + factoryname + " = factory.calculate(); factory.cancel();")
     var obj = f.calculate();
     f.cancel();

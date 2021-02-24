@@ -15,19 +15,21 @@
         var that = this;
         this.unlockButton = this.addWidget("button", "Unlock", "value", function(w, canvas, node, pos, event) {
             if (event.type !== "mousedown") return;
+            var origin_id = that.graph.links[that.inputs[0].link].origin_id;
+            var origin = that.graph.getNodeById(origin_id);
 
             var unlocked = moi.geometryDatabase.createObjectList();
-            if (that.tempobjects) {
-                var created = [];
-                for (var i = 0; i < that.tempobjects.length; i++) {
-                    var o = that.tempobjects[i].clone();
-                    unlocked.addObject(o);
-                    created.push(o);
-                    o.locked = false;
-                    o.setHitTest(true);
-                }
-                moi.geometryDatabase.addObjects(unlocked);
+            var before = that.getInputData(0, moi.geometryDatabase.createObjectList());
+            var created = [];
+            for (var i = 0; i < before.length; i++) {
+                var o = before[i].clone();
+                unlocked.addObject(o);
+                created.push(o);
+                o.locked = false;
+                o.setHitTest(true);
+                o.name = origin.title + "_" + String(origin.id);
             }
+            moi.geometryDatabase.addObjects(unlocked);
             that.graph.updateIndex(that.getInputNode(0), created);
             that.graph.remove(that);
             that.setDirtyCanvas(true, true);
