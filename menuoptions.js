@@ -16,20 +16,6 @@ Elephant.getSlotMenuOptions = function(slot) {
                 }}
             );
             menu_info.push({
-                content: "Replace with GetNamed", callback: function() {
-                    var node = LiteGraph.createNode("basic/getnamed");
-                    node.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
-                    node.properties.name = that.title + "_" + String(that.id)
-                    that.graph.add(node);
-                    var outputs = that.outputs[slot.slot].links;
-                    for (var i = 0; i < outputs.length; i++) {
-                        var link = that.graph.links[outputs[i]];
-                        var target = that.graph.getNodeById(link.target_id);
-                        node.connect(0, target, link.target_slot);
-                    }
-                }}
-            );
-            menu_info.push({
                 content: "Add ObjectList", callback: function() {
                     var output = LiteGraph.createNode("Classes/ObjectList");
                     output.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
@@ -189,4 +175,57 @@ LGraphNode.prototype.getMenuOptions = function(canvas) {
         },
     ];
 }
+
+LGraphCanvas.prototype.getExtraMenuOptions = function(canvas) {
+    var that = this;
+    var options = [
+        {
+            content: "Arrange",
+            callback: function() {
+                that.graph.arrange();
+            },
+        }
+    ];
+    if (this.graph._nodes.length > 0) {
+        options = options.concat([
+            {
+                content: "Clean-up unused nodes",
+                callback: function(item, options, e, menu, node) {
+                    var allobjects = moi.geometryDatabase.getObjects();
+                    var info = that.graph.nodeForObjects(allobjects);
+                    var source = info[0], created = info[1];
+                    source.selectDependencies();
+                    that.invertSelection();
+                    that.deleteSelectedNodes();
+                    for (var i = 0; i < created.length; i++) {
+                        var created = created[i];
+                        that.graph.remove(created);
+                    }
+                }
+            },
+        ]);
+    }
+    if (this.selected_nodes.length > 0) {
+        options = options.concat([
+            {
+                content: "Invert Selection",
+                callback: graphcanvas.invertSelection,
+            },
+            {
+                content: "Delete selected nodes",
+                callback: graphcanvas.deleteSelectedNodes,
+            },
+        ]);
+    }
+    if (moi.geometryDatabase.getSelectedObjects().length > 0) {
+        options = options.concat([
+            {
+                content: "Store Selection",
+                callback: window.storeSelection,
+            },
+        ]);
+    }
+    return options;
+}
+
 })(this);

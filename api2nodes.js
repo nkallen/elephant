@@ -175,6 +175,36 @@
                     }
                 }
             }
+            var output = that.getOutputData(0);
+            if (output != null) {
+                menu_info.push({
+                    content: lang.getTranslation("Replace with live object"), callback: function() {
+                        var unlocked = moi.geometryDatabase.createObjectList();
+                        var before = output;
+                        var created = [];
+                        for (var i = 0; i < before.length; i++) {
+                            var o = before[i].clone();
+                            unlocked.addObject(o);
+                            created.push(o);
+                            o.locked = false;
+                            o.setHitTest(true);
+                            o.name = that.title + "_" + String(that.id);
+                        }
+                        moi.geometryDatabase.addObjects(unlocked);
+
+                        var node = LiteGraph.createNode("basic/getnamed");
+                        node.pos = [that.pos[0] + that.size[0] + 30, that.pos[1]];
+                        node.properties.name = that.title + "_" + String(that.id)
+                        that.graph.add(node);
+                        var outputs = that.outputs[0].links;
+                        for (var i = 0; i < outputs.length; i++) {
+                            var link = that.graph.links[outputs[i]];
+                            var target = that.graph.getNodeById(link.target_id);
+                            node.connect(0, target, link.target_slot);
+                        }                                    
+                    }
+                });
+            }
             return menu_info;
         };
         node.prototype.getSlotMenuOptions = Elephant.getSlotMenuOptions;

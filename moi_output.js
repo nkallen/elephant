@@ -36,7 +36,7 @@
         });
         this.unlockButton.disabled = true;
         this.offsetSlider = this.addWidget("slider", "x-offset", 0.0, function(n) {
-            that.onPropertyChanged("xOffset");
+            LGraphNode.prototype.onPropertyChanged.call(that, "xOffset", n);
             that.properties.xOffset = n;
         }, {min:-100, max:100});
     }
@@ -48,7 +48,13 @@
         moi.geometryDatabase.removeObjects(this.tempobjects);
         this.tempobjects = moi.geometryDatabase.createObjectList();
     }
-        
+
+    MoIOutput.prototype.onPropertyChanged = function(name, value) {
+        LGraphNode.prototype.onPropertyChanged.call(this, name, value);
+        if (name != "xOffset") return;
+        this.offsetSlider.value = value;
+    };
+    
     MoIOutput.prototype.onRemoved = function() {
         this.onClear();
     }

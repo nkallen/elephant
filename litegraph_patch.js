@@ -670,7 +670,6 @@ LGraphNode.prototype.selectDependencies = function() {
     var visited_links = {};
 
     while (true) {
-        console.log("iter");
         if (S.length == 0) break;
 
         var node = S.shift();
@@ -681,25 +680,20 @@ LGraphNode.prototype.selectDependencies = function() {
             console.log("link");
             var input = node.inputs[i];
             if (input == null) continue;
-            console.log(1);
             var link_id = input.link;
             if (link_id == null) continue;
-            console.log(2);
             var link = this.graph.links[link_id];
             if (link == null) continue;
             
             if (visited_links[link.id]) continue;
-            console.log(3);
             visited_links[link.id] = true;
 
             console.json(link);
             var origin_node = this.graph.getNodeById(link.origin_id);
             if (origin_node == null) continue;
-            console.log(4);
             S.push(origin_node);
         }
     }
-    console.log(L.length);
     this.graph.sendActionToCanvas("selectNodes", [L]);
 }
 
