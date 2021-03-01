@@ -7,12 +7,11 @@ There are three steps to install.
 Installation (Win):
 
     cd C:\Users\<username>\AppData\Roaming\Moi\
-    
     git clone https://github.com/nkallen/elephant.git
 
 Installation (Mac):
+
     cd /Users/<username>/Library/Application Support/Moi/
-    
     git clone https://github.com/nkallen/elephant.git
 
 # Secondly, initialize your MoI application folder as a git repository. This allows us to safely make changes and easily roll them back
@@ -20,12 +19,12 @@ Installation (Mac):
 Installation (Mac):
 
     cd /Applications/MoI v4.app/
-    
     git init .
-    
     git checkout -b elephant
 
 # Finally, download and apply the patch file:
+
+[The patch file is here](https://github.com/nkallen/elephant/releases/tag/v0.1-alpha)
 
 Installation (Win):
 
