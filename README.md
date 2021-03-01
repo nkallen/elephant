@@ -4,17 +4,12 @@ There are three steps to install.
 
 # Firstly, install the nodegraph into MoI's Appdata folder. You can do this using git most easily.
 
-Installation (Win):
-
-    cd C:\Users\<username>\AppData\Roaming\Moi\
-    git clone https://github.com/nkallen/elephant.git
-
 Installation (Mac):
 
     cd /Users/<username>/Library/Application Support/Moi/
     git clone https://github.com/nkallen/elephant.git
 
-# Secondly, initialize your MoI application folder as a git repository. This allows us to safely make changes and easily roll them back
+# Secondly, initialize your MoI application folder as a git repository. This allows us to safely make changes and easily roll them back. I also recommend making a branch named "elephant" so we can keep main/master clean.
 
 Installation (Mac):
 
@@ -22,16 +17,12 @@ Installation (Mac):
     git init .
     git checkout -b elephant
 
-# Finally, download and apply the patch file:
+# Finally, download and apply the patch files:
 
-[The patch file is here](https://github.com/nkallen/elephant/releases/tag/v0.1-alpha)
-
-Installation (Win):
-
-    cd C:\Program Files\Moi v4.0\
-    git am --ignore-whitespace elephant.patch
+[The patch file are here](https://github.com/nkallen/elephant/releases/tag/v0.1-alpha)
 
 Installation (Mac):
 
     cd /Applications/MoI v4.app/
-    git am --ignore-whitespace elephant.patch
+    git am --directory commands --ignore-whitespace ~/Downloads/commands.patch
+    git am --directory ui --ignore-whitespace ~/Downloads/ui.patch
