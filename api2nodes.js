@@ -40,6 +40,19 @@
         node.title = name;
         node.desc = name;
         node.prototype.onExecute = function() { // FIXME nk move into loop
+            var calls = this.getCalls();
+            var acc = moi.geometryDatabase.createObjectList();
+            for (var i = 0; i < calls.length; i++) {
+                var temp = factory.apply(null, calls[i]);
+                for (var j = 0; j < temp.length; j++) {
+                    acc.addObject(temp.item(j));
+                }
+            }
+            this.boxcolor = acc.length == 0 ? "#F80" : "#0F5";
+            this.setOutputData(0, acc);
+            this.setDirtyCanvas(true);
+        }
+        node.prototype.getCalls = function () {
             var call = [[name]];
             for (var i = 0; i < input.length; i++) {
                 var type = input[i].type;
@@ -81,17 +94,7 @@
             }
             // console.json(call);
             var calls = unroll(call);
-    
-            var acc = moi.geometryDatabase.createObjectList();
-            for (var i = 0; i < calls.length; i++) {
-                var temp = factory.apply(null, calls[i]);
-                for (var j = 0; j < temp.length; j++) {
-                    acc.addObject(temp.item(j));
-                }
-            }
-            this.boxcolor = acc.length == 0 ? "#F80" : "#0F5";
-            this.setOutputData(0, acc);
-            this.setDirtyCanvas(true);
+            return calls;
         }
     
         function unroll(call) {
@@ -197,11 +200,34 @@
                         node.properties.name = that.title + "_" + String(that.id)
                         that.graph.add(node);
                         var outputs = that.outputs[0].links;
+                        if (outputs == null) return;
                         for (var i = 0; i < outputs.length; i++) {
                             var link = that.graph.links[outputs[i]];
                             var target = that.graph.getNodeById(link.target_id);
                             node.connect(0, target, link.target_slot);
                         }                                    
+                    }
+                });
+            }
+            var selectedObjects = moi.geometryDatabase.getSelectedObjects();
+            if (selectedObjects.length > 0) {
+                menu_info.push({
+                    content: lang.getTranslation("Replace with selected object"), callback: function() {
+                        var store = LiteGraph.createNode("basic/store");
+                        store.title = "Replace node with selected object";
+                        graph.add(store, false, true);
+                        store.addInput("a", "objectlist");
+                        var info = graph.nodeForObjects(selectedObjects);
+                        var source = info[0], wasCreated = info[1];
+                        source.connect(0, store, 0);
+                        graph.addHistoryItem(wasCreated, store);
+                        var outputs = that.outputs[0].links;
+                        if (outputs == null) return;
+                        for (var i = 0; i < outputs.length; i++) {
+                            var link = that.graph.links[outputs[i]];
+                            var target = that.graph.getNodeById(link.target_id);
+                            store.connect(0, target, link.target_slot);
+                        }
                     }
                 });
             }
@@ -232,6 +258,12 @@
                 "pos": 0,
                 "name": "Pts",
                 "type": "Point"
+            },
+            {
+                "pos": 1,
+                "name": "Closed",
+                "type": "boolean",
+                "default": false,
             }
         ];
         Elephant.api.factories[factoryname] = { category: "curve", in: polyline_in};
@@ -270,6 +302,12 @@
                 console.trace("factory.setInput(" + String(i) + ", " + pp(1, points.getPoint(i)) + ");");
                 factory.setInput(i, points.getPoint(i));
             }
+            if (this.getInputData(1, this.properties["Closed"])) {
+                console.trace("factory.createInput('point')");
+                factory.createInput('point');
+                console.trace("factory.setInput(" + String(i) + ", " + pp(1, points.getPoint(i)) + ");");
+                factory.setInput(i, points.getPoint(0));
+            }
             console.trace("factory.calculate()");
             var output = factory.calculate();
             if (output.length > 0) this.boxcolor = "#0F5";
@@ -294,7 +332,27 @@
         this.setOutputData(0, acc);
         this.setDirtyCanvas(true);
     }
-    // curve interpcurve sketchcurve
+    // fillet (FIXME need to add variable fillets too)
+    LiteGraph.getNodeType("construct/fillet").prototype.onExecute = function() {
+        var acc = moi.geometryDatabase.createObjectList();
+        var calls = this.getCalls();
+        console.json(calls);
+        for (var i = 0; i < calls.length; i++) {
+            var objects = calls[i][0+1];
+            var radius = calls[i][3+1];
+            var maxRadius = evalMinR(objects, 100);
+            if (radius > maxRadius) {
+                calls[i][3+1] = maxRadius - 0.1;
+            }
+            var temp = factory.apply(null, calls[i]);
+            for (var j = 0; j < temp.length; j++) {
+                acc.addObject(temp.item(j));
+            }
+        }
+        this.boxcolor = acc.length == 0 ? "#F80" : "#0F5";
+        this.setOutputData(0, acc);
+        this.setDirtyCanvas(true);
+    }
 
     ////////////////////////////////////////////////////////////////
     /// Basic Object-Oriented node wrappers. An ONM if you will ///
@@ -367,6 +425,60 @@
             }
         }
         LiteGraph.registerNodeType("Classes/" + name, node);
+    }
+
+    var outs = [
+        {
+            "pos": 0,
+            "name": "Objects",
+            "type": "ObjectList"
+        }
+    ];
+    var geomethods = Elephant.api.geomethods;
+    for (var name in geomethods) {
+        var node = makeNodeType(name, outs.concat(geomethods[name].in), [geomethods[name].out]);
+        node.prototype.onExecute = function() {
+            this.boxcolor = "#F80";
+            var enm = geomethods[this.name].enum; // FIXME nk this is ugly
+            var objects = this.getInputData(0, this.properties["Objects"]);
+            var outData;
+            switch (this.output[0].type) {
+                case "Point":
+                    outData = new pointArray();
+                    break;
+                case "ObjectList":
+                    outData = moi.geometryDatabase.createObjectList();
+                    break;
+                default:
+                    outData = [];
+                    break;
+            }
+            this.setOutputData(0, outData);
+
+            if (objects == null) return;
+            for (var i = 0; i < objects.length; i++) {
+                var object = objects.item(i);
+                if (object.type == enm || enm == null) {
+                    var result = object.evaluatePoint(this.getInputData(1, this.properties.t)[0]);
+                    if (result == null) continue;
+                    switch (this.output[0].type) {
+                        case "Point":
+                            outData.pushPoint(result);
+                            break;
+                        case "ObjectList":
+                            for (var k = 0; k < result.length; k++) {
+                                outData.addObject(result.item(k));
+                            }
+                            break;
+                        default:
+                            outData.push(result);
+                            break;
+                    }
+                    this.boxcolor = "#0F5";
+                }
+            }
+        }
+        LiteGraph.registerNodeType("Methods/" + name, node);
     }
     
     var classes = Elephant.api.classes;
@@ -467,7 +579,7 @@
         });
     }
     LiteGraph.getNodeType("Classes/GeometryDatabase").prototype.hasChanged = function() {
-        var revChange = moi.geometryDatabase.revision != this.prevRev;
+        var revChange = moi.geometryDatabase.revision != this.prevRev; // FIXME nk
         this.prevRev = moi.geometryDatabase.revision;
         if (this.prevSelection == null) this.prevSelection = [];
         var selection = moi.geometryDatabase.getSelectedObjects();
@@ -516,7 +628,10 @@
         var index = this.getInputData(1, this.properties["Index"]);
         var type = this.getInputData(2, this.properties["Type"]);
         var output = moi.geometryDatabase.createObjectList();
-    
+        this.setOutputData(0, output);
+
+        if (index == null) return;
+
         for (var i = 0; i < objects.length; i++) {
             var subobjects = objects.item(i).getSubObjects();
             if (type != null) {
@@ -528,7 +643,6 @@
                 output.addObject(subobj);
             }
         }
-        this.setOutputData(0, output);
         this.boxcolor = output.length == 0 ? "#F80" : "#0F5";
     }
     LiteGraph.registerNodeType("basic/subobject", subobject);
@@ -547,11 +661,16 @@
         ]
     };
     var loopbegin = makeNodeType("loopbegin", loopbegindesc.in, loopbegindesc.out);
-    loopbegin.prototype.onStart = function() {
+    loopbegin.prototype.onAdded = function() {
         this.onPropertyChanged();
     }
     loopbegin.prototype.onPropertyChanged = function() {
         this.currentIteration = 0;
+    }
+    loopbegin.prototype.onConnectionsChange = function() {
+        console.log("in here");
+        this.onPropertyChanged();
+        this.markChanged();
     }
     loopbegin.prototype.onExecute = function() {
         this.boxcolor = "#F80";

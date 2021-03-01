@@ -9,6 +9,7 @@
         this.addProperty("edges", true, "boolean");
         this.addProperty("displayMode", "Normal", "enum", {values: ["Normal", "FaintWireframe"]});
         this.addProperty("xOffset", 0.0, "number")
+        this.addOutput("Out", "objectlist");
         this.sIndex = -1;
         this.tempobjects = moi.geometryDatabase.createObjectList();
 
@@ -89,10 +90,10 @@
 
         switch (this.properties.displayMode) {
             case "Normal":
-                inObj.setProperty('displayMode', 0);
+                this.tempobjects.setProperty('displayMode', 0);
                 break;
-            case "FaintWireFrame":
-                inObj.setProperty('displayMode', 1);
+            case "FaintWireframe":
+                this.tempobjects.setProperty('displayMode', 1);
                 break;
         }
         for ( var i = this.tempobjects.length; i > 0; ) this.tempobjects.item(--i).setHitTest(0);
@@ -110,6 +111,7 @@
         if (changeStyle) this.tempobjects.setProperty( 'styleIndex', this.sIndex);
 
         moi.geometryDatabase.addObjects(this.tempobjects);
+        this.graph.updateIndex(this, this.tempobjects);
         console.trace("moi.geometryDatabase.addObjects(objects)");
     }
     

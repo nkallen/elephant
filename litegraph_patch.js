@@ -126,7 +126,6 @@ LGraph.prototype.onNodeConnectionChange = function(io, node, slot, target_node, 
         // just copy already computed data.
         var output_info = node.outputs[slot];
         if (!output_info) return;
-
         if (node.outputs[slot].links) {
             for (var i = 0; i < node.outputs[slot].links.length; i++) {
                 var link_id = node.outputs[slot].links[i];
@@ -145,14 +144,15 @@ LGraph.prototype.onNodeRemoved = function(node) {
     delete hasChanged[node.id];
     delete immortal[node.id];
 }
-LGraph.prototype.onClear = function() {
+LGraphCanvas.prototype.onClear = function() {
     hasChanged = {};
     immortal = {};    
 }
 
 LGraph.prototype.runStep = function(num, do_not_catch_errors, limit ) {
     for (var id in immortal) {
-        if (this.getNodeById(id).hasChanged())
+        var node = this.getNodeById(id);
+        if (node.hasChanged())
             hasChanged[id] = true;
     }
     if (Object.keys(hasChanged).length == 0) return;

@@ -51,6 +51,7 @@ function createAndConnectSources(factory, node) {
 }
 
 window.commit = function(factory, newFactory) {
+    graphcanvas.pause_rendering = true;
     var node = LiteGraph.createNodeFromFactory(factory);
     graph.add(node, false, true);
 
@@ -64,7 +65,7 @@ window.commit = function(factory, newFactory) {
     }
     graph.addHistoryItem(sources, node);
     graph.updateIndex(node, createdObjects);
-
+    graphcanvas.pause_rendering = false;
 }
 
 function Created(rev) {

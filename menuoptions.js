@@ -89,8 +89,12 @@ Elephant.getSlotMenuOptions = function(slot) {
                     var point = LiteGraph.createNode("basic/point");
                     point.pos = [that.pos[0] - point.size[0] - 30, that.pos[1]];
                     that.graph.add(point);
-                    if (that.properties[_slot.name]) {
+                    if (that.properties[_slot.name] != null) {
                         point.loadValue(that.properties[_slot.name]);
+                    } else {
+                        var pa = new pointArray;
+                        pa.push();
+                        point.loadValue(pa);
                     }
                     point.connect(0, that, slot.slot);
                 }
@@ -198,22 +202,22 @@ LGraphCanvas.prototype.getExtraMenuOptions = function(canvas) {
                     that.invertSelection();
                     that.deleteSelectedNodes();
                     for (var i = 0; i < created.length; i++) {
-                        var created = created[i];
-                        that.graph.remove(created);
+                        var c = created[i];
+                        that.graph.remove(c);
                     }
                 }
             },
         ]);
     }
-    if (this.selected_nodes.length > 0) {
+    if (Object.keys(this.selected_nodes).length > 0) {
         options = options.concat([
             {
                 content: "Invert Selection",
-                callback: graphcanvas.invertSelection,
+                callback: this.invertSelection.bind(this),
             },
             {
                 content: "Delete selected nodes",
-                callback: graphcanvas.deleteSelectedNodes,
+                callback: this.deleteSelectedNodes.bind(this),
             },
         ]);
     }

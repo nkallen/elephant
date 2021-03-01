@@ -719,7 +719,9 @@
 
     function ConstantPoint() {
         this.addOutput("", "pointarray");
-        this.addProperty("pointarray", new pointArray());
+        var pa = new pointArray();
+        pa.push();
+        this.addProperty("pointarray", pa);
         this.widgetX = this.addWidget("number","x",0,this.setValue.bind(this));
         this.widgetY = this.addWidget("number","y",0,this.setValue.bind(this));
         this.widgetZ = this.addWidget("number","z",0,this.setValue.bind(this));
@@ -731,6 +733,12 @@
     ConstantPoint.desc = "Constant point";
 
     ConstantPoint.prototype.getTitle = ConstantNumber.prototype.getTitle;
+    ConstantPoint.prototype.configure = function(info) {
+        LGraphNode.prototype.configure.call(this, info);
+        var pa = new pointArray();
+        pa.concat(info.properties.pointarray);
+        this.loadValue(pa);
+    }
 
     ConstantPoint.prototype.onExecute = function() {
         console.log("ContantPoint.onExecute: " + this.properties.pointarray.getPoint().toString());
@@ -969,9 +977,23 @@
     }
 
     GetNamed.prototype.hasChanged = function() {
-        var revChange = moi.command.lastCommandRevisionEnd != this.prevRev;
-        this.prevRev = moi.command.lastCommandRevisionEnd;
-        return revChange;
+        var dbRevChange = moi.geometryDatabase.revision != this.prevDbRev;
+        this.prevDbRev = moi.geometryDatabase.revision;
+        if (!dbRevChange) return false;
+
+        var name = this.getInputData(0, this.properties["name"]);
+        var allobjects = moi.geometryDatabase.getObjects();
+        var mx = -1;
+        for (var i = 0; i < allobjects.length; i++) {
+            var obj = allobjects.item(i);
+            if (obj.name === name) {
+                mx = Math.max(mx, obj.databaseRevision);
+                break;
+            }
+        }
+        var maxRevChange = mx != this.maxDbRev;
+        this.maxDbRev = mx;
+        return maxRevChange;
     }
 
     GetNamed.prototype.onExecute = function() {
@@ -986,6 +1008,7 @@
                 obj = obj.clone();
                 obj.name = null;
                 out.addObject(obj);
+                break;
             }
         }
 
@@ -1222,7 +1245,6 @@
             try {
                 this._func = new Function("A", "B", "C", "DATA", "node", code);
                 this.markChanged();
-                console.log("1");
 
             } catch (err) {
                 console.error("Error parsing script");

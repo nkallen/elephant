@@ -318,7 +318,22 @@ Elephant.api = {
             "pos": 8,
             "name": "Path reversed",
             "type": "boolean"
-            }
+            },
+            {
+            "pos": 9,
+            "name": "To point",
+            "type": "boolean"
+            },
+            {
+            "pos": 10,
+            "name": "Draft angle",
+            "type": "float"
+            },
+            {
+            "pos": 11,
+            "name": "Flip",
+            "type": "boolean"
+            },
         ]},
         "plane3pts": {category: "solid", in: [
             {
@@ -2291,6 +2306,18 @@ Elephant.api = {
                   "slot": "property"
                 },
                 {
+                  "name": "domainMin",
+                  "type": "float",
+                  "arguments": "read only",
+                  "slot": "property"
+                },
+                {
+                  "name": "domainMax",
+                  "type": "float",
+                  "arguments": "read only",
+                  "slot": "property"
+                },
+                {
                   "name": "getEndPt",
                   "type": "Point",
                   "arguments": "",
@@ -2366,6 +2393,24 @@ Elephant.api = {
                   "slot": "method"
                 }
             ]
+        }
+    },
+
+    geomethods: {
+        "evaluatePoint": {
+            enum: 2,
+            "in": [
+                {
+                    "pos": 0,
+                    "name": "t",
+                    "type": "float",
+                }
+            ],
+            "out": {
+                "pos": 0,
+                "name": "pt",
+                "type": "Point",
+              },
         }
     },
 

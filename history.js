@@ -111,13 +111,21 @@
             var id = item.id;
             if (id in objectIds) {
                 var info = objectIds[id];
-                if (!(info.nodeId in idxs)) idxs[info.nodeId] = [];
-                if (info.index != null) idxs[info.nodeId].push(info.index);
+                if (this.getNodeById(info.nodeId) == null) { // the node may have been deleted;
+                    free.addObject(item.clone());
+                } else {
+                    if (!(info.nodeId in idxs)) idxs[info.nodeId] = [];
+                    if (info.index != null) idxs[info.nodeId].push(info.index);
+                }
             } else if (id in subobjectIds) {
                 var info = subobjectIds[id];
                 var key = [info.nodeId, info.parentIndex];
-                if (!(key in subobjs)) subobjs[key] = {nodeId: info.nodeId, parentIndex: info.parentIndex, subobjectIndexes: []};
-                subobjs[key].subobjectIndexes.push(info.subobjectIndex);
+                if (this.getNodeById(info.nodeId) == null) {
+                    free.addObject(item.clone());
+                } else {
+                    if (!(key in subobjs)) subobjs[key] = {nodeId: info.nodeId, parentIndex: info.parentIndex, subobjectIndexes: []};
+                    subobjs[key].subobjectIndexes.push(info.subobjectIndex);
+                }
             } else {
                 free.addObject(item.clone());
             }
@@ -129,6 +137,7 @@
             if (item.length > 0) {
                 var idx_node = LiteGraph.createNode("basic/array[]");
                 this.add(idx_node, false, true);
+                idx_node.collapse();
                 idx_node.setProperty("index", item);
                 var parent_node = this.getNodeById(nodeId);
                 parent_node.connect(0, idx_node, 0, true);
@@ -145,6 +154,7 @@
             if (parentIndex != null) {
                 var idx_node = LiteGraph.createNode("basic/array[]");
                 this.add(idx_node, false, true);
+                idx_node.collapse();
                 idx_node.setProperty("index", [parentIndex]);
                 parent_node.connect(0, idx_node, 0, true);
                 allCreated.push(idx_node);
@@ -153,6 +163,7 @@
             var subobject_node = LiteGraph.createNode("basic/subobject");
             subobject_node.properties["Index"] = item.subobjectIndexes;
             this.add(subobject_node, false, true);
+            subobject_node.collapse();
             parent_node.connect(0, subobject_node, 0, true);
             toBeConcatted.push(subobject_node);
             allCreated.push(subobject_node);
@@ -160,6 +171,7 @@
         if (free.length > 0) {
             var store = LiteGraph.createNode("basic/store");
             this.add(store, false, true);
+            store.collapse();
             store.addInput("a", "objectlist");
             store.addProperty("a", free, "objectlist");
             toBeConcatted.push(store);
