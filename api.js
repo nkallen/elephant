@@ -1482,7 +1482,7 @@ Elephant.api = {
                 "type": "boolean"
                 },
             {
-                "pos": 9, // unclear what 8 is
+                "pos": 8,
                 "name": "Keep all joined",
                 "type": "boolean"
             }

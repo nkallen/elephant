@@ -112,7 +112,7 @@ LGraph.prototype.updateExecutionOrder = function() {
 
 var hasChanged = {};
 LGraphNode.prototype.markChanged = function() {
-    if (this.id == null) throw "Node not yet added to graph";
+    if (this.id == null) return;
     hasChanged[this.id] = true;
 }
 LGraphNode.prototype.onPropertyChanged = function(prop) {
@@ -120,7 +120,7 @@ LGraphNode.prototype.onPropertyChanged = function(prop) {
     hasChanged[this.id] = true;
 }
 LGraph.prototype.onNodeConnectionChange = function(io, node, slot, target_node, target_slot) {
-    if (node.id == null) throw "Node not yet added to graph";
+    if (node.id == null) return;
     if (io == LiteGraph.OUTPUT) {
         // Rather than re-executing the node when an output link changes,
         // just copy already computed data.
@@ -570,7 +570,7 @@ LGraphCanvas.prototype.processMouseDown = function(e) {
                     this.dragging_rectangle = null;
                 }
 
-                var dist = distance( [e.canvasX, e.canvasY], [ this.selected_group.pos[0] + this.selected_group.size[0], this.selected_group.pos[1] + this.selected_group.size[1] ] );
+                var dist = LiteGraph.distance( [e.canvasX, e.canvasY], [ this.selected_group.pos[0] + this.selected_group.size[0], this.selected_group.pos[1] + this.selected_group.size[1] ] );
                 if (dist * this.ds.scale < 10) {
                     this.selected_group_resizing = true;
                 } else {
@@ -712,3 +712,5 @@ LGraphCanvas.prototype.invertSelection = function() {
     this.deselectAllNodes();
     this.selectNodes(toBeSelected);
 }
+
+LGraphCanvas.prototype.touchHandler = function() {};

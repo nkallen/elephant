@@ -973,6 +973,7 @@
     function GetNamed() {
         this.addOutput("Out", "objectlist");
         this.addInput("name", "string");
+        this.addProperty("name", "");
         this.mode = LiteGraph.IMMORTAL;
     }
 
@@ -986,9 +987,8 @@
         var mx = -1;
         for (var i = 0; i < allobjects.length; i++) {
             var obj = allobjects.item(i);
-            if (obj.name === name) {
+            if (obj.name === name && obj.databaseRevision <= moi.command.lastCommandRevisionEnd) {
                 mx = Math.max(mx, obj.databaseRevision);
-                break;
             }
         }
         var maxRevChange = mx != this.maxDbRev;
@@ -1008,7 +1008,6 @@
                 obj = obj.clone();
                 obj.name = null;
                 out.addObject(obj);
-                break;
             }
         }
 
@@ -1240,7 +1239,6 @@
                     return;
                 }
             }
-            console.log("0");
 
             try {
                 this._func = new Function("A", "B", "C", "DATA", "node", code);
@@ -1254,12 +1252,10 @@
     };
 
     NodeScript.prototype.onExecute = function() {
-        console.log("2");
         if (!this._func) {
             return;
         }
 
-        console.log("3");
         // try {
             var A = this.getInputData(0);
             var B = this.getInputData(1);

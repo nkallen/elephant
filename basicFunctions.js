@@ -105,14 +105,14 @@ function evalMinR(objects, numPts)
         var pointfactory = moi.command.createFactory('point');
         pointfactory.setInput(0, crv.getStartPt());
         var startPtObject = pointfactory.calculate();
-        pointfactory.commit();
+        pointfactory.cancel();
         var acFactory = moi.command.createFactory('arraycurve'); ///
         acFactory.setInput(0, startPtObject);	// object (list)
         acFactory.setInput(1, crv);		// path
         acFactory.setInput(2, 'NumItems');		// array mode
         acFactory.setInput(3, numPts);
         var arrayed_pts = acFactory.calculate();
-        acFactory.commit();
+        acFactory.cancel();
         var pts = new Array();
         pts.push(startPtObject.item(0).pt);
         for (var iPts = 0; iPts < arrayed_pts.length; ++iPts)
