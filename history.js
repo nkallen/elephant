@@ -122,7 +122,7 @@
                 var info = subobjectIds[id];
                 var key = [info.nodeId, info.parentIndex];
                 if (this.getNodeById(info.nodeId) == null) {
-                    free.addObject(item.clone());
+                    free.addObject(item); // clone doesn't work for some reason ... maybe bug in MoI
                 } else {
                     if (!(key in subobjs)) subobjs[key] = {nodeId: info.nodeId, parentIndex: info.parentIndex, subobjectIndexes: []};
                     subobjs[key].subobjectIndexes.push(info.subobjectIndex);
