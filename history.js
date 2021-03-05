@@ -104,6 +104,7 @@
         if (objectlist.length == 0) return null;
     
         var allCreated = [];
+        var toBeConcatted = [];
         var idxs = {}, subobjs = {}, free = moi.geometryDatabase.createObjectList();
         // First, aggregate everything we want to connect together
         for (var j = 0; j < objectlist.length; j++) {
@@ -130,53 +131,68 @@
                 free.addObject(item.clone());
             }
         }
-        // Next, build the compact node graph; there are things ref'd by index, subobject, and "free"/lacking a ref
-        var toBeConcatted = [];
+
         for (var nodeId in idxs) {
             var item = idxs[nodeId];
-            if (item.length > 0) {
-                var idx_node = LiteGraph.createNode("basic/array[]");
-                this.add(idx_node, false, true);
-                idx_node.collapse();
-                idx_node.setProperty("index", item);
-                var parent_node = this.getNodeById(nodeId);
-                parent_node.connect(0, idx_node, 0, true);
-                toBeConcatted.push(idx_node);
-                allCreated.push(idx_node);
-            } else {
-                toBeConcatted.push(this.getNodeById(nodeId));
-            }
+            this.makeIndexNode(nodeId, item, toBeConcatted, allCreated);
         }
         for (var k in subobjs) {
             var item = subobjs[k];
-            var nodeId = item.nodeId, parentIndex = item.parentIndex;
-            var parent_node = this.getNodeById(nodeId);
-            if (parentIndex != null) {
-                var idx_node = LiteGraph.createNode("basic/array[]");
-                this.add(idx_node, false, true);
-                idx_node.collapse();
-                idx_node.setProperty("index", [parentIndex]);
-                parent_node.connect(0, idx_node, 0, true);
-                allCreated.push(idx_node);
-                parent_node = idx_node;
-            }
-            var subobject_node = LiteGraph.createNode("basic/subobject");
-            subobject_node.properties["Index"] = item.subobjectIndexes;
-            this.add(subobject_node, false, true);
-            subobject_node.collapse();
-            parent_node.connect(0, subobject_node, 0, true);
-            toBeConcatted.push(subobject_node);
-            allCreated.push(subobject_node);
+            this.makeSubobjectNode(item, toBeConcatted, allCreated);
         }
         if (free.length > 0) {
-            var store = LiteGraph.createNode("basic/store");
-            this.add(store, false, true);
-            store.collapse();
-            store.addInput("a", "objectlist");
-            store.addProperty("a", free, "objectlist");
-            toBeConcatted.push(store);
-            allCreated.push(store);
+            this.makeFreeNode(free, toBeConcatted, allCreated);
         }
+        return this.makeConcatNode(toBeConcatted, allCreated);
+    }
+
+    LGraph.prototype.makeFreeNode = function(free, toBeConcatted, allCreated) {
+        var store = LiteGraph.createNode("basic/store");
+        this.add(store, false, true);
+        store.collapse();
+        store.addInput("a", "objectlist");
+        store.addProperty("a", free, "objectlist");
+        toBeConcatted.push(store);
+        allCreated.push(store);
+    }
+    
+    LGraph.prototype.makeSubobjectNode = function(item, toBeConcatted, allCreated) {
+        var nodeId = item.nodeId, parentIndex = item.parentIndex;
+        var parent_node = this.getNodeById(nodeId);
+        if (parentIndex != null) {
+            var idx_node = LiteGraph.createNode("basic/array[]");
+            this.add(idx_node, false, true);
+            idx_node.collapse();
+            idx_node.setProperty("index", [parentIndex]);
+            parent_node.connect(0, idx_node, 0, true);
+            allCreated.push(idx_node);
+            parent_node = idx_node;
+        }
+        var subobject_node = LiteGraph.createNode("basic/subobject");
+        subobject_node.properties["Index"] = item.subobjectIndexes;
+        this.add(subobject_node, false, true);
+        subobject_node.collapse();
+        parent_node.connect(0, subobject_node, 0, true);
+        toBeConcatted.push(subobject_node);
+        allCreated.push(subobject_node);
+    }
+
+    LGraph.prototype.makeIndexNode = function(nodeId, item, toBeConcatted, allCreated) {
+        if (item.length > 0) {
+            var idx_node = LiteGraph.createNode("basic/array[]");
+            this.add(idx_node, false, true);
+            idx_node.collapse();
+            idx_node.setProperty("index", item);
+            var parent_node = this.getNodeById(nodeId);
+            parent_node.connect(0, idx_node, 0, true);
+            toBeConcatted.push(idx_node);
+            allCreated.push(idx_node);
+        } else {
+            toBeConcatted.push(this.getNodeById(nodeId));
+        }
+    }
+
+    LGraph.prototype.makeConcatNode = function(toBeConcatted, allCreated) {
         // Finally, create a concat node if necessary!
         if (toBeConcatted.length == 0) {
             return [null, allCreated];
@@ -193,12 +209,36 @@
             return [concat, allCreated];
         }
     }
+
+    LGraph.prototype.nodeForObjects_preserveOrder = function(objectlist) {
+        if (objectlist.length == 0) return null;
     
-    LGraph.prototype.nodeForObjectId0 = function(id) { // FIXME nk rename
-        if (!(id in objectIds)) return null;
-    
-        var info = objectIds[id];
-        return this.getNodeById(info.nodeId);
+        var allCreated = [];
+        var toBeConcatted = [];
+        for (var j = 0; j < objectlist.length; j++) {
+            var item = objectlist.item(j);
+            var id = item.id;
+            if (id in objectIds) {
+                var info = objectIds[id];
+                if (this.getNodeById(info.nodeId) == null) { // the node may have been deleted;
+                    this.makeFreeNode(item.clone(), toBeConcatted, allCreated);
+                } else {
+                    this.makeIndexNode(info.nodeId, info.index != null ? [info.index] : [], toBeConcatted, allCreated);
+                }
+            } else if (id in subobjectIds) {
+                var info = subobjectIds[id];
+                if (this.getNodeById(info.nodeId) == null) {
+                    this.makeFreeNode(item.clone(), toBeConcatted, allCreated);
+                } else {
+                    this.makeSubobjectNode({nodeId: info.nodeId, parentIndex: info.parentIndex, subobjectIndexes: [info.subobjectIndex]}, toBeConcatted, allCreated);
+                }
+            } else {
+                var olist = moi.geometryDatabase.createObjectList();
+                olist.addObject(item.clone())
+                this.makeFreeNode(olist, toBeConcatted, allCreated);
+            }
+        }
+        return this.makeConcatNode(toBeConcatted, allCreated);
     }
     
     var history_cursor = -1;

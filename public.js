@@ -36,7 +36,16 @@ function createAndConnectSources(factory, node) {
             continue;
         }
         if (input.type == 8 || input.type == 7) { // objectlist || (geo)object
-            var info = input.type == 8 ? graph.nodeForObjects(value) : graph.nodeForObject(value);
+            var info;
+            if (input.type == 8) {
+                if (node.name == "loft") {
+                    info = graph.nodeForObjects_preserveOrder(value);
+                } else {
+                    info = graph.nodeForObjects(value);
+                }
+            } else {
+                info = graph.nodeForObject(value);
+            }
             if (info == null) continue;
 
             var source = info[0], created = info[1];

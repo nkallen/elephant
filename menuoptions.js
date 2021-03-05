@@ -197,13 +197,18 @@ LGraphCanvas.prototype.getExtraMenuOptions = function(canvas) {
                 callback: function(item, options, e, menu, node) {
                     var allobjects = moi.geometryDatabase.getObjects();
                     var info = that.graph.nodeForObjects(allobjects);
-                    var source = info[0], created = info[1];
-                    source.selectDependencies();
-                    that.invertSelection();
-                    that.deleteSelectedNodes();
-                    for (var i = 0; i < created.length; i++) {
-                        var c = created[i];
-                        that.graph.remove(c);
+                    if (info != null) {
+                        var source = info[0], created = info[1];
+                        source.selectDependencies();
+                        that.invertSelection();
+                        that.deleteSelectedNodes();
+                        for (var i = 0; i < created.length; i++) {
+                            var c = created[i];
+                            that.graph.remove(c);
+                        }
+                    } else {
+                        that.invertSelection();
+                        that.deleteSelectedNodes();
                     }
                 }
             },

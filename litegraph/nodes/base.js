@@ -902,7 +902,6 @@
 
     function Concat() {
         this.addInput("a", "numarray,objectlist,pointarray");
-        this.addProperty("index",0);
     }
 
     Concat.title = "Concat";
