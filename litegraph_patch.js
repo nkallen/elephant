@@ -529,10 +529,6 @@ LGraphCanvas.prototype.processMouseDown = function(e) {
                     }
                     if (e.ctrlKey) {
                         this.copyToClipboard();
-                        var todeselect = [];
-                        if ( !this.selected_nodes[node.id] ) for(var i in this.selected_nodes) if (this.selected_nodes[i] != n) todeselect.push(this.selected_nodes[i]);
-                        //two passes to avoid problems modifying the container
-                        for(var i in todeselect) this.processNodeDeselected(todeselect[i]);
                         this.pasteFromClipboard();
                     } else if (!this.selected_nodes[node.id]) {
                         this.processNodeSelected(node, e);

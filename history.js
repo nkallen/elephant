@@ -4,6 +4,16 @@
     var subobjectIds = {};
     var history = [];
     var history_output = null;
+
+    var preserve_reference = [];
+
+    function safeClone(item) {
+        var c = item.clone()
+        if (c != null) return c;
+
+        preserve_reference.push(item.getParentBRep());
+        return item;
+    }
     
     LGraph.prototype.clearHistory = function() {
         cursor = 100;
@@ -113,7 +123,7 @@
             if (id in objectIds) {
                 var info = objectIds[id];
                 if (this.getNodeById(info.nodeId) == null) { // the node may have been deleted;
-                    free.addObject(item.clone());
+                    free.addObject(safeClone(item));
                 } else {
                     if (!(info.nodeId in idxs)) idxs[info.nodeId] = [];
                     if (info.index != null) idxs[info.nodeId].push(info.index);
@@ -122,13 +132,14 @@
                 var info = subobjectIds[id];
                 var key = [info.nodeId, info.parentIndex];
                 if (this.getNodeById(info.nodeId) == null) {
-                    free.addObject(item); // clone doesn't work for some reason ... maybe bug in MoI
+                    free.addObject(safeClone(item));
                 } else {
                     if (!(key in subobjs)) subobjs[key] = {nodeId: info.nodeId, parentIndex: info.parentIndex, subobjectIndexes: []};
                     subobjs[key].subobjectIndexes.push(info.subobjectIndex);
                 }
             } else {
-                free.addObject(item.clone());
+                console.log("b");
+                free.addObject(safeClone(item));
             }
         }
 

@@ -2045,12 +2045,37 @@ Elephant.api = {
             },
             {
                 "pos": 6,
-                "name": "Flip normal",
-                "type": "boolean"
+                "name": "idk",
+                "type": "idk"
             },
             {
                 "pos": 7,
                 "name": "Flow Straight",
+                "type": "boolean"
+            },
+            {
+                "pos": 6,
+                "name": "idk",
+                "type": "idk"
+            },
+            {
+                "pos": 6,
+                "name": "idk",
+                "type": "idk"
+            },
+            {
+                "pos": 10,
+                "name": "Flip normal",
+                "type": "boolean"
+            },
+            {
+                "pos": 11,
+                "name": "Projective",
+                "type": "boolean"
+            },
+            {
+                "pos": 12,
+                "name": "Straight",
                 "type": "boolean"
             },
         ]},

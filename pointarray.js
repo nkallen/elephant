@@ -21,7 +21,7 @@ function factory( factoryname ) {
     var f = moi.command.createFactory( factoryname );
     console.trace("var factory = moi.command.createFactory('" + factoryname + "');");
     for ( var i = 1; i < arguments.length; i++ )
-        if (arguments[i] !==null) {
+        if (arguments[i] !== null) {
             f.setInput( i - 1, arguments[i] );
             console.trace("factory.setInput(" + String(i-1) + ", " + pp(f.getInput(i-1).type, arguments[i]) + ");");
         }
