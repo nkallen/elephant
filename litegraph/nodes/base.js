@@ -634,24 +634,24 @@
     ConstantNumber.desc = "Constant number";
 
     ConstantNumber.prototype.onExecute = function() {
-        this.setOutputData(0, parseFloat(this.properties["value"]));
+        this.setOutputData(0, [parseFloat(this.properties["value"])]);
     };
+
+    ConstantNumber.prototype.setValue = function(v) {
+        this.properties.value = v;
+        this.widget.value = v;
+    }
+
+    ConstantNumber.prototype.onPropertyChanged = function(p,v) {
+        this.widget.value = Number(v);
+        this.markChanged();
+    }
 
     ConstantNumber.prototype.getTitle = function() {
         if (this.flags.collapsed) {
             return this.properties.value;
         }
         return this.title;
-    };
-
-    ConstantNumber.prototype.setValue = function(v)
-    {
-        this.setProperty("value",[v]);
-    }
-
-    ConstantNumber.prototype.onDrawBackground = function(ctx) {
-        //show the current value
-        this.outputs[0].label = this.properties["value"].toFixed(3);
     };
 
     LiteGraph.registerNodeType("basic/const", ConstantNumber);
