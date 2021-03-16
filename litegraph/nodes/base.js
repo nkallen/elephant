@@ -666,6 +666,7 @@
 
     ConstantBoolean.title = "Const Boolean";
     ConstantBoolean.desc = "Constant boolean";
+    
     ConstantBoolean.prototype.getTitle = ConstantNumber.prototype.getTitle;
 
     ConstantBoolean.prototype.onExecute = function() {
@@ -741,7 +742,7 @@
     }
 
     ConstantPoint.prototype.onExecute = function() {
-        console.log("ContantPoint.onExecute: " + this.properties.pointarray.getPoint().toString());
+        console.log("ConstantPoint.onExecute: " + this.properties.pointarray.getPoint().toString());
         this.setOutputData(0, this.properties.pointarray);
     };
 
@@ -753,7 +754,6 @@
         this.widgetZ.value = p.z;
     };
 
-
     ConstantPoint.prototype.setValue = function() {
         var old = this.properties.pointarray.getFrame();
         old.set(this.widgetX.value, this.widgetY.value, this.widgetZ.value, old.xaxis.x, old.xaxis.y, old.xaxis.z, old.yaxis.x, old.yaxis.y, old.yaxis.z);
@@ -763,6 +763,7 @@
     };
 
     LiteGraph.registerNodeType("basic/point", ConstantPoint);
+    
     function ConstantArray() {
         this._value = [];
         this.addInput("", "");
