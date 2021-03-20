@@ -198,14 +198,14 @@
         ctx.font = (h * 0.7).toFixed(1) + "px Arial";
         ctx.fillStyle = "#EEE";
         ctx.fillText(
-            this.properties.value.toFixed(this._precision),
+            parseFloat(this.properties.value).toFixed(this._precision),
             x,
             h * 0.75
         );
     };
 
     WidgetNumber.prototype.onExecute = function() {
-        this.setOutputData(0, [this.properties.value]);
+        this.setOutputData(0, [parseFloat(this.properties.value)]);
     };
 
     WidgetNumber.prototype.onPropertyChanged = function(name, value) {
@@ -245,7 +245,7 @@
         steps = steps | 0;
 
         var v = Math.clamp(
-            this.properties.value + steps * this.properties.step,
+            parseFloat(this.properties.value) + steps * parseFloat(this.properties.step),
             this.properties.min,
             this.properties.max
         );
@@ -259,7 +259,7 @@
         if (e.click_time < 200) {
             var steps = pos[1] > this.size[1] * 0.5 ? -1 : 1;
             this.properties.value = Math.clamp(
-                this.properties.value + steps * this.properties.step,
+                parseFloat(this.properties.value) + steps * parseFloat(this.properties.step),
                 this.properties.min,
                 this.properties.max
             );
@@ -275,7 +275,6 @@
     };
 
     LiteGraph.registerNodeType("widget/number", WidgetNumber);
-
 
     /* Knob ****************/
 
