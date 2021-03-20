@@ -198,7 +198,7 @@
         ctx.font = (h * 0.7).toFixed(1) + "px Arial";
         ctx.fillStyle = "#EEE";
         ctx.fillText(
-            parseInt(this.properties.value).toFixed(this._precision),
+            parseFloat(this.properties.value).toFixed(this._precision),
             x,
             h * 0.75
         );
