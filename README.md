@@ -1,3 +1,6 @@
+
+<img width="1415" height="460" alt="Screenshot 2025-12-23 at 00 51 50" src="https://github.com/user-attachments/assets/15dbebed-65d3-423b-8306-1fc9a66dd2ca" />
+
 # elephant
 
 There are three steps to install.
